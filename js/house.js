@@ -7,7 +7,7 @@ export const PARTS = ["foundation", "slab", "walls", "windows", "door", "roof"];
 
 import { STAGE } from "./scenes/util.js";
 const STAGE_W = STAGE.w, STAGE_H = STAGE.h;
-const BONE = 0xededed, ORANGE = 0xff5f00;
+const BONE = 0xf2efea, SAGE = 0x557373;
 
 // Exploded-view offsets of each part group (model units at ex = 1).
 const EXPLODE = {
@@ -128,7 +128,7 @@ const MAT_DEF = {
   concrete: { color: 0x8f8a83, metalness: 0, roughness: 0.92 },
   bone: { color: 0xdcd8d0, metalness: 0, roughness: 0.8 },
   timber: { color: 0x3a281c, metalness: 0, roughness: 0.82 },
-  glass: { color: 0x11161b, metalness: 0.8, roughness: 0.1, emissive: ORANGE, emissiveIntensity: 0.012 },
+  glass: { color: 0x11161b, metalness: 0.8, roughness: 0.1, emissive: SAGE, emissiveIntensity: 0.012 },
   frame: { color: 0x1d1e20, metalness: 0.6, roughness: 0.45 },
   water: { color: 0x0f3a44, metalness: 0.3, roughness: 0.08, emissive: 0x06262c, emissiveIntensity: 1 },
   railing: { color: 0x9fb2b8, metalness: 0.2, roughness: 0.1, transparent: true, opacity: 0.32, depthWrite: false },
@@ -168,7 +168,7 @@ function makeEnvironment(renderer) {
   };
   panel(22, 5, [0, 14, 6], 4, 4, 4);        // sky softbox
   panel(3, 14, [-14, 2, 5], 2.4, 2.4, 2.5); // left strip
-  panel(3, 12, [13, 0, -8], 4, 1.2, 0);     // orange rim strip
+  panel(3, 12, [13, 0, -8], 4, 1.2, 0);     // sage rim strip
   panel(18, 2, [0, -10, 4], 0.6, 0.6, 0.6); // ground bounce
   const pm = new THREE.PMREMGenerator(renderer);
   const tex = pm.fromScene(env, 0.03).texture;
@@ -209,9 +209,9 @@ export async function mountHouse(canvas, state, opts = {}) {
   // lights live outside the root so they do not rotate with the house
   const key = new THREE.DirectionalLight(0xf4efe6, 2.1);
   key.position.set(-5, 8, 9);
-  const back = new THREE.DirectionalLight(ORANGE, 0.7);
+  const back = new THREE.DirectionalLight(SAGE, 0.7);
   back.position.set(6, 3, -6);
-  const cursorLight = new THREE.PointLight(ORANGE, 18, 0, 2);
+  const cursorLight = new THREE.PointLight(SAGE, 18, 0, 2);
   cursorLight.position.set(0, 0, 4);
   const fill = new THREE.HemisphereLight(0xf2efe9, 0x1a1208, 0.6);
   scene.add(key, back, cursorLight, fill);
@@ -338,8 +338,8 @@ export async function mountHouse(canvas, state, opts = {}) {
       highlighted = next;
       if (!next) return;
       const p = partsByName[next];
-      for (const m of p.materials) m.emissive.setHex(ORANGE);
-      p.edgeMat.color.setHex(ORANGE);
+      for (const m of p.materials) m.emissive.setHex(SAGE);
+      p.edgeMat.color.setHex(SAGE);
       p.edgeMat.opacity = 0.95;
     },
 

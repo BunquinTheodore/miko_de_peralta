@@ -94,17 +94,17 @@ const CSS_PORT = `
 .scene .tk-chip{width:435px;height:88px;padding:0 26px;font:700 28px/1 var(--mono);letter-spacing:.14em}`;
 const CSS = `<style>${PT ? CSS_PORT : CSS_LAND}
 .tk-gp{white-space:nowrap}
-.tk-sk li.p{color:var(--orange);text-shadow:0 0 14px rgba(255,95,0,.45)}
+.tk-sk li.p{color:var(--sage);text-shadow:0 0 14px rgba(85, 115, 115,.45)}
 .tk-lead{position:absolute;left:0;top:0;width:${STAGE.w}px;height:${STAGE.h}px;overflow:visible;z-index:19}
 .tk-lead polyline{fill:none;stroke:var(--ink);stroke-width:2}
-.tk-lead circle{fill:var(--orange)}
+.tk-lead circle{fill:var(--sage)}
 .scene .tk-tag{position:absolute;left:0;top:0;z-index:20;text-transform:uppercase;color:var(--ink);white-space:nowrap;will-change:transform}
 .scene .tk-tag b{display:inline-block;background:var(--ink);color:var(--bone)}
 .scene .tk-tag small{display:block;color:#6a6565}
 .scene .tk-tag.lt{text-align:right}
 .scene .tk-chip{position:absolute;display:flex;align-items:center;justify-content:space-between;
-  border:2px solid rgba(237,237,237,.55);background:rgba(5,5,5,.72);color:var(--bone);text-transform:uppercase}
-.scene .tk-chip span:first-child{color:var(--orange);transition:color .2s}
+  border:2px solid rgba(242, 239, 234,.55);background:rgba(13, 13, 13,.72);color:var(--bone);text-transform:uppercase}
+.scene .tk-chip span:first-child{color:var(--sage);transition:color .2s}
 .scene .tk-chip.on span:first-child{color:var(--bone)}
 .tk-rule{position:absolute;height:16px;border-left:2px solid currentColor;border-right:2px solid currentColor;
   background:linear-gradient(currentColor,currentColor) center/100% 2px no-repeat}
@@ -250,7 +250,7 @@ export function scenes(C, P) {
       <div class="abs mono tk-a-scale" style="z-index:2;left:110px;top:284px;font-size:13px">Scale 1:100 · Rev 02</div>
       <div class="mask abs" style="z-index:2;left:104px;top:780px"><h1 class="mega tk-a-title" style="color:var(--bone)"><span>TOOLKIT.</span></h1></div>`;
   const toolkit = {
-    slug: "toolkit", name: "Toolkit", act: "04 · Toolkit", field: "orange", dur: 2.0, stars: false, ammo: 1,
+    slug: "toolkit", name: "Toolkit", act: "04 · Toolkit", field: "sage", dur: 2.0, stars: false, ammo: 1,
     turn: [1.75, "bone"], rest: null, restAt: null, model: true,
     html: `${CSS}
       <div class="abs tk-flood" style="inset:0;z-index:1;background:var(--bone);clip-path:${clip(0)}"></div>
@@ -266,7 +266,7 @@ export function scenes(C, P) {
       fadeIn(tl, q(root, ".tk-a-scale"), 0.75, 0.4, { y: 8 });
       // flood: bone circle swells from the house, copy flips to ink once covered
       tl.fromTo(q(root, ".tk-flood"), { clipPath: clip(0) }, { clipPath: clip(FR), duration: 0.25, ease: "power2.in" }, 1.75);
-      tl.set(title, { color: "#050505" }, 1.9);
+      tl.set(title, { color: "#0d0d0d" }, 1.9);
     },
     tick(root, st, env) {
       env?.model?.highlight?.(null);
@@ -349,7 +349,7 @@ export function scenes(C, P) {
     return `<div class="chip tk-chip" role="button" tabindex="0" data-part="${p}" aria-label="${esc(`${C.skills[p].part}: ${C.skills[p].group}`)}" style="left:${x}px;top:${y}px">` +
       `<span>${pad(i + 1)}</span><span>${esc(C.skills[p].part)}</span></div>`;
   }).join("");
-  const title = `<span>BUILT<span style="color:var(--orange)">.</span></span>`;
+  const title = `<span>BUILT<span style="color:var(--sage)">.</span></span>`;
   const bHtml = PT
     ? `<div class="eyebrow abs tk-b-eb" style="left:90px;top:160px">Assembled · ${pad(ORDER.length)} / ${pad(ORDER.length)} layers</div>
       <div class="mask abs" style="left:86px;top:1000px"><h2 class="mega tk-b-title" style="font-size:210px">${title}</h2></div>

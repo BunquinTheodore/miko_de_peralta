@@ -9,8 +9,8 @@ const IRIS_SEC = 0.55;         // length of the scene-to-scene iris
 const BOOT_GATE = ["plan-scan", 2.3];
 const LANDING = ["name", 1.5];
 const MODEL_SAFETY_MS = 15000;   // never leave the boot stuck at 97%
-const COLOR = { ink: "#050505", orange: "#ff5f00", bone: "#ededed", quad: "#050505" };
-const LIGHT_FIELDS = new Set(["orange", "bone"]);
+const COLOR = { ink: "#0d0d0d", sage: "#557373", bone: "#f2efea", quad: "#0d0d0d" };
+const LIGHT_FIELDS = new Set(["sage", "bone"]);
 const REST_SLUG = "built-rest";
 
 const $ = (id) => document.getElementById(id);
@@ -191,7 +191,7 @@ function drawStars() {
     if (p.x < -4 || p.x > w + 4 || p.y < -4 || p.y > h + 4) Object.assign(p, makeStar(true), { a: 0 });
     starCtx.beginPath();
     starCtx.arc(p.x + p.tx, p.y + p.ty, p.r, 0, Math.PI * 2);
-    starCtx.fillStyle = `rgba(237,237,237,${p.a.toFixed(3)})`;
+    starCtx.fillStyle = `rgba(223, 229, 243,${p.a.toFixed(3)})`; // mist
     starCtx.fill();
   }
 }

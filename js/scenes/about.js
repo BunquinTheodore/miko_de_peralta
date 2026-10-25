@@ -2,9 +2,9 @@
 import { pad, q, qa, esc, clamp, STAGE } from "./util.js";
 
 const WORLD_URL = "https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-110m.json";
-const BONE = "#ededed";
-const INK = "#050505";
-const ORANGE = "#ff5f00";
+const BONE = "#f2efea";
+const INK = "#0d0d0d";
+const SAGE = "#557373";
 const MONO = "Geist Mono, ui-monospace, monospace";
 const ACT = "02 · About";
 const PORT = STAGE.portrait;
@@ -87,7 +87,7 @@ function locationScene(C) {
     <g class="${cls}" opacity="0" transform="translate(${MID} ${MID})">
       <path class="lc-lead" pathLength="1" fill="none" stroke="${BONE}" stroke-width="2" stroke-dasharray="1" stroke-dashoffset="1"/>
       <text class="lc-t" stroke="${INK}" stroke-width="5" paint-order="stroke" fill="${BONE}" font-family="${MONO}" font-weight="700" font-size="${LOC.ft}" letter-spacing="${LOC.ls}">${esc(title)}</text>
-      <text class="lc-s" stroke="${INK}" stroke-width="5" paint-order="stroke" fill="${ORANGE}" font-family="${MONO}" font-weight="600" font-size="${LOC.fs}" letter-spacing="${LOC.ls}">${esc(sub)}</text>
+      <text class="lc-s" stroke="${INK}" stroke-width="5" paint-order="stroke" fill="${SAGE}" font-family="${MONO}" font-weight="600" font-size="${LOC.fs}" letter-spacing="${LOC.ls}">${esc(sub)}</text>
       ${dot}
     </g>`;
   const marketRows = markets.map((m, i) => `
@@ -165,8 +165,8 @@ function locationScene(C) {
       <style>
         .lc-rows{position:absolute;left:${LOC.text}px;top:${rowsTop}px;width:${LOC.w}px;height:${markets.length * LOC.row}px}
         .lc-row{position:absolute;left:0;width:${LOC.w}px;height:${LOC.row}px;display:grid;grid-template-columns:${PORT ? 90 : 70}px 1fr auto;
-          align-items:center;border-top:2px solid rgba(237,237,237,.28)}
-        .lc-ri{font-size:${LOC.ri}px;color:var(--orange)}
+          align-items:center;border-top:2px solid rgba(242, 239, 234,.28)}
+        .lc-ri{font-size:${LOC.ri}px;color:var(--sage)}
         .lc-rz{font-size:${PORT ? 28 : 18}px;color:var(--bone);letter-spacing:.16em}
         .lc-rc{font:900 ${LOC.rc}px/1 var(--sans);letter-spacing:-.03em;white-space:nowrap;text-transform:uppercase}
         .lc-rc i{font-style:normal;color:var(--ash)}
@@ -189,16 +189,16 @@ function locationScene(C) {
       </div>
       <div class="abs lc-wrap" style="left:${gx}px;top:${gy}px;width:760px;height:760px">
         <svg viewBox="0 0 760 760" width="760" height="760" style="overflow:visible">
-          <circle cx="${MID}" cy="${MID}" r="${R + 22}" fill="none" stroke="${ORANGE}" stroke-width="1.5" stroke-opacity=".45" stroke-dasharray="3 9"/>
-          <circle cx="${MID}" cy="${MID}" r="${R}" fill="rgba(8,8,8,.9)" stroke="${BONE}" stroke-opacity=".5" stroke-width="2"/>
+          <circle cx="${MID}" cy="${MID}" r="${R + 22}" fill="none" stroke="${SAGE}" stroke-width="1.5" stroke-opacity=".45" stroke-dasharray="3 9"/>
+          <circle cx="${MID}" cy="${MID}" r="${R}" fill="rgba(13, 13, 13,.9)" stroke="${BONE}" stroke-opacity=".5" stroke-width="2"/>
           <path class="lc-grat" fill="none" stroke="${BONE}" stroke-opacity=".16" stroke-width="1"/>
-          <path class="lc-land" fill="rgba(237,237,237,.1)" stroke="${BONE}" stroke-opacity=".5" stroke-width="1" stroke-linejoin="round"/>
-          ${markets.map(() => `<path class="lc-arc" fill="none" stroke="${ORANGE}" stroke-width="3" stroke-linecap="round"/>`).join("")}
-          ${markets.map(() => `<g class="lc-tip" opacity="0"><circle r="13" fill="${ORANGE}" fill-opacity=".25"/><circle r="6" fill="${ORANGE}"/></g>`).join("")}
+          <path class="lc-land" fill="rgba(242, 239, 234,.1)" stroke="${BONE}" stroke-opacity=".5" stroke-width="1" stroke-linejoin="round"/>
+          ${markets.map(() => `<path class="lc-arc" fill="none" stroke="${SAGE}" stroke-width="3" stroke-linecap="round"/>`).join("")}
+          ${markets.map(() => `<g class="lc-tip" opacity="0"><circle r="13" fill="${SAGE}" fill-opacity=".25"/><circle r="6" fill="${SAGE}"/></g>`).join("")}
           ${markets.map((m) => labelSvg("lc-mk", String(m.city).toUpperCase(), `${m.country} · ${m.tzLabel}`.toUpperCase(),
-            `<circle r="11" fill="none" stroke="${ORANGE}" stroke-width="2"/><circle r="5" fill="${ORANGE}"/>`)).join("")}
+            `<circle r="11" fill="none" stroke="${SAGE}" stroke-width="2"/><circle r="5" fill="${SAGE}"/>`)).join("")}
           ${labelSvg("lc-pin", String(L.city).toUpperCase(), "HOME",
-            `<circle class="lc-ring" r="10" fill="none" stroke="${ORANGE}" stroke-width="3"/><circle r="9" fill="${ORANGE}"/>`)}
+            `<circle class="lc-ring" r="10" fill="none" stroke="${SAGE}" stroke-width="3"/><circle r="9" fill="${SAGE}"/>`)}
           <text aria-hidden="true" x="${MID}" y="${MID + R + 64}" fill="${BONE}" fill-opacity=".5" font-family="${MONO}" font-size="${PORT ? 22 : 14}"
             letter-spacing="4" text-anchor="middle">ORTHOGRAPHIC · GREAT-CIRCLE ROUTES</text>
         </svg>
@@ -276,8 +276,8 @@ function clockFace(CX, FACE) {
       <circle cx="${CX}" cy="${CX}" r="${FACE + 14}" fill="none" stroke="${INK}" stroke-width="2" stroke-dasharray="2 8"/>
       <circle cx="${CX}" cy="${CX}" r="${FACE}" fill="${INK}"/>
       <g class="tz-ticks">${ticks}</g>${nums}
-      ${hand("tz-h", 24, 0.5, 12, BONE)}${hand("tz-m", 24, 0.76, 7, BONE)}${hand("tz-s", 38, 0.88, 3, ORANGE)}
-      <circle cx="${CX}" cy="${CX}" r="${11 * k}" fill="${ORANGE}"/><circle cx="${CX}" cy="${CX}" r="${4 * k}" fill="${INK}"/>
+      ${hand("tz-h", 24, 0.5, 12, BONE)}${hand("tz-m", 24, 0.76, 7, BONE)}${hand("tz-s", 38, 0.88, 3, SAGE)}
+      <circle cx="${CX}" cy="${CX}" r="${11 * k}" fill="${SAGE}"/><circle cx="${CX}" cy="${CX}" r="${4 * k}" fill="${INK}"/>
     </svg>`;
 }
 
@@ -332,7 +332,7 @@ function timezoneScene(C) {
     : `<div class="abs tz-sep" style="left:${90 + ((i + 1) * 1740) / zones.length}px;top:330px;width:2px;height:620px;background:var(--ink);opacity:.22;transform-origin:50% 0"></div>`).join("");
 
   return {
-    slug: "timezone", name: "Timezone", act: ACT, field: "orange", dur: 3.0,
+    slug: "timezone", name: "Timezone", act: ACT, field: "sage", dur: 3.0,
     stars: false, ammo: 1, turn: null, rest: null, restAt: null, model: false,
     html: `
       <style>.tz-dig{font-variant-numeric:tabular-nums;font-feature-settings:"tnum";letter-spacing:.1em;white-space:nowrap}
@@ -432,19 +432,19 @@ function educationScene(C) {
       <style>
         .ed-box{position:absolute;inset:0;border:2px solid var(--ink);overflow:hidden;background:#d9d6d3}
         .ed-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 30%;display:block}
-        .ed-grade{position:absolute;inset:0;background:linear-gradient(to top,rgba(255,95,0,.10),rgba(255,95,0,0) 40%),
-          linear-gradient(to bottom,rgba(5,5,5,.14),rgba(5,5,5,0) 30%)}
+        .ed-grade{position:absolute;inset:0;background:linear-gradient(to top,rgba(85, 115, 115,.10),rgba(85, 115, 115,0) 40%),
+          linear-gradient(to bottom,rgba(13, 13, 13,.14),rgba(13, 13, 13,0) 30%)}
         .ed-ph{position:absolute;inset:0;display:grid;place-items:center}
         .ed-hatch{position:absolute;inset:0;opacity:.12;background:repeating-linear-gradient(135deg,var(--ink) 0 1.5px,transparent 1.5px 22px)}
         .ed-ini{position:relative;--paper:#d9d6d3}
         .ed-ini span{font:900 170px/1 var(--sans);letter-spacing:-.05em;color:var(--ink)}
-        .ed-c{position:absolute;width:40px;height:40px;border:0 solid var(--orange)}
+        .ed-c{position:absolute;width:40px;height:40px;border:0 solid var(--sage)}
         .ed-c-tl{left:-16px;top:-16px;border-width:4px 0 0 4px}.ed-c-tr{right:-16px;top:-16px;border-width:4px 4px 0 0}
         .ed-c-bl{left:-16px;bottom:-16px;border-width:0 0 4px 4px}.ed-c-br{right:-16px;bottom:-16px;border-width:0 4px 4px 0}
         .ed-cover{position:absolute;inset:-2px;background:var(--bone)}
         .ed-lab{color:var(--ink);background:var(--bone);padding:6px 8px;letter-spacing:.2em}
       </style>
-      <div class="abs ed-bar" style="left:${EDU.bar}px;top:${EDU.eye}px;width:12px;height:${ruleTop - EDU.eye}px;background:var(--orange);transform-origin:50% 0"></div>
+      <div class="abs ed-bar" style="left:${EDU.bar}px;top:${EDU.eye}px;width:12px;height:${ruleTop - EDU.eye}px;background:var(--sage);transform-origin:50% 0"></div>
       <div class="abs" style="left:${EDU.text}px;top:${EDU.eye}px">${eyebrow("Education", "ink")}</div>
       ${showYears ? `<div class="abs mono dim ed-years" style="${yearsStyle}">${esc(E.years)}</div>` : ""}
       ${top ? mask(esc(top.toUpperCase()), "mid", `position:absolute;left:${EDU.text - 4}px;top:${EDU.top}px;font-size:${topPx}px;white-space:nowrap`) : ""}
@@ -509,15 +509,15 @@ function valuesScene(C) {
     stars: true, ammo: 3, turn: null, rest: "scroll to continue", restAt: 2.0, model: false,
     html: `
       <style>
-        .va-h span{color:var(--orange);letter-spacing:${PORT ? ".2em" : ".3em"}}
-        .va-pill{position:absolute;left:0;width:${VAL.pillW}px;height:82px;border:2px solid rgba(237,237,237,.42);border-radius:999px;
+        .va-h span{color:var(--sage);letter-spacing:${PORT ? ".2em" : ".3em"}}
+        .va-pill{position:absolute;left:0;width:${VAL.pillW}px;height:82px;border:2px solid rgba(242, 239, 234,.42);border-radius:999px;
           display:grid;grid-template-columns:${VAL.numW}px minmax(0,1fr) ${VAL.icon}px;column-gap:8px;align-items:center;
-          padding:0 ${VAL.padR}px 0 ${VAL.padL}px;background:rgba(5,5,5,.6);overflow:hidden}
+          padding:0 ${VAL.padR}px 0 ${VAL.padL}px;background:rgba(13, 13, 13,.6);overflow:hidden}
         .va-i{font-size:${PORT ? 28 : 15}px;color:var(--ash);letter-spacing:.16em}
         .va-t{font-weight:900;letter-spacing:-.02em;text-transform:uppercase;white-space:nowrap;line-height:1;overflow:hidden}
-        .va-ic{display:grid;place-items:center;color:var(--orange)}
+        .va-ic{display:grid;place-items:center;color:var(--sage)}
         .va-g{border-style:dashed}
-        .va-word .period{background:var(--orange)}
+        .va-word .period{background:var(--sage)}
       </style>
       <div class="abs" style="left:96px;top:${VAL.eye}px">${eyebrow("Values · Direction")}</div>
       ${mask(`PRECISE<span class="period"></span>`, "mega va-word", `position:absolute;left:84px;top:${VAL.word}px;font-size:${wordPx}px;white-space:nowrap`)}

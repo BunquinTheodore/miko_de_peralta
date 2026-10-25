@@ -2,7 +2,7 @@
 
 Portfolio site for Miko De Peralta, pre-construction estimator for luxury residential projects (Qatar, Chicago).
 A scroll-driven "film": 26 scenes scrubbed by scroll, a procedural three.js house that splits into the six layers of
-his toolkit, and architectural-drawing styling in ink, safety orange and bone.
+his toolkit, and architectural-drawing styling in ink, sage and bone.
 
 ## Run
 

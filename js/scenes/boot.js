@@ -21,7 +21,7 @@ function decode(tl, el, text, at = 0, dur = 0.6) {
 }
 
 const PORTRAIT = STAGE.portrait;
-const GLOW = (a) => `rgba(255,95,0,${a})`;
+const GLOW = (a) => `rgba(85, 115, 115,${a})`;
 const MONO_FS = PORTRAIT ? 28 : 20;      // side labels
 const MONO_LS = PORTRAIT ? ".2em" : ".22em";
 const EYE = PORTRAIT ? "font-size:28px;letter-spacing:.2em;" : "";
@@ -149,7 +149,7 @@ function planHtml() {
   .ps-mono { position:absolute; font:600 ${MONO_FS}px/1.5 var(--mono); letter-spacing:${MONO_LS}; text-transform:uppercase; color:var(--ash); white-space:nowrap; }
   .ps-mono b { color:var(--bone); font-weight:700; }
   .ps-ticks { position:absolute; width:26px; height:${R.h}px; top:${R.top}px;
-    background:repeating-linear-gradient(to bottom, rgba(237,237,237,.38) 0 2px, transparent 2px 14px); transform-origin:50% 0; }
+    background:repeating-linear-gradient(to bottom, rgba(242, 239, 234,.38) 0 2px, transparent 2px 14px); transform-origin:50% 0; }
   .ps-fp path { fill:none; stroke-width:1.3; stroke-linecap:square; }
   .ps-fp path.pw { stroke-width:2.6; }
   .ps-fp .pg path { stroke-width:7; }
@@ -169,23 +169,23 @@ ${brk(bx0, by0, "3px 0 0 3px")}${brk(bx1, by0, "3px 3px 0 0")}${brk(bx0, by1, "0
 
 <svg class="abs ps-fp" style="left:${PLAN.left}px;top:${PLAN.top}px;overflow:visible" width="${PLAN.w}" height="${PLAN.h}" viewBox="${VB.x} ${VB.y} ${VB.w} ${VB.h}">
   <defs><clipPath id="psClip"><rect class="ps-clip" x="${VB.x}" y="${VB.y}" width="${VB.w}" height="${VB.h}"/></clipPath></defs>
-  ${layer("pb", "rgba(237,237,237,.34)", "rgba(237,237,237,.5)")}
-  <g clip-path="url(#psClip)">${glow}${layer("pr", "#ff5f00", "#ff5f00")}</g>
+  ${layer("pb", "rgba(242, 239, 234,.34)", "rgba(242, 239, 234,.5)")}
+  <g clip-path="url(#psClip)">${glow}${layer("pr", "#557373", "#557373")}</g>
 </svg>
 <div class="scanline ps-scan" style="top:${PLAN.top}px"></div>
 
 <div class="abs ps-num" style="${PS.num};display:flex;align-items:flex-end;gap:12px">
   <div class="mono" style="position:absolute;left:0;top:${PS.capTop}px;font-size:${PS.capFs}px;letter-spacing:${MONO_LS};color:var(--ash);white-space:nowrap">Measured</div>
   <span class="ps-val" style="font:900 ${PS.numFs}px/.82 var(--sans);letter-spacing:-.05em">00</span>
-  <span style="font:900 ${PS.pctFs}px/.9 var(--sans);color:var(--orange)">%</span>
+  <span style="font:900 ${PS.pctFs}px/.9 var(--sans);color:var(--sage)">%</span>
 </div>
 
 <div class="ps-mono abs ps-r2" style="${PS.r2};line-height:1.9">
   Walls <b>traced</b><br>
   Openings <b class="ps-open">00</b><br>
   <span style="position:relative;display:inline-block;min-width:${PORTRAIT ? 440 : 330}px;height:${PORTRAIT ? 53 : 38}px">
-    <span class="ps-st ps-s1">Status <b style="color:var(--orange)">measuring</b></span>
-    <span class="ps-st ps-s2">Status <b style="color:var(--orange)">measured</b></span>
+    <span class="ps-st ps-s1">Status <b style="color:var(--sage)">measuring</b></span>
+    <span class="ps-st ps-s2">Status <b style="color:var(--sage)">measured</b></span>
   </span>
 </div>`;
 }
@@ -206,7 +206,7 @@ function planAnim(root, tl) {
     tl.from(qa(root, `${g} .lt text`), { opacity: 0, duration: 0.3, ease: "power1.out", stagger: { amount: 0.4 } }, 0.95);
   }
 
-  // scan sweep: the orange reveal clip (a transform on the clip rect) and the scanline travel together
+  // scan sweep: the sage reveal clip (a transform on the clip rect) and the scanline travel together
   tl.fromTo(q(root, ".ps-clip"), { scaleY: 0, svgOrigin: `0 ${VB.y}` },
     { scaleY: 1, svgOrigin: `0 ${VB.y}`, duration: 2, ease: "power1.inOut", immediateRender: false }, 0.3);
   tl.set(q(root, ".ps-clip"), { scaleY: 0, svgOrigin: `0 ${VB.y}` }, 0);
@@ -240,7 +240,7 @@ const TC = PORTRAIT ? {
 function completeBlock(p) {
   const bws = ["4px 0 0 4px", "4px 4px 0 0", "0 0 4px 4px", "0 4px 4px 0"];
   const br = TC.br.map(([l, t], i) =>
-    `<i class="${p}br" style="position:absolute;left:${l}px;top:${t}px;width:64px;height:64px;border:0 solid var(--orange);border-width:${bws[i]}"></i>`).join("");
+    `<i class="${p}br" style="position:absolute;left:${l}px;top:${t}px;width:64px;height:64px;border:0 solid var(--sage);border-width:${bws[i]}"></i>`).join("");
   const cw = `position:absolute;left:0;width:${STAGE.w}px;text-align:center`;
   const st = TC.stamp, [bl, bw, bt] = TC.bar;
   return `
@@ -248,19 +248,19 @@ function completeBlock(p) {
   ${br}
   <div class="eyebrow ${p}eye" style="${cw};justify-content:center;top:${TC.eyeTop}px;${EYE}">Quantities measured</div>
   <div class="mega ${p}l1" style="${cw};top:${TC.l1Top}px;font-size:${TC.fs}px">TAKE-OFF</div>
-  <div class="mega ${p}l2" style="${cw};top:${TC.l2Top}px;font-size:${TC.fs}px;color:var(--orange)">COMPLETE</div>
-  <div class="${p}bar" style="position:absolute;left:${bl}px;width:${bw}px;top:${bt}px;height:4px;background:var(--orange);box-shadow:0 0 18px var(--orange);transform-origin:0 50%"></div>
+  <div class="mega ${p}l2" style="${cw};top:${TC.l2Top}px;font-size:${TC.fs}px;color:var(--sage)">COMPLETE</div>
+  <div class="${p}bar" style="position:absolute;left:${bl}px;width:${bw}px;top:${bt}px;height:4px;background:var(--sage);box-shadow:0 0 18px var(--sage);transform-origin:0 50%"></div>
   <div class="mono ${p}foot" style="${cw};top:${TC.footTop}px;font-size:${TC.footFs}px;letter-spacing:${MONO_LS};color:var(--ash)">Sheet A-101 &nbsp;·&nbsp; quantities checked</div>
-  <div class="${p}stamp" style="position:absolute;left:${st.left}px;top:${st.top}px;width:${st.w}px;padding:14px 0 12px;border:4px solid var(--orange);color:var(--orange);text-align:center;transform:rotate(-8deg);box-shadow:0 0 22px ${GLOW(0.35)}, inset 0 0 14px ${GLOW(0.25)}">
+  <div class="${p}stamp" style="position:absolute;left:${st.left}px;top:${st.top}px;width:${st.w}px;padding:14px 0 12px;border:4px solid var(--sage);color:var(--sage);text-align:center;transform:rotate(-8deg);box-shadow:0 0 22px ${GLOW(0.35)}, inset 0 0 14px ${GLOW(0.25)}">
     <div style="font:900 ${st.big}px/1 var(--sans);letter-spacing:.02em">CHECKED</div>
     <div class="mono" style="font-size:${st.small}px;letter-spacing:${MONO_LS};margin-top:8px">Qty &nbsp;·&nbsp; A-101</div>
   </div>
-  <i class="${p}line" style="position:absolute;left:${TC.line[0]}px;width:${TC.line[1]}px;top:${TC.cy - 1}px;height:3px;background:var(--orange);box-shadow:0 0 22px var(--orange),0 0 50px var(--orange);opacity:0"></i>
+  <i class="${p}line" style="position:absolute;left:${TC.line[0]}px;width:${TC.line[1]}px;top:${TC.cy - 1}px;height:3px;background:var(--sage);box-shadow:0 0 22px var(--sage),0 0 50px var(--sage);opacity:0"></i>
 </div>`;
 }
 
 function completeHtml() {
-  return completeBlock("tc-") + `<div class="tc-flash" style="position:absolute;inset:0;background:var(--orange);opacity:0;z-index:9"></div>`;
+  return completeBlock("tc-") + `<div class="tc-flash" style="position:absolute;inset:0;background:var(--sage);opacity:0;z-index:9"></div>`;
 }
 
 function completeAnim(root, tl) {
@@ -285,10 +285,10 @@ function collapseHtml() {
   const { cx, cy } = TC;
   const ring = (cls, c) => `<i class="${cls}" style="position:absolute;left:${cx - 42}px;top:${cy - 42}px;width:84px;height:84px;border-radius:50%;border:2px solid ${c}"></i>`;
   return completeBlock("cd-") + `
-${ring("cd-r1", "var(--orange)")}${ring("cd-r2", "var(--bone)")}
-<i class="cd-hx" style="position:absolute;left:${cx - 200}px;width:400px;top:${cy - 1}px;height:1px;background:rgba(237,237,237,.45)"></i>
-<i class="cd-vx" style="position:absolute;top:${cy - 200}px;height:400px;left:${cx - 1}px;width:1px;background:rgba(237,237,237,.45)"></i>
-<i class="cd-dot" style="position:absolute;left:${cx - 12}px;top:${cy - 12}px;width:24px;height:24px;border-radius:50%;background:var(--orange);box-shadow:0 0 27px var(--orange),0 0 70px ${GLOW(0.65)};z-index:12"></i>
+${ring("cd-r1", "var(--sage)")}${ring("cd-r2", "var(--bone)")}
+<i class="cd-hx" style="position:absolute;left:${cx - 200}px;width:400px;top:${cy - 1}px;height:1px;background:rgba(242, 239, 234,.45)"></i>
+<i class="cd-vx" style="position:absolute;top:${cy - 200}px;height:400px;left:${cx - 1}px;width:1px;background:rgba(242, 239, 234,.45)"></i>
+<i class="cd-dot" style="position:absolute;left:${cx - 12}px;top:${cy - 12}px;width:24px;height:24px;border-radius:50%;background:var(--sage);box-shadow:0 0 27px var(--sage),0 0 70px ${GLOW(0.65)};z-index:12"></i>
 <div class="mono cd-cap" style="position:absolute;left:0;width:${STAGE.w}px;text-align:center;top:${TC.capTop}px;font-size:${TC.capFs}px;letter-spacing:${MONO_LS};color:var(--ash)">Datum &nbsp;·&nbsp; &plusmn;0.00</div>`;
 }
 
@@ -391,12 +391,12 @@ function nameAnim(root, tl) {
 }
 
 // ---------- 05 word burst ----------
-const GRID_PAPER = "background-image:linear-gradient(rgba(237,237,237,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(237,237,237,.06) 1px,transparent 1px);background-size:48px 48px;";
+const GRID_PAPER = "background-image:linear-gradient(rgba(242, 239, 234,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(242, 239, 234,.06) 1px,transparent 1px);background-size:48px 48px;";
 const CELL_LOOK = [
-  { bg: "#0b0b0b", fg: "var(--bone)", dot: "var(--orange)", extra: "box-shadow:inset 0 0 0 4px var(--orange);" },
-  { bg: "var(--orange)", fg: "var(--ink)", dot: "var(--ink)", extra: "" },
-  { bg: "var(--bone)", fg: "var(--ink)", dot: "var(--orange)", extra: "" },
-  { bg: "var(--ink)", fg: "var(--bone)", dot: "var(--orange)", extra: GRID_PAPER },
+  { bg: "#0d0d0d", fg: "var(--bone)", dot: "var(--sage)", extra: "box-shadow:inset 0 0 0 4px var(--sage);" },
+  { bg: "var(--sage)", fg: "var(--ink)", dot: "var(--ink)", extra: "" },
+  { bg: "var(--mist)", fg: "var(--ink)", dot: "var(--sage)", extra: "" },
+  { bg: "var(--olive)", fg: "var(--mist)", dot: "var(--mist)", extra: GRID_PAPER },
 ];
 // landscape: 2x2 quadrants; portrait: four stacked bands. Each cell shrinks toward the stage centre.
 const CELL_BOX = PORTRAIT
@@ -440,7 +440,7 @@ export function scenes(C, P) {
     { ...base, slug: "take-off-complete", name: "Take-off complete", act: "00 · Boot", field: "ink", dur: 1.2, html: completeHtml(), anim: completeAnim },
     { ...base, slug: "collapse-to-the-dot", name: "Collapse to the dot", act: "00 · Boot", field: "ink", dur: 1.8, stars: true, html: collapseHtml(), anim: collapseAnim },
     {
-      ...base, slug: "name", name: `${C.person.first} ${C.person.last}`, act: "01 · Hero", field: "orange", dur: 3.4,
+      ...base, slug: "name", name: `${C.person.first} ${C.person.last}`, act: "01 · Hero", field: "sage", dur: 3.4,
       turn: [3.1, "ink"], rest: "scroll", restAt: 1.5, html: nameHtml(C), anim: nameAnim,
     },
     { ...base, slug: "word-burst", name: "Word burst", act: "01 · Hero", field: "quad", dur: 2.0, html: burstHtml(C), anim: burstAnim },

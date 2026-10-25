@@ -3,8 +3,8 @@
 import { pad, q, qa, esc, STAGE } from "./util.js";
 
 const ACT = "03 · Experience";
-const BONE = "#ededed";
-const ORANGE = "#ff5f00";
+const BONE = "#f2efea";
+const SAGE = "#557373";
 const PORTRAIT = STAGE.portrait;
 const W = STAGE.w, H = STAGE.h;
 const MX = 90; // side margin, stage px
@@ -31,7 +31,7 @@ function experienceScene(C) {
         dimL: 100, dimW: 1720, lbl: "font-size:18px", sub: "font-size:24px", drift: -50 };
   const eyeStyle = PORTRAIT ? `color:var(--ink);${PM}` : "color:var(--ink)";
   return {
-    slug: "experience", name: "Experience", act: ACT, field: "orange", dur: 2.0,
+    slug: "experience", name: "Experience", act: ACT, field: "sage", dur: 2.0,
     stars: false, ammo: 1, turn: [1.45, "ink"], rest: null, restAt: null, model: false,
     html: `
       <style>
@@ -71,7 +71,7 @@ function experienceScene(C) {
       tl.fromTo(q(root, ".ex-flood"), { clipPath: `circle(0px ${at})` },
         { clipPath: `circle(${R}px ${at})`, duration: 0.55, ease: "power3.inOut", immediateRender: false }, 1.0);
       tl.set(q(root, ".ex-ink"), { color: BONE }, 1.3);
-      tl.set(q(root, ".ex-eb"), { color: ORANGE }, 1.3);
+      tl.set(q(root, ".ex-eb"), { color: SAGE }, 1.3);
     },
   };
 }
@@ -123,11 +123,11 @@ function rolesRestLandscape(C) {
           grid-template-columns:70px 1fr 580px 56px; align-items:center; column-gap:24px; padding:0 22px 0 24px;
           color:var(--bone); text-decoration:none; }
         .rr-link { transition:background-color .25s, color .25s; }
-        .rr-link:hover, .rr-link:focus-visible { background:var(--orange); color:var(--ink); }
+        .rr-link:hover, .rr-link:focus-visible { background:var(--sage); color:var(--ink); }
         .rr .rr-i { font-size:20px; opacity:.7; }
         .rr .rr-left { display:grid; gap:18px; min-width:0; }
         .rr .rr-role span { font:900 84px/1 var(--sans); letter-spacing:-.04em; white-space:nowrap; }
-        .rr .rr-co { font-size:20px; letter-spacing:.2em; color:var(--orange); }
+        .rr .rr-co { font-size:20px; letter-spacing:.2em; color:var(--sage); }
         .rr .rr-right { display:grid; gap:14px; }
         .rr .rr-place { font-size:16px; letter-spacing:.24em; color:var(--ash); }
         .rr .rr-sum { font:400 24px/1.35 var(--sans); color:var(--bone); }
@@ -136,11 +136,11 @@ function rolesRestLandscape(C) {
         .rr-link:hover .rr-arrow { transform:translate(6px,-6px); }
         .rs-head { position:absolute; left:100px; top:${RTOP}px; display:grid; gap:22px; }
         .rs-item { position:absolute; left:500px; width:1330px; height:${RITEM}px; display:grid;
-          grid-template-columns:64px 1fr; align-items:center; border-top:1px dashed rgba(237,237,237,.22); }
-        .rs-item .rs-n { font-size:16px; color:var(--orange); letter-spacing:.2em; }
+          grid-template-columns:64px 1fr; align-items:center; border-top:1px dashed rgba(242, 239, 234,.22); }
+        .rs-item .rs-n { font-size:16px; color:var(--sage); letter-spacing:.2em; }
         .rs-item .rs-t { font:400 22px/1.3 var(--sans); color:var(--bone); }
         .rs-tick { position:absolute; left:470px; width:2px; height:${RITEM * resp.length}px; top:${RTOP}px;
-          background:var(--orange); transform-origin:50% 0; }
+          background:var(--sage); transform-origin:50% 0; }
       </style>
       <div class="abs" style="left:100px;top:112px">${mask(`<span class="eyebrow">Experience</span>`)}</div>
       <div class="abs mono dim rr-count" style="right:100px;top:116px;font-size:20px">${pad(roles.length)} roles · Sheet E-202</div>
@@ -199,22 +199,22 @@ function rolesRestPortrait(C) {
         .rp-roles { position:absolute; left:${MX}px; top:400px; width:${CW}px; display:grid; gap:72px; }
         .rp-role { position:relative; display:grid; gap:18px; padding-top:40px; color:var(--bone); text-decoration:none; }
         .rp-role .rp-line { position:absolute; left:0; top:0; width:100%; height:2px; background:var(--bone); opacity:.35; transform-origin:0 50%; }
-        .rp-role .rp-i { ${PM}; color:var(--orange); }
+        .rp-role .rp-i { ${PM}; color:var(--sage); }
         .rp-role .rp-name span { font:900 96px/1 var(--sans); letter-spacing:-.04em; white-space:nowrap; }
-        .rp-role .rp-co { ${PM}; color:var(--orange); }
+        .rp-role .rp-co { ${PM}; color:var(--sage); }
         .rp-role .rp-meta { ${PM}; color:var(--ash); }
         .rp-role .rp-sum { font:400 40px/1.3 var(--sans); color:var(--bone); margin-top:6px; }
         .rq { position:absolute; left:${MX}px; top:260px; width:${CW}px; display:grid; gap:0; }
         .rq-recap { display:grid; gap:14px; padding-bottom:36px; }
         .rq-recap .rq-row { ${PM}; color:var(--ash); }
         .rq-head { display:flex; justify-content:space-between; align-items:flex-end; padding:30px 0 26px;
-          border-top:2px solid rgba(237,237,237,.35); }
+          border-top:2px solid rgba(242, 239, 234,.35); }
         .rq-head .rq-label { ${PM}; color:var(--ash); }
         .rq-list { position:relative; display:grid; gap:0; padding-left:34px; }
-        .rq-list .rq-tick { position:absolute; left:0; top:0; bottom:0; width:3px; background:var(--orange); transform-origin:50% 0; }
+        .rq-list .rq-tick { position:absolute; left:0; top:0; bottom:0; width:3px; background:var(--sage); transform-origin:50% 0; }
         .rq-item { display:grid; grid-template-columns:72px 1fr; align-items:baseline; padding:24px 0;
-          border-top:1px dashed rgba(237,237,237,.25); }
-        .rq-item .rq-n { ${PM}; color:var(--orange); }
+          border-top:1px dashed rgba(242, 239, 234,.25); }
+        .rq-item .rq-n { ${PM}; color:var(--sage); }
         .rq-item .rq-t { font:400 40px/1.28 var(--sans); color:var(--bone); }
       </style>
       <div class="abs" style="left:${MX}px;top:150px">${mask(`<span class="eyebrow" style="${PM}">Experience</span>`)}</div>
@@ -260,18 +260,18 @@ function processScene(C) {
     html: `
       <style>
         .pr-grid { position:absolute; inset:0; background-image:
-          linear-gradient(rgba(5,5,5,.055) 1px, transparent 1px), linear-gradient(90deg, rgba(5,5,5,.055) 1px, transparent 1px);
+          linear-gradient(rgba(13, 13, 13,.055) 1px, transparent 1px), linear-gradient(90deg, rgba(13, 13, 13,.055) 1px, transparent 1px);
           background-size:40px 40px; background-position:-1px -1px; }
         .pr-svg { position:absolute; left:0; top:0; overflow:visible; }
         .pr-svg path { fill:none; stroke:var(--ink); stroke-width:2; }
         .pr-svg .pr-base, .pr-svg .pr-prog, .pr-svg .pr-oline { stroke-dasharray:1; }
-        .pr-svg .pr-prog { stroke:var(--orange); stroke-width:5; }
+        .pr-svg .pr-prog { stroke:var(--sage); stroke-width:5; }
         .pr-svg .pr-ext, .pr-svg .pr-oext { stroke-width:1.5; opacity:.6; }
         .pr-svg .pr-tick { stroke-width:3; }
         .pr-svg .pr-arr, .pr-svg .pr-oarr { fill:var(--ink); stroke:none; }
         .pr-node { position:absolute; width:${G.node}px; height:${G.node}px; border-radius:50%; border:3px solid var(--ink);
           background:var(--bone); display:grid; place-items:center; z-index:3; }
-        .pr-node .pr-fill { position:absolute; inset:5px; border-radius:50%; background:var(--orange); }
+        .pr-node .pr-fill { position:absolute; inset:5px; border-radius:50%; background:var(--sage); }
         .pr-node b { position:relative; font-size:${G.nodeFont}px; letter-spacing:.08em; color:var(--ink); }
         .pr-tool { color:var(--ink); opacity:.75; white-space:nowrap; }
         .pr-step { font-family:var(--sans); font-weight:900; text-transform:uppercase; line-height:1; letter-spacing:-.03em; color:var(--ink); white-space:nowrap; }
@@ -301,7 +301,7 @@ function processScene(C) {
       tl.from(qa(root, ".pr-ext"), { opacity: 0, duration: 0.3, stagger: 0.08 }, 0.4);
       tl.from(qa(root, ".pr-arr"), { opacity: 0, duration: 0.25 }, 0.95);
       tl.from(qa(root, ".pr-tick"), { opacity: 0, scale: 0, transformOrigin: "50% 50%", duration: 0.3, stagger: 0.08 }, 0.6);
-      // orange progress runs along the line, nodes light as it reaches them
+      // sage progress runs along the line, nodes light as it reaches them
       const T0 = 0.9, STEP = 0.3;
       tl.fromTo(q(root, ".pr-prog"), { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: STEP * Math.max(1, n - 1), ease: "none", immediateRender: true }, T0);
       const nodesEl = qa(root, ".pr-node"), fills = qa(root, ".pr-fill"), tools = qa(root, ".pr-tool");

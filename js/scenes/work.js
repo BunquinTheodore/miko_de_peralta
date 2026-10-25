@@ -8,9 +8,9 @@ const ARROW = (px = 34) =>
 
 // shared inline styles (all classes prefixed wk-)
 const CSS = `<style>
-.wk-eb{position:absolute;display:flex;align-items:center;font:700 20px/1 var(--mono);letter-spacing:.34em;text-transform:uppercase;color:var(--orange);white-space:nowrap}
-.orange .wk-eb{color:var(--ink)}
-.wk-acc{color:var(--orange)} .orange .wk-acc{color:var(--ink)}
+.wk-eb{position:absolute;display:flex;align-items:center;font:700 20px/1 var(--mono);letter-spacing:.34em;text-transform:uppercase;color:var(--sage);white-space:nowrap}
+.sage .wk-eb{color:var(--ink)}
+.wk-acc{color:var(--sage)} .sage .wk-acc{color:var(--ink)}
 .wk-lab{position:absolute;font:700 20px/1 var(--mono);letter-spacing:.3em;text-transform:uppercase;white-space:nowrap}
 .wk-live{display:inline-block;width:14px;height:14px;border-radius:50%;background:currentColor;margin-right:14px;vertical-align:1px}
 
@@ -21,8 +21,8 @@ const CSS = `<style>
 .wk-card{position:absolute;display:flex;flex-direction:column;justify-content:space-between;padding:28px 30px;border:3px solid var(--ink)}
 .wk-card.f-ink{background:var(--ink);color:var(--bone)}
 .wk-card.f-bone{background:var(--bone);color:var(--ink)}
-.wk-card.f-orange{color:var(--ink);background:var(--orange) repeating-linear-gradient(135deg,rgba(5,5,5,.085) 0 2px,transparent 2px 15px);
-  box-shadow:inset 0 0 0 9px var(--orange),inset 0 0 0 11px var(--ink)}
+.wk-card.f-sage{color:var(--ink);background:var(--sage) repeating-linear-gradient(135deg,rgba(13, 13, 13,.085) 0 2px,transparent 2px 15px);
+  box-shadow:inset 0 0 0 9px var(--sage),inset 0 0 0 11px var(--ink)}
 .wk-card .wk-top{display:flex;justify-content:space-between;align-items:center;font:700 18px/1 var(--mono);letter-spacing:.18em;text-transform:uppercase}
 .wk-card .wk-no{font:900 30px/1 var(--mono);letter-spacing:.02em}
 .wk-card .wk-top span:last-child{opacity:.6}
@@ -39,41 +39,41 @@ const CSS = `<style>
 .wk-stack{position:absolute;font:700 22px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;white-space:nowrap}
 .wk-links{position:absolute;display:flex;gap:58px}
 .wk-links a{display:inline-flex;align-items:center;gap:14px;transition:color .2s}
-.wk-links a:hover{color:var(--orange)}
+.wk-links a:hover{color:var(--sage)}
 
 /* drawing sheet */
 .wk-sw{position:absolute;width:700px;height:820px;transform-origin:0 0}
 .wk-sheet{position:absolute;left:0;top:0;width:700px;height:820px;border:3px solid currentColor;background:var(--paper)}
-.bone .wk-sheet{--paper:#f7f6f2;box-shadow:18px 18px 0 rgba(5,5,5,.1)}
-.ink .wk-sheet{--paper:#0c0c0c;box-shadow:0 40px 90px rgba(255,95,0,.12)}
+.bone .wk-sheet{--paper:#f7f6f2;box-shadow:18px 18px 0 rgba(13, 13, 13,.1)}
+.ink .wk-sheet{--paper:#0d0d0d;box-shadow:0 40px 90px rgba(85, 115, 115,.12)}
 .wk-sheet svg.wk-plan{position:absolute;left:0;top:0;width:694px;height:595px;overflow:visible}
 .wk-plan text{font-family:var(--mono);font-weight:700;letter-spacing:.12em;fill:currentColor}
-.wk-plan .wk-or{stroke:var(--orange)} .wk-plan text.wk-or{fill:var(--orange);stroke:none}
+.wk-plan .wk-or{stroke:var(--sage)} .wk-plan text.wk-or{fill:var(--sage);stroke:none}
 .wk-tb{position:absolute;left:18px;right:18px;bottom:18px;height:186px;border:2px solid currentColor;display:grid;
   grid-template-columns:2fr 2fr 1fr 1fr;grid-template-rows:1fr 1fr}
 .wk-tb div{padding:12px 14px;border-left:2px solid currentColor;border-top:2px solid currentColor;display:flex;flex-direction:column;gap:8px;min-width:0}
 .wk-tb div:nth-child(4n+1){border-left:0} .wk-tb div:nth-child(-n+4){border-top:0}
 .wk-tb small{font:700 11px/1 var(--mono);letter-spacing:.24em;text-transform:uppercase;opacity:.55}
 .wk-tb b{font:700 16px/1.25 var(--mono);letter-spacing:.08em;text-transform:uppercase}
-.wk-tb div:first-child b{color:var(--orange)}
-.wk-stamp{position:absolute;top:462px;padding:10px 16px;border:4px solid var(--orange);color:var(--orange);
+.wk-tb div:first-child b{color:var(--sage)}
+.wk-stamp{position:absolute;top:462px;padding:10px 16px;border:4px solid var(--sage);color:var(--sage);
   font:900 22px/1 var(--mono);letter-spacing:.18em;text-transform:uppercase;white-space:nowrap;background:var(--paper)}
 
 /* badge star */
 .wk-badge{position:absolute;color:var(--ink);z-index:3}
-.wk-badge svg{position:absolute;inset:0;width:100%;height:100%;fill:var(--orange)}
+.wk-badge svg{position:absolute;inset:0;width:100%;height:100%;fill:var(--sage)}
 .wk-badge .wk-bt{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
 .wk-badge b{font:900 72px/.9 var(--sans);letter-spacing:-.04em;text-transform:uppercase}
 .wk-badge small{margin-top:8px;max-width:150px;font:700 16px/1.2 var(--mono);letter-spacing:.14em;text-transform:uppercase}
 
 /* credentials */
 .wk-cert{transition:border-color .2s,box-shadow .2s,background-color .2s}
-a.wk-cert:hover,a.wk-cert:focus-visible{border-color:var(--orange);background:#140800;box-shadow:0 0 0 2px var(--orange),0 24px 60px rgba(255,95,0,.28)}
+a.wk-cert:hover,a.wk-cert:focus-visible{border-color:var(--sage);background:#272401;box-shadow:0 0 0 2px var(--sage),0 24px 60px rgba(85, 115, 115,.28)}
 .wk-cert .wk-ct{display:flex;justify-content:space-between;gap:14px;font:700 17px/1.2 var(--mono);letter-spacing:.18em;text-transform:uppercase;padding-left:10px}
-.wk-cert .wk-ct span:first-child{color:var(--orange)}
+.wk-cert .wk-ct span:first-child{color:var(--sage)}
 .wk-cert .wk-ct span:last-child{flex:none;opacity:.6}
 .wk-cert .wk-cn{font:900 38px/.98 var(--sans);letter-spacing:-.03em;text-transform:uppercase;padding-left:10px}
-.wk-cert .wk-cv{display:flex;align-items:center;gap:10px;margin-top:14px;padding-left:10px;font:700 17px/1 var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--orange)}
+.wk-cert .wk-cv{display:flex;align-items:center;gap:10px;margin-top:14px;padding-left:10px;font:700 17px/1 var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--sage)}
 
 /* blast */
 .wk-blast .wk-eb{color:inherit}
@@ -84,7 +84,7 @@ a.wk-row:hover,a.wk-row:focus-visible{background:var(--ink);color:var(--bone);pa
 .wk-row .wk-rl{font:700 20px/1 var(--mono);letter-spacing:.24em;text-transform:uppercase;opacity:.75}
 .wk-row .wk-rv{font:900 44px/1 var(--sans);letter-spacing:-.03em;text-transform:uppercase;white-space:nowrap}
 .wk-row svg{justify-self:end;transition:transform .25s,color .2s}
-a.wk-row:hover svg,a.wk-row:focus-visible svg{transform:translate(6px,-6px);color:var(--orange)}
+a.wk-row:hover svg,a.wk-row:focus-visible svg{transform:translate(6px,-6px);color:var(--sage)}
 .wk-foot a.lnk{border-color:currentColor}
 .wk-foot a.lnk:hover{color:var(--bone)}
 </style>${PT ? `<style>
@@ -140,7 +140,7 @@ function services(C) {
   const COLS = L.cols, GAP = L.gap;
   const W = Math.floor((L.w - GAP * (COLS - 1)) / COLS);
   const rows = Math.ceil(n / COLS), H = Math.floor((L.yend - L.y0 - GAP * (rows - 1)) / rows);
-  const field = (f) => (["ink", "bone", "orange"].includes(f) ? f : "ink");
+  const field = (f) => (["ink", "bone", "sage"].includes(f) ? f : "ink");
   const cards = list.map((s, i) => {
     const l = L.x0 + (i % COLS) * (W + GAP), t = L.y0 + Math.floor(i / COLS) * (H + GAP);
     const body = PT
@@ -152,7 +152,7 @@ function services(C) {
   const ticks = Array.from({ length: COLS + 1 }, (_, k) =>
     `<i style="left:${Math.min(L.w - 3, k * (W + GAP) - (k ? GAP / 2 : 0))}px"></i>`).join("");
   return {
-    slug: "services-rest", name: "Services", act: "05 · Services", field: "orange", dur: 6.0, stars: false, ammo: 3,
+    slug: "services-rest", name: "Services", act: "05 · Services", field: "sage", dur: 6.0, stars: false, ammo: 3,
     turn: null, rest: "scroll to continue", restAt: 4.8, model: false,
     html: `${CSS}
       <div class="wk-eb" style="left:${L.eb[0]}px;top:${L.eb[1]}px">05 · Services</div>
@@ -247,7 +247,7 @@ function planSvg(i, steps) {
     bubbles += `<circle cx="${fx(mx(44))}" cy="${fx(y)}" r="14" fill="none" stroke="currentColor" stroke-width="2"/><text x="${fx(mx(44))}" y="${fx(y + 5)}" font-size="14" text-anchor="middle">${k + 1}</text>`;
   });
 
-  // dimension strings (orange)
+  // dimension strings (sage)
   const tick = (x, y) => `M${fx(x - 6)},${fx(y + 6)} L${fx(x + 6)},${fx(y - 6)}`;
   const dy = 78, dx = mx(638);
   let dims = `M${fx(mx(X0))},${dy} L${fx(mx(X1))},${dy} M${fx(dx)},${Y0} L${fx(dx)},${Y1} `;
@@ -271,8 +271,8 @@ function planSvg(i, steps) {
   const tags = steps.slice(0, pts.length).map((_, k) => {
     const [px, py] = pts[k], tX = mx(px + 50), tY = py - 44;
     return `<g class="wk-tag"><path class="wk-ld wk-or" d="M${fx(mx(px))},${fx(py)} L${fx(tX)},${fx(tY)}" pathLength="1" stroke-dasharray="1" stroke-width="2" fill="none"/>
-      <circle cx="${fx(mx(px))}" cy="${fx(py)}" r="4" fill="var(--orange)" style="fill:var(--orange)"/>
-      <g class="wk-tc"><circle cx="${fx(tX)}" cy="${fx(tY)}" r="16" style="fill:var(--orange)"/><text x="${fx(tX)}" y="${fx(tY + 5)}" font-size="13" text-anchor="middle" style="fill:var(--ink)">${pad(k + 1)}</text></g></g>`;
+      <circle cx="${fx(mx(px))}" cy="${fx(py)}" r="4" fill="var(--sage)" style="fill:var(--sage)"/>
+      <g class="wk-tc"><circle cx="${fx(tX)}" cy="${fx(tY)}" r="16" style="fill:var(--sage)"/><text x="${fx(tX)}" y="${fx(tY + 5)}" font-size="13" text-anchor="middle" style="fill:var(--ink)">${pad(k + 1)}</text></g></g>`;
   }).join("");
 
   // scale bar + north arrow
@@ -286,7 +286,7 @@ function planSvg(i, steps) {
 
   return `<svg class="wk-plan" viewBox="0 0 700 600" aria-hidden="true">
     <defs><pattern id="${gid}" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M20 0H0V20" fill="none" stroke="currentColor" stroke-width="1"/></pattern>
-      <pattern id="${hid}" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><path d="M0 0V12" stroke="var(--orange)" style="stroke:var(--orange)" stroke-width="1.5" opacity=".55"/></pattern></defs>
+      <pattern id="${hid}" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><path d="M0 0V12" stroke="var(--sage)" style="stroke:var(--sage)" stroke-width="1.5" opacity=".55"/></pattern></defs>
     <rect class="wk-paper" x="14" y="14" width="672" height="570" fill="url(#${gid})" opacity=".07"/>
     <path class="wk-grid" d="${grid}" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="14 5 3 5" opacity=".35"/>
     <g class="wk-bub">${bubbles}</g>
@@ -314,7 +314,7 @@ function sheetHtml(C, s, i, left, top, scale = 1) {
 /* ---------------- scenes 23/24: market showcases ---------------- */
 function tickBox() {
   return `<svg viewBox="0 0 44 44" aria-hidden="true"><rect x="2" y="2" width="40" height="40" fill="none" stroke="currentColor" stroke-width="3"/>
-    <path class="wk-tk" d="M10 23 L19 32 L35 12" pathLength="1" stroke-dasharray="1" fill="none" stroke="var(--orange)" style="stroke:var(--orange)" stroke-width="5" stroke-linecap="square"/></svg>`;
+    <path class="wk-tk" d="M10 23 L19 32 L35 12" pathLength="1" stroke-dasharray="1" fill="none" stroke="var(--sage)" style="stroke:var(--sage)" stroke-width="5" stroke-linecap="square"/></svg>`;
 }
 
 function market(C, i) {
@@ -333,7 +333,7 @@ function market(C, i) {
   const mail = C.contact.links.find((l) => /^mailto:/.test(l.url || "")) || C.contact.links.find((l) => l.url);
   const link = mail ? `<a ${linkAttrs(mail.url)}>Discuss a project ${ARROW(PT ? 26 : 20)}</a>` : "";
   const badge = s.badge || { big: s.ghost || "", small: "" };
-  const field = ["ink", "orange", "bone"].includes(s.field) ? s.field : "ink";
+  const field = ["ink", "sage", "bone"].includes(s.field) ? s.field : "ink";
   return {
     slug, name: `Market · ${name}`, act: "06 · Markets", field, dur: 4.0, stars: false, ammo: i === 0 ? 2 : 3,
     turn: null, rest: link ? "discuss a project" : "scroll to continue", restAt: 2.8, model: false,
@@ -409,7 +409,7 @@ function credentials(C) {
     html: `${CSS}
       <div class="wk-eb" style="left:${L.eb[0]}px;top:${L.eb[1]}px">07 · Credentials</div>
       <h2 class="big wk-head abs" style="left:${L.eb[0]}px;top:${L.head[0]}px;font-size:${L.head[1]}px;white-space:nowrap">${maskLine(`Credentials<span class="wk-acc">.</span>`)}</h2>
-      <div class="wk-lab dim wk-hint" style="left:${L.eb[0]}px;top:${L.hint}px"><span class="wk-live" style="background:var(--orange)"></span>Certifications · Education</div>
+      <div class="wk-lab dim wk-hint" style="left:${L.eb[0]}px;top:${L.hint}px"><span class="wk-live" style="background:var(--sage)"></span>Certifications · Education</div>
       ${badgeHtml(pad(n), "Credentials", ...L.badge)}
       ${cards}`,
     anim(root, tl) {
@@ -447,12 +447,12 @@ function blast(C) {
   const li = ct.links.find((l) => /linkedin/i.test(`${l.label} ${l.url || ""}`) && l.url);
   return {
     slug: "blast", name: "Contact", act: "08 · Contact", field: "ink", dur: 5.0, stars: false, ammo: 3,
-    turn: [0.2, "orange"], rest: null, restAt: null, model: false,
+    turn: [0.2, "sage"], rest: null, restAt: null, model: false,
     html: `${CSS}
-      <div class="wk-flood" style="position:absolute;inset:0;background:var(--orange);z-index:0;clip-path:circle(0px at ${FX}px ${FY}px)"></div>
-      <div class="wk-blast wk-wrap" style="position:absolute;inset:0;z-index:2;color:#ededed">
+      <div class="wk-flood" style="position:absolute;inset:0;background:var(--sage-field);z-index:0;clip-path:circle(0px at ${FX}px ${FY}px)"></div>
+      <div class="wk-blast wk-wrap" style="position:absolute;inset:0;z-index:2;color:#f2efea">
         <div class="wk-eb" style="left:${L.x}px;top:${L.eb}px"><span class="wk-live"></span>08 · Contact · ${esc(C.location.note)}</div>
-        <h2 class="mega wk-mega abs" style="left:${L.x - 6}px;top:${L.mega[0]}px;font-size:${L.mega[1]}px;white-space:nowrap;--paper:var(--orange)">${headline}</h2>
+        <h2 class="mega wk-mega abs" style="left:${L.x - 6}px;top:${L.mega[0]}px;font-size:${L.mega[1]}px;white-space:nowrap;--paper:var(--sage)">${headline}</h2>
         <p class="wk-pitch wk-cp" style="left:${L.x}px;top:${L.pitch}px;width:${PT ? 900 : 1300}px;margin:0">${maskLine(esc(ct.pitch))}</p>
         <div class="wk-rows abs" style="left:${L.x}px;top:${L.rows}px;width:${L.w}px">${rows}</div>
         <div class="wk-foot wk-lab" style="left:${L.x}px;right:${L.x}px;top:${L.foot}px;display:flex;justify-content:space-between;align-items:center">
@@ -466,8 +466,8 @@ function blast(C) {
       // flood: a clip-path circle on a full-stage plane (no giant scaled disc)
       tl.fromTo(q(root, ".wk-flood"), { clipPath: `circle(0px at ${FX}px ${FY}px)` },
         { clipPath: `circle(${FR}px at ${FX}px ${FY}px)`, duration: 0.5, ease: "power3.out" }, 0);
-      tl.set(wrap, { color: "#ededed" }, 0);
-      tl.set(wrap, { color: "#050505" }, 0.2);
+      tl.set(wrap, { color: "#f2efea" }, 0);
+      tl.set(wrap, { color: "#0d0d0d" }, 0.2);
       tl.from(q(root, ".wk-eb"), { opacity: 0, x: -40, duration: 0.6, ease: "power3.out" }, 0.45);
       tl.from(qa(root, ".wk-mega .mask > span"), { yPercent: 115, duration: 0.95, ease: "expo.out", stagger: 0.1 }, 0.4);
       tl.from(q(root, ".wk-cp .mask > span"), { yPercent: 110, duration: 0.7, ease: "expo.out" }, 0.75);

@@ -11,8 +11,8 @@ Applies to every scene file. Read this whole file, then re-read `CONTRACT.md` if
 - house.js renders to `STAGE.w x STAGE.h` with the same camera (fov 30 vertical at z 14). In portrait the frame shows
   7.5 units tall x 4.22 wide (256 px per unit); `env.model.project()` returns portrait stage px.
 - The photo is in: `C.person.photo = "img/miko.jpg"` (480x480 head-and-shoulders portrait, light grey backdrop, dark suit).
-- Outline type: `.ol` / `.ol-orange` now draw `-webkit-text-stroke: 6px` with `paint-order: stroke fill` and fill with
-  `var(--paper)` (set per field on `.scene.ink/.orange/.bone/.quad`). This hides the stray lines Geist's overlapping
+- Outline type: `.ol` / `.ol-sage` now draw `-webkit-text-stroke: 6px` with `paint-order: stroke fill` and fill with
+  `var(--paper)` (set per field on `.scene.ink/.sage/.bone/.quad`). This hides the stray lines Geist's overlapping
   contours caused inside letters. If an outline element sits on a backdrop other than its scene field (a card, a cell),
   set `--paper` on it to that backdrop colour. Don't add your own `-webkit-text-stroke` rules; use `.ol`.
 - No decorative dash/line before label text anywhere (the user asked for this; `.eyebrow::before` is gone).

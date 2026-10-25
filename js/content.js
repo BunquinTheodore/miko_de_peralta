@@ -64,10 +64,10 @@ export const CONTENT = {
   services: [
     { name: "Quantity Take-Off", text: "Measured quantities from luxury residential drawings in Bluebeam and PlanSwift.", field: "ink" },
     { name: "BOQ & BOM", text: "Bills of Quantities and Materials, structured and checkable in Excel.", field: "bone" },
-    { name: "Vendor Coordination", text: "Pricing and materials coordinated with vendors and suppliers.", field: "orange" },
+    { name: "Vendor Coordination", text: "Pricing and materials coordinated with vendors and suppliers.", field: "sage" },
     { name: "Project Scheduling", text: "Gantt charts and S-curves in MS Project, JobTread, and Procore.", field: "ink" },
     { name: "Client Communication", text: "Clients and project teams kept aligned across Slack, WhatsApp, Meet, and Zoom.", field: "bone" },
-    { name: "Engineering Base", text: "Petroleum Engineering degree plus terminal operations experience.", field: "orange" },
+    { name: "Engineering Base", text: "Petroleum Engineering degree plus terminal operations experience.", field: "sage" },
   ],
   // two market frames (showcase scenes)
   showcases: [
