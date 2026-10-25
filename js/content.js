@@ -92,7 +92,7 @@ export const CONTENT = {
     headline: "LET'S CONNECT",
     pitch: "Looking for an estimator, need a take-off or BOQ, or want to discuss a pre-construction role? I'd be glad to connect.",
     links: [
-      { label: "Email", value: "deperalta.miko05@gmail.com", url: "mailto:deperalta.miko05@gmail.com" },
+      { label: "Email", value: "miko.q.deperalta@gmail.com", url: "mailto:miko.q.deperalta@gmail.com" },
       { label: "LinkedIn", value: "in/mikodeperalta", url: "https://www.linkedin.com/in/mikodeperalta" },
       { label: "Based in", value: "Philippines · Open to relocation", url: null },
     ],
