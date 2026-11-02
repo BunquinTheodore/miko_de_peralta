@@ -1,7 +1,7 @@
 # Miko De Peralta · Construction Estimator
 
-Portfolio site for Miko De Peralta, pre-construction estimator for luxury residential projects (Qatar, Chicago).
-A scroll-driven "film": 31 scenes scrubbed by scroll (the original 26, plus five from the résumé: a "By the numbers" scene, three role scenes and a technical skills scene), a procedural three.js house that splits into the six layers of
+Portfolio site for Miko De Peralta, pre-construction estimator for luxury residential projects (Qatar).
+A scroll-driven "film": 30 scenes scrubbed by scroll (the original 26 minus the Chicago market, plus five from the résumé: a "By the numbers" scene, three role scenes and a technical skills scene), a procedural three.js house that splits into the six layers of
 his toolkit, and architectural-drawing styling in ink, sage and bone.
 
 ## Run

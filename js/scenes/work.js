@@ -1,4 +1,4 @@
-// Scenes 22-26: services-rest, market-qatar, market-chicago, credentials-rest, blast.
+// Scenes: services-rest, one market scene per C.showcases entry (market-qatar), credentials-rest, blast.
 import { pad, q, qa, esc, STAGE } from "./util.js";
 
 const PT = STAGE.portrait;   // the page is built for exactly one layout
@@ -392,15 +392,22 @@ function market(C, i) {
 function credentials(C) {
   const certs = C.certs, n = certs.length;
   // portrait: 2x2 grid under the headline; landscape: a fanned row
+  // up to 4 cards keep the original layout; 5 cards use a tighter row (landscape) or a third row (portrait)
+  const FIVE = n > 4;
   const L = PT
-    ? { left: [90, 570, 90, 570], top: [690, 720, 1200, 1230], rot: [-2, 1.5, 1.5, -2], cx: 330, eb: [90, 160], head: [210, 130], hint: 386, badge: [720, 356, 270] }
-    : { left: [130, 560, 990, 1420], top: [510, 570, 490, 550], rot: [-5, 3, -3, 5], cx: 770, eb: [100, 100], head: [160, 160], hint: 360, badge: [1530, 96, 270] };
-  const LEFT = (k) => L.left[k % 4], TOP = L.top, ROT = L.rot;
+    ? (FIVE
+      ? { left: [90, 570, 90, 570, 330], top: [650, 680, 1030, 1060, 1400], rot: [-2, 1.5, 1.5, -2, 1], cx: 330, eb: [90, 160], head: [210, 130], hint: 386, badge: [720, 356, 270], card: "height:350px" }
+      : { left: [90, 570, 90, 570], top: [690, 720, 1200, 1230], rot: [-2, 1.5, 1.5, -2], cx: 330, eb: [90, 160], head: [210, 130], hint: 386, badge: [720, 356, 270], card: "" })
+    : (FIVE
+      ? { left: [90, 440, 790, 1140, 1490], top: [500, 560, 480, 560, 500], rot: [-4, 3, -2, 3, -4], cx: 790, eb: [100, 100], head: [160, 160], hint: 360, badge: [1530, 96, 270], card: "width:340px;height:300px" }
+      : { left: [130, 560, 990, 1420], top: [510, 570, 490, 550], rot: [-5, 3, -3, 5], cx: 770, eb: [100, 100], head: [160, 160], hint: 360, badge: [1530, 96, 270], card: "" });
+  const SLOTS = L.left.length;
+  const LEFT = (k) => L.left[k % SLOTS], TOP = L.top, ROT = L.rot;
   const anyLink = certs.some((c) => c.url);
-  const cards = certs.slice(0, 4).map((c, k) => {
+  const cards = certs.slice(0, SLOTS).map((c, k) => {
     const inner = `<div class="wk-ct"><span>${esc(c.issuer)}</span><span>${pad(k + 1)}/${pad(n)}</span></div>
       <div><div class="wk-cn">${esc(c.title)}</div>${c.url ? `<div class="wk-cv">Verify ${ARROW(20)}</div>` : ""}</div>`;
-    const style = `style="left:${LEFT(k)}px;top:${TOP[k % 4]}px"`;
+    const style = `style="left:${LEFT(k)}px;top:${TOP[k % SLOTS]}px;${L.card}"`;
     return c.url ? `<a class="cert wk-cert" ${linkAttrs(c.url)} ${style}>${inner}</a>` : `<div class="cert wk-cert" ${style}>${inner}</div>`;
   }).join("");
   return {
@@ -420,7 +427,7 @@ function credentials(C) {
       tl.fromTo(q(root, ".wk-badge svg"), { rotation: 0 }, { rotation: 260, duration: 4.6, ease: "none", immediateRender: false }, 0);
       qa(root, ".wk-cert").forEach((el, k) => {
         tl.fromTo(el, { x: L.cx - LEFT(k), y: 90, rotation: 0, opacity: 0, transformPerspective: 1000 },
-          { x: 0, y: 0, rotation: ROT[k % 4], opacity: 1, duration: 1.0, ease: "power3.out" }, 0.6 + k * 0.2);
+          { x: 0, y: 0, rotation: ROT[k % SLOTS], opacity: 1, duration: 1.0, ease: "power3.out" }, 0.6 + k * 0.2);
       });
     },
   };
@@ -479,5 +486,5 @@ function blast(C) {
 }
 
 export function scenes(C, P) {
-  return [services(C), market(C, 0), market(C, 1), credentials(C), blast(C)];
+  return [services(C), ...(C.showcases || []).map((_, i) => market(C, i)), credentials(C), blast(C)];
 }

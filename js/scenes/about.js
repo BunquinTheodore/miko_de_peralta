@@ -319,7 +319,7 @@ function timezoneScene(C) {
   const fmts = zones.map((z) => makeFormatter(z.tz));
   const CX = PORT ? 150 : 200;
   let clocks = null;
-  const head = "THREE TIME ZONES";
+  const head = `${["ONE", "TWO", "THREE"][zones.length - 1] || zones.length} TIME ZONE${zones.length > 1 ? "S" : ""}`;
   const headLines = PORT ? twoLines(head) : [head];
   const headPx = PORT ? Math.min(...headLines.map((l) => fit(l, 140, 880, 0.66))) : 132;
   const headHtml = headLines.map((l, i) => mask(`${esc(l)}${i === headLines.length - 1 ? '<span class="period"></span>' : ""}`, "big",

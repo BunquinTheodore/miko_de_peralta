@@ -1,6 +1,6 @@
 # Build contract: Miko De Peralta, cinematic scroll-film portfolio
 
-Miko De Peralta is a pre-construction **construction estimator** (luxury residential houses in Qatar and Chicago;
+Miko De Peralta is a pre-construction **construction estimator** (luxury residential houses in Qatar;
 BS Petroleum Engineering, Adamson University; previously Operations Assistant at Porto Petroleum). This site reuses
 the engine of `C:\Portfolio` (read its `CONTRACT.md` and `js/scenes/*.js` + `js/gun.js` for the established style and
 techniques; reuse/adapt freely, but never import from it). A fixed 1920x1080 "stage" scaled to the window, scenes
