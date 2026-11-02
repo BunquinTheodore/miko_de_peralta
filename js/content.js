@@ -10,6 +10,9 @@ export const CONTENT = {
     tagline: "Engineering precision for luxury residential estimating.",
     bio: "Construction estimator with experience on luxury residential houses in Qatar and Chicago: quantity take-offs, BOQs and BOMs, vendor coordination, and project scheduling, backed by an engineering degree.",
     photo: "img/miko.jpg",
+    // from the résumé
+    titles: ["Construction Estimator", "Quantity Takeoff Specialist", "Project Coordinator"],
+    summary: "Petroleum Engineering graduate with freelance experience in residential construction quantity takeoffs, Bill of Quantities (BOQ) preparation, and remote pre-construction project coordination. Proficient in Bluebeam, PlanSwift, JobTread, and Procore, with additional experience in petroleum terminal operations, inventory monitoring, and operational leadership.",
   },
   words: ["MEASURE", "QUANTIFY", "PRICE", "SCHEDULE"],
   // home base; `markets` are where the estimated projects are
@@ -26,13 +29,74 @@ export const CONTENT = {
     short: "BS Petroleum Engineering",
     school: "Adamson University",
     place: "Manila, Philippines",
-    years: null, // TODO: e.g. "2019 — 2023"
+    years: "Aug 2019 to May 2025",
   },
   work: [
     { company: "Luxury Residential Projects", role: "Estimator", place: "Qatar · Chicago, USA", since: null, url: null,
       summary: "Take-offs, BOQs and BOMs, vendor pricing and schedules for luxury residential houses." },
     { company: "Porto Petroleum", role: "Operations Assistant", place: "Philippines", since: null, url: null,
       summary: "Terminal operations: inventory reconciliation, safety, and cross-functional coordination." },
+  ],
+  // "By the numbers" (résumé figures; approximate where the résumé says so)
+  record: {
+    head: "BY THE NUMBERS",
+    stats: [
+      { value: "12", unit: "", label: "Residential estimating projects", note: "Including luxury residential properties" },
+      { value: "5,000", unit: "sqm", label: "Average project area", note: "Approximate, as reported" },
+      { value: "10 to 30", unit: "", label: "Drawing sheets per project", note: "Reviewed for each take-off" },
+      { value: "3", unit: "", label: "Pre-construction projects coordinated", note: "Residential, remote" },
+      { value: "1 to 2", unit: "days", label: "Typical turnaround", note: "Depending on scope and complexity" },
+    ],
+  },
+  // full résumé roles, newest first (the `work` rows above stay as the short summary)
+  roles: [
+    {
+      title: "BOQ & Construction Estimator", subtitle: null, org: "Freelance", place: "Remote", period: "Aug 2026 to Present",
+      highlights: [
+        "Worked on quantity takeoff and Bill of Quantities (BOQ) assignments across 12 residential construction projects, including luxury residential properties.",
+        "Reviewed approximately 10 to 30 drawing sheets per project to support quantity measurement and pre-construction documentation.",
+        "Supported estimating assignments involving residential projects with an average reported floor area of approximately 5,000 sqm.",
+        "Performed quantity takeoffs for interior finishes and components, including wall finishes, flooring, fixtures, lighting fixtures, joinery, cabinetry, and doors.",
+        "Quantified wall cladding and other cladding-related scopes based on assigned project requirements.",
+        "Used Bluebeam and PlanSwift to support drawing review, quantity measurement, and takeoff preparation.",
+        "Delivered assigned estimating tasks within a typical 1 to 2 day turnaround, depending on project scope and complexity.",
+        "Prepared quantity takeoff and BOQ deliverables to support residential pre-construction planning.",
+      ],
+    },
+    {
+      title: "Project Coordinator", subtitle: "Project Management Virtual Assistant", org: "Freelance", place: "Remote", period: "Aug 2026 to Present",
+      highlights: [
+        "Coordinated 3 residential pre-construction projects, supporting project schedules, task tracking, client communication, and deliverable management.",
+        "Provided client updates and coordinated follow-ups to keep stakeholders informed of project progress and outstanding requirements.",
+        "Coordinated with multiple subcontractors according to project scope and trade requirements, including plumbing, structural work, and sewer and water connections.",
+        "Coordinated deliveries and scheduling requirements to support project activities and trade sequencing.",
+        "Assisted with permit-related requirements and documentation as part of the pre-construction coordination process.",
+        "Used JobTread and Procore to support project coordination, communication, and management workflows.",
+        "Monitored deadlines and deliverables, supporting on-time delivery through scheduling, follow-ups, and stakeholder coordination.",
+        "Managed revisions and client feedback as part of ongoing project communication and deliverable coordination.",
+      ],
+    },
+    {
+      title: "Operations Assistant", subtitle: null, org: "Porto Petroleum Inc.", place: "Sariaya, Quezon, Philippines", period: "Jan 2026 to Sep 2026",
+      highlights: [
+        "Promoted from Filler to Operations Assistant in approximately two months, reflecting demonstrated performance and operational capability.",
+        "Served as Loading Master during multiple vessel-receiving operations involving approximately 10 million liters of motor gasoline.",
+        "Monitored inventory across one 3,000,000-liter motor gasoline tank and two 50,000-liter ethanol additive tanks, recording product volume and temperature every shift.",
+        "Conducted weekly and month-end inventory tallies to support inventory monitoring and reconciliation.",
+        "Led team members during assigned shifts and served as the immediate supervisor during night shifts.",
+        "Coordinated with surveyors, Safety Officers, logistics personnel, sales managers, and Accounting to support terminal operations.",
+        "Prepared and released receipts, waybills, and withdrawal certificates, and coordinated Sales Order and account balance tallies with Accounting.",
+        "Supervised pipeline commissioning activities and truck rescue and recovery operations involving trucks outside standard operating conditions.",
+      ],
+    },
+  ],
+  // résumé "Technical skills" groups (shown in the Scope scene after the toolkit)
+  scopes: [
+    { group: "Construction Estimating & Pre-Construction", items: ["Quantity Takeoff", "Bill of Quantities (BOQ)", "Bill of Materials (BOM)", "Residential Construction", "Luxury Residential Projects", "Construction Drawing Review", "Pre-Construction Documentation"] },
+    { group: "Interior Finishes & Cladding", items: ["Wall Finishes", "Flooring", "Fixtures", "Lighting Fixtures", "Joinery and Cabinetry", "Doors", "Wall Cladding", "Other Cladding-Related Takeoffs"] },
+    { group: "Project Coordination & Management", items: ["Project Scheduling and Task Tracking", "Client Communication", "Subcontractor Coordination", "Delivery Coordination", "Permit Coordination", "Document and Deliverable Management", "Revision and Feedback Management"] },
+    { group: "Software", items: ["Bluebeam", "PlanSwift", "JobTread", "Procore", "AutoCAD", "Microsoft Office"] },
+    { group: "Communication Platforms", items: ["Google Meet", "Zoom", "Slack", "WhatsApp"] },
   ],
   // "How I build an estimate"
   process: [

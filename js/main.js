@@ -316,15 +316,36 @@ function buildAbout() {
   add("h1", p.full);
   add("p", `${p.title}. ${p.tagline}`);
   add("p", p.bio);
+  if (p.titles?.length) add("p", p.titles.join(". ") + ".");
+  if (p.summary) add("p", p.summary);
   add("p", `${join(loc.city, loc.country)} (${loc.tzLabel}). ${loc.note}.`);
   add("h2", "Experience");
   list(C.work.map((w) => [`${w.role}, ${join(w.company, w.place, w.since)}: ${w.summary}`, w.url]));
+  const stats = C.record?.stats ?? [];
+  if (stats.length) {
+    add("h2", "By the numbers");
+    list(stats.map((s) => [`${[s.value, s.unit].filter(Boolean).join(" ")}: ${s.label}${s.note ? ` (${s.note})` : ""}`]));
+  }
+  const roles = C.roles ?? [];
+  if (roles.length) {
+    add("h2", "Roles");
+    for (const r of roles) {
+      add("h3", r.subtitle ? `${r.title} (${r.subtitle})` : r.title);
+      add("p", join(r.org, r.place, r.period));
+      list((r.highlights ?? []).map((h) => [h]));
+    }
+  }
   add("h2", "How I build an estimate");
   list(C.process.map((s, i) => [`${i + 1}. ${s.step} (${s.tool}): ${s.text}`]));
   add("h2", "Responsibilities");
   list(C.responsibilities.map((r) => [r]));
   add("h2", "Skills");
   list(Object.values(C.skills).map((s) => [`${s.group}: ${s.items.join(", ")}`]));
+  const scopes = C.scopes ?? [];
+  if (scopes.length) {
+    add("h2", "Technical skills");
+    list(scopes.map((g) => [`${g.group}: ${(g.items ?? []).join(", ")}`]));
+  }
   add("h2", "How I can help");
   list(C.services.map((s) => [`${s.name}: ${s.text}`]));
   add("h2", "Markets");
