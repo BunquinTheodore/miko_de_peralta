@@ -1,6 +1,17 @@
 // Simple 2D portfolio. All copy comes from CONTENT; DOM is built with textContent only.
 import { CONTENT as C } from "./content.js";
 
+/** Split text so anything inside parentheses becomes an <em> (still text nodes only, never parsed as HTML). */
+function withItalicParens(text) {
+  return text.split(/(\([^)]*\))/).filter(Boolean)
+    .map((part) => {
+      if (!/^\(.*\)$/.test(part)) return document.createTextNode(part);
+      const em = document.createElement("em");
+      em.textContent = part;
+      return em;
+    });
+}
+
 /** Build an element. Text children are appended as text nodes, never parsed as HTML. */
 function el(tag, attrs, ...kids) {
   const node = document.createElement(tag);
@@ -11,7 +22,7 @@ function el(tag, attrs, ...kids) {
   }
   for (const kid of kids.flat()) {
     if (kid == null || kid === false) continue;
-    node.append(kid instanceof Node ? kid : document.createTextNode(String(kid)));
+    node.append(...(kid instanceof Node ? [kid] : withItalicParens(String(kid))));
   }
   return node;
 }
@@ -65,7 +76,8 @@ function renderRoles() {
       el("header", { class: "role-meta" },
         el("p", { class: "role-period" }, r.period),
         el("p", { class: "role-org" }, r.org),
-        el("p", { class: "role-place" }, r.place)),
+        el("p", { class: "role-place" }, r.place),
+        r.photo && el("img", { class: "role-photo", src: r.photo, alt: r.photoAlt || "", width: 480, height: 853, loading: "lazy", decoding: "async" })),
       el("div", { class: "role-body" },
         el("h3", null, r.title),
         el("ul", { class: "bullets" }, r.highlights.map((h) => el("li", null, h)))))));

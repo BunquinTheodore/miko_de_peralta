@@ -6,8 +6,7 @@ Portfolio site for Miko De Peralta: planning and scheduling, operations coordina
 
 - `index.html` is the default entry: a simple, 2D, normal vertical scroll portfolio (`css/simple.css`, rendered by `js/simple.js`).
   It has a button that opens the animated version.
-- `animated.html` is the cinematic scroll film. It has a fixed "Simple version" link (`css/film-toggle.css`) back to `index.html`,
-  visible for the whole film.
+- `animated.html` is the cinematic scroll film. Open it from the "View animated version" buttons on `index.html`.
 - Both pages read the same copy from `js/content.js`, so editing it updates both.
 
 ## The animated film

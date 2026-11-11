@@ -68,7 +68,7 @@ export const CONTENT = {
       ],
     },
     {
-      title: "Operations Assistant", subtitle: null, org: "Porto Petroleum Inc.", place: "Sariaya, Quezon, Philippines", period: "Jan 2026 to Sep 2026",
+      title: "Operations Assistant", subtitle: null, org: "Porto Petroleum Inc.", place: "Sariaya, Quezon, Philippines", period: "Jan 2026 to Sep 2026", photo: "img/vessel.jpg", photoAlt: "Miko in a hard hat on the deck of a tanker at Porto Petroleum",
       highlights: [
         "Coordinated daily across 5 departments: cargo figures with surveyors, safety with Safety Officers, product movement with Logistics, orders with Sales, and records with Accounting.",
         "Scheduled shift rosters, truck loading and dispatch, vessel arrivals and discharge, and maintenance inspections.",
