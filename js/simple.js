@@ -40,20 +40,16 @@ const link = (cls, href, label) => {
 const contactLink = (label) => C.contact.links.find((l) => l.label === label);
 
 function renderHero() {
-  const { person, location } = C;
-  fill("place", `${location.city}, ${location.country}`);
+  const { person } = C;
   fill("name", person.first, " ", person.last);
   fill("titles", person.titles.map((t) => el("li", null, t)));
   fill("summary", person.tagline);
 
   const email = contactLink("Email");
   const linkedin = contactLink("LinkedIn");
-  const phone = contactLink("Phone");
   fill("actions",
     email && link("btn btn-solid", email.url, "Email me"),
     linkedin && link("btn btn-line", linkedin.url, "LinkedIn"),
-    phone && link("btn btn-line", phone.url, `Call ${phone.value}`),
-    link("btn btn-text", "animated.html", "View animated version"),
   );
 
   const frame = slot("portrait");
