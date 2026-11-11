@@ -171,6 +171,7 @@ h3 { font-size: 1.2rem; line-height: 1.3; letter-spacing: 0.12em; }
 .cert:last-child { border-bottom: 1px solid currentColor; }
 .cert-title { font-weight: 600; grid-column: 1; font-size: 0.95rem; }
 .cert-issuer { grid-column: 1; font-size: 0.84rem; }
+.cert em { font-style: normal; }   /* the italic-in-parentheses rule is for the experience bullets, not certificate lines */
 .cert .pill { grid-column: 2; grid-row: 1 / span 2; }
 .pill { font: 700 0.62rem/1 var(--sans); letter-spacing: 0.14em; text-transform: uppercase; padding: 5px 10px; border-radius: 999px; background: var(--fg); color: var(--bg); }
 
