@@ -2,6 +2,7 @@
 import { pad, q, qa, esc, STAGE } from "./util.js";
 
 const PT = STAGE.portrait;   // the page is built for exactly one layout
+const SQ = STAGE.square;     // 1080x1080 layout for social posts (?layout=square)
 
 const ARROW = (px = 34) =>
   `<svg viewBox="0 0 24 24" width="${px}" height="${px}" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="square" aria-hidden="true"><path d="M5 19L19 5M8 5h11v11"/></svg>`;
@@ -94,20 +95,43 @@ a.wk-row:hover svg,a.wk-row:focus-visible svg{transform:translate(6px,-6px);colo
 .wk-card .wk-top span.wk-nm{opacity:1}
 .wk-card .wk-no{font-size:36px}
 .wk-card .wk-tx{margin-top:0;font-size:40px;line-height:1.2;opacity:.9}
+.wk-ttl{font-size:92px}
 .wk-pitch{font-size:40px;line-height:1.25}
 .wk-stack{font-size:28px;letter-spacing:.14em;line-height:1.4;white-space:normal;width:900px}
 .wk-links a{font-size:28px;letter-spacing:.16em}
 .wk-badge small{font-size:26px;letter-spacing:.1em;max-width:210px}
 .wk-cert{width:420px;height:440px;padding:30px}
 .wk-cert .wk-ct{flex-direction:column;gap:12px;font-size:28px;letter-spacing:.14em}
-.wk-cert .wk-cn{font-size:46px}
+.wk-cert .wk-cn{font-size:42px}
 .wk-cert .wk-cv{font-size:28px}
 .wk-row{grid-template-columns:1fr 60px;grid-template-rows:auto auto;align-content:center;row-gap:18px;height:150px;padding:0 20px}
 .wk-row .wk-rl,.wk-row .wk-rv{grid-column:1}
 .wk-row > :last-child{grid-column:2;grid-row:1/3}
 .wk-row .wk-rl{font-size:28px;letter-spacing:.2em}
 .wk-foot{flex-direction:column;align-items:flex-start!important;gap:30px}
+.wk-foot span{white-space:normal}
 .wk-foot a.lnk{font-size:28px;letter-spacing:.16em}
+</style>` : ""}${SQ ? `<style>
+.wk-eb,.wk-lab{font-size:22px;letter-spacing:.22em}
+.wk-card{padding:20px 26px}
+.wk-card .wk-top{font-size:17px}
+.wk-card .wk-no{font-size:28px}
+.wk-card .wk-nm{font-size:33px}
+.wk-card .wk-tx{margin-top:8px;font-size:19px;line-height:1.3}
+.wk-ttl{font-size:108px}
+.wk-pitch{font-size:27px}
+.wk-steps{flex-direction:column;gap:14px}
+.wk-step{font-size:36px;gap:14px}
+.wk-step svg{width:34px;height:34px}
+.wk-stack{font-size:18px;line-height:1.5;white-space:normal;width:350px}
+.wk-links a{font-size:20px}
+.wk-badge b{font-size:56px}
+.wk-badge small{font-size:13px;max-width:120px}
+.wk-ghost{font-size:700px}
+.wk-cert{padding:22px 20px}
+.wk-cert .wk-ct{font-size:15px;letter-spacing:.14em;padding-left:6px}
+.wk-cert .wk-cn{font-size:33px;padding-left:6px}
+.wk-cert .wk-cv{font-size:15px;padding-left:6px}
 </style>` : ""}`;
 
 // 22-point seal star as an SVG polygon
@@ -134,7 +158,9 @@ const draw = (tl, els, at, dur = 0.6, stagger = 0) =>
 function services(C) {
   const list = C.services, n = list.length;
   // portrait: one full-width column (two columns would push the 40px copy to 5+ lines)
-  const L = PT
+  const L = SQ
+    ? { cols: 2, gap: 24, x0: 70, w: 940, y0: 280, yend: 1010, eb: [70, 62], head: [104, 104], rule: 240 }
+    : PT
     ? { cols: 1, gap: 16, x0: 90, w: 900, y0: 384, yend: 1770, eb: [90, 160], head: [214, 112], rule: 346 }
     : { cols: 3, gap: 36, x0: 100, w: 1720, y0: 380, yend: 980, eb: [100, 96], head: [146, 136], rule: 328 };
   const COLS = L.cols, GAP = L.gap;
@@ -302,7 +328,7 @@ function planSvg(i, steps) {
 function sheetHtml(C, s, i, left, top, scale = 1) {
   const m = i % 2 === 1;
   const cells = [["Project", "Luxury Residential"], ["Location", s.title.join(" ")], ["Sheet", `A-10${i + 1}`], ["Scale", "1:100"],
-    ["Stage", "Pre-construction"], ["Scope", s.steps.join(" · ")], ["Drawn", C.person.initials], ["Rev", "02"]];
+    ["Stage", "Estimating"], ["Scope", s.steps.join(" · ")], ["Drawn", C.person.initials], ["Rev", "02"]];
   const tb = cells.map(([k, v]) => `<div><small>${esc(k)}</small><b>${esc(v)}</b></div>`).join("");
   // the sheet is an illustration (its title block repeats the scene copy), so it is hidden from assistive tech
   return `<div class="wk-sw" aria-hidden="true" style="left:${left}px;top:${top}px${scale !== 1 ? `;transform:scale(${scale})` : ""}"><div class="wk-sheet">
@@ -323,10 +349,12 @@ function market(C, i) {
   const name = s.title.join(" ");
   const m = i % 2 === 1;
   // layout table: text column, sheet (+scale), badge on the sheet's outer top corner, ghost
-  const L = PT
+  const L = SQ
+    ? { tx: 60, top: [66, 120, 340, 528, 566, 770, 905], pw: 380, sx: 468, sy: 330, ss: 0.8, bx: 840, by: 64, gx: -30, gy: 40 }
+    : PT
     ? { tx: 90, top: [160, 220, 560, 700, 745, 830, 950], pw: 900, sx: 232, sy: 1045, ss: 0.88, bx: m ? 90 : 780, by: 1000, gx: -40, gy: 240 }
     : { tx: m ? 920 : 110, top: [110, 196, 540, 664, 706, 810, 880], pw: 880, sx: m ? 110 : 1110, sy: 140, ss: 1, bx: m ? 90 : 1620, by: 90, gx: m ? 640 : 330, gy: 120 };
-  const TX = L.tx, [tEb, tTtl, tPitch, tScope, tSteps, tStack, tLink] = L.top, BS = 210;
+  const TX = L.tx, [tEb, tTtl, tPitch, tScope, tSteps, tStack, tLink] = L.top, BS = SQ ? 176 : 210;
   const accentOf = (line) => (s.accent && line.replace(/[^\w]/g, "").toLowerCase() === String(s.accent).toLowerCase() ? "wk-acc" : "");
   const titleHtml = s.title.map((l) => maskLine(esc(l), accentOf(l))).join("");
   const steps = s.steps.map((w) => `<span class="wk-step">${tickBox()}<span>${esc(w)}</span></span>`).join("");
@@ -394,7 +422,10 @@ function credentials(C) {
   // portrait: 2x2 grid under the headline; landscape: a fanned row
   // up to 4 cards keep the original layout; 5 cards use a tighter row (landscape) or a third row (portrait)
   const FIVE = n > 4;
-  const L = PT
+  const SIZES = [[300, 300], [300, 300], [300, 300], [460, 300], [460, 300]];
+  const L = SQ
+    ? { left: [70, 390, 710, 70, 550], top: [336, 356, 330, 690, 676], rot: [-2, 1.5, -1.5, 1.5, -1.5], cx: 400, eb: [70, 62], head: [104, 104], hint: 234, badge: [840, 64, 176], size: SIZES, card: "" }
+    : PT
     ? (FIVE
       ? { left: [90, 570, 90, 570, 330], top: [650, 680, 1030, 1060, 1400], rot: [-2, 1.5, 1.5, -2, 1], cx: 330, eb: [90, 160], head: [210, 130], hint: 386, badge: [720, 356, 270], card: "height:350px" }
       : { left: [90, 570, 90, 570], top: [690, 720, 1200, 1230], rot: [-2, 1.5, 1.5, -2], cx: 330, eb: [90, 160], head: [210, 130], hint: 386, badge: [720, 356, 270], card: "" })
@@ -407,7 +438,8 @@ function credentials(C) {
   const cards = certs.slice(0, SLOTS).map((c, k) => {
     const inner = `<div class="wk-ct"><span>${esc(c.issuer)}</span><span>${pad(k + 1)}/${pad(n)}</span></div>
       <div><div class="wk-cn">${esc(c.title)}</div>${c.url ? `<div class="wk-cv">Verify ${ARROW(20)}</div>` : ""}</div>`;
-    const style = `style="left:${LEFT(k)}px;top:${TOP[k % SLOTS]}px;${L.card}"`;
+    const sz = L.size?.[k % SLOTS];
+    const style = `style="left:${LEFT(k)}px;top:${TOP[k % SLOTS]}px;${sz ? `width:${sz[0]}px;height:${sz[1]}px` : L.card}"`;
     return c.url ? `<a class="cert wk-cert" ${linkAttrs(c.url)} ${style}>${inner}</a>` : `<div class="cert wk-cert" ${style}>${inner}</div>`;
   }).join("");
   return {
@@ -444,8 +476,8 @@ function blast(C) {
     ? `${lead ? maskLine(lead) : ""}${maskLine(esc(last), "ol")}`
     : maskLine(`${lead ? `${lead} ` : ""}<span class="ol">${esc(last)}</span>`);
   const L = PT
-    ? { x: 90, w: 900, eb: 160, mega: [210, 185], pitch: 560, rows: 790, foot: 1560 }
-    : { x: 100, w: 1720, eb: 92, mega: [140, 220], pitch: 372, rows: 510, foot: 920 };
+    ? { x: 90, w: 900, eb: 160, mega: [210, 185], pitch: 560, rows: 790, foot: 1600 }
+    : { x: 100, w: 1720, eb: 92, mega: [140, 220], pitch: 372, rows: 510, foot: 985 };
   const rows = ct.links.map((l) => {
     const inner = `<span class="wk-rl">${esc(l.label)}</span><span class="wk-rv">${esc(l.value)}</span>`;
     return l.url ? `<a class="wk-row" ${linkAttrs(l.url)}>${inner}${ARROW(PT ? 44 : 34)}</a>` : `<div class="wk-row">${inner}<span></span></div>`;
@@ -464,7 +496,7 @@ function blast(C) {
         <div class="wk-rows abs" style="left:${L.x}px;top:${L.rows}px;width:${L.w}px">${rows}</div>
         <div class="wk-foot wk-lab" style="left:${L.x}px;right:${L.x}px;top:${L.foot}px;display:flex;justify-content:space-between;align-items:center">
           <span>&copy; 2026 ${esc(C.person.first)} ${esc(C.person.last)}</span>
-          <span style="opacity:.7">${esc(C.person.title)}</span>
+          <span style="opacity:.7;white-space:normal">${esc(C.person.tagline)}</span>
           ${li ? `<a class="lnk" ${linkAttrs(li.url)}>${esc(li.label)} ${ARROW(PT ? 24 : 16)}</a>` : "<span></span>"}
         </div>
       </div>`,

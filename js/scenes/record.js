@@ -1,10 +1,11 @@
 // Résumé scenes after the process sheet: record-rest ("By the numbers": the five résumé figures plus the three
-// titles) and three role sheets (one per C.roles entry, all eight highlights each).
+// titles) and one role sheet per C.roles entry, all eight highlights each).
 // Each builder branches on STAGE.portrait (1080x1920 stage) vs landscape (1920x1080).
 import { pad, q, qa, esc, count, STAGE } from "./util.js";
 
 const ACT = "03 · Experience";
 const PORTRAIT = STAGE.portrait;
+const SQUARE = STAGE.square;
 const W = STAGE.w, H = STAGE.h;
 const MX = 90; // side margin, stage px
 const CW = W - 2 * MX; // content width
@@ -56,7 +57,7 @@ function recordScene(C) {
   const head = String(rec.head || "");
   const stats = (rec.stats || []).slice(0, 5);
   const titles = (C.person && C.person.titles) || [];
-  const L = PORTRAIT ? recordPortrait(head, stats, titles) : recordLandscape(head, stats, titles);
+  const L = SQUARE ? recordSquare(head, stats, titles) : PORTRAIT ? recordPortrait(head, stats, titles) : recordLandscape(head, stats, titles);
 
   return {
     slug: "record-rest", name: "By the numbers", act: ACT, field: "ink", dur: 3.6,
@@ -148,6 +149,37 @@ function recordLandscape(head, stats, titles) {
   };
 }
 
+// square (1080x1080): header, titles on one line, then five figure rows filling the rest of the frame
+function recordSquare(head, stats, titles) {
+  const TOP = 300, BOT = 984, ROW = Math.floor((BOT - TOP) / Math.max(1, stats.length));
+  const headPx = fit(head, 112, CW, 0.6);
+  const valPx = Math.min(...stats.map((s) => fit(s.value, 80, 330, 0.62)), 80);
+  const rules = Array.from({ length: stats.length + 1 }, (_, i) =>
+    `<i class="nb-rule" style="left:${MX}px;top:${TOP + i * ROW}px;width:${CW}px"></i>`).join("");
+  return {
+    css: `.nb-rows { position:absolute; left:${MX}px; top:${TOP}px; width:${CW}px; display:grid;
+          grid-template-rows:repeat(${stats.length}, ${ROW}px); }
+        .nb-row { display:grid; grid-template-columns:56px 340px 1fr; align-items:center; column-gap:18px; padding-left:28px; }
+        .nb-row .nb-i { font-size:16px; letter-spacing:.2em; }
+        .nb-vline { display:flex; align-items:baseline; gap:12px; min-width:0; }
+        .nb-val { font-size:${valPx}px; }
+        .nb-unit { font-size:18px; letter-spacing:.2em; }
+        .nb-txt { display:grid; gap:8px; }
+        .nb-label { font:500 27px/1.15 var(--sans); letter-spacing:-.01em; }
+        .nb-note { font-size:14px; letter-spacing:.14em; }
+        .nb-tick { position:absolute; left:${MX}px; top:${TOP}px; width:3px; height:${ROW * stats.length}px;
+          background:var(--sage); transform-origin:50% 0; }`,
+    body: `
+        <div class="abs nb-eye" style="left:${MX + 6}px;top:96px"><span class="eyebrow">Experience</span></div>
+        <div class="abs mono nb-sheet" style="right:${MX}px;top:98px;font-size:16px;color:var(--mut)">Sheet E-203 · Rev 03</div>
+        ${mask(esc(head), "mid nb-head", `position:absolute;left:${MX + 2}px;top:140px;font-size:${headPx}px;white-space:nowrap`)}
+        <div class="abs mono nb-titles" style="left:${MX + 4}px;top:${140 + headPx + 22}px;width:${CW}px;font-size:15px;letter-spacing:.14em;line-height:1.5">${titles.map(esc).join(" · ")}</div>
+        ${rules}
+        <i class="nb-tick"></i>
+        <div class="nb-rows">${stats.map((s, i) => statRow(s, i)).join("")}</div>`,
+  };
+}
+
 // portrait: header lines, the three titles stacked, then five stacked figures filling the safe band
 function recordPortrait(head, stats, titles) {
   const lines = split2(head);
@@ -185,8 +217,8 @@ function recordPortrait(head, stats, titles) {
 }
 
 /* ------------------------------------------------------------------ role-* */
-const ROLE_SLUGS = ["role-estimator", "role-coordinator", "role-operations"];
-const ROLE_FIELDS = ["bone", "ink", "bone"];
+const ROLE_SLUGS = ["role-estimator", "role-operations"];
+const ROLE_FIELDS = ["bone", "ink"];
 const ROLE_REST = 2.4;
 const SPLIT = 4; // portrait: highlights shown in phase A; the rest follow in phase B
 
@@ -215,7 +247,7 @@ function roleScene(r, i, n) {
   const label = `Role ${pad(i + 1)} / ${pad(n)}`;
   const hl = (r.highlights || []).slice();
   const metaLeft = [r.org, r.place].filter(Boolean).join(" · ");
-  const L = PORTRAIT ? rolePortrait(r, i, label, hl, metaLeft) : roleLandscape(r, i, label, hl, metaLeft);
+  const L = SQUARE ? roleSquare(r, i, label, hl, metaLeft) : PORTRAIT ? rolePortrait(r, i, label, hl, metaLeft) : roleLandscape(r, i, label, hl, metaLeft);
   return {
     slug, name: `Role · ${r.title}`, act: ACT, field, dur: 3.8,
     stars: field === "ink", ammo: 3, turn: null, rest: "scroll to continue", restAt: ROLE_REST, model: false,
@@ -261,6 +293,43 @@ function roleLandscape(r, i, label, hl, metaLeft) {
         .rl-item { grid-template-columns:64px 1fr; padding-top:16px; }
         .rl-n { font-size:18px; letter-spacing:.2em; padding-top:4px; }
         .rl-t { font:400 24px/1.36 var(--sans); }`,
+    body: `
+        <div class="rl-col">
+          <div class="rl-top"><span class="mono rl-idx">${esc(label)}</span><span class="mono rl-sheet">Sheet E-3${pad(i + 1)} · Rev 03</span></div>
+          ${mask(esc(title), "rl-head rl-title", `font-size:${tp}px`)}
+          ${r.subtitle ? `<span class="mono rl-sub">${esc(r.subtitle)}</span>` : ""}
+          <div class="rl-metas"><span class="mono rl-meta">${esc(metaLeft)}</span><span class="mono rl-meta rl-mut">${esc(r.period || "")}</span></div>
+          ${dimHtml()}
+          <div class="rl-list">${hl.map(itemHtml).join("")}</div>
+        </div>`,
+    anim(root, tl) {
+      headerIn(root, tl, 0);
+      tl.from(qa(root, ".rl-item"), { opacity: 0, x: 40, duration: 0.5, ease: "power3.out", stagger: 0.1 }, 0.7);
+    },
+  };
+}
+
+// square (1080x1080): header stack, then all highlights in two columns of four filling the frame
+function roleSquare(r, i, label, hl, metaLeft) {
+  const title = String(r.title).toUpperCase();
+  const tp = fit(title, 104, CW, 0.62);
+  const rows = Math.ceil(hl.length / 2) || 1;
+  return {
+    css: `.rl-col { position:absolute; left:${MX}px; top:96px; width:${CW}px; height:${984 - 96}px; display:flex; flex-direction:column; }
+        .rl-top { display:flex; justify-content:space-between; align-items:center; padding:0 6px; }
+        .rl-idx { font-size:16px; letter-spacing:.26em; font-weight:700; }
+        .rl-sheet { font-size:16px; }
+        .rl-head { margin-top:30px; }
+        .rl-sub { margin-top:20px; font-size:17px; letter-spacing:.16em; padding-left:4px; }
+        .rl-metas { margin-top:16px; display:flex; justify-content:space-between; padding:0 4px; }
+        .rl-meta { font-size:16px; letter-spacing:.14em; }
+        .rl-dim { margin-top:8px; }
+        .rl-list { margin-top:20px; flex:1; display:grid; grid-auto-flow:column; grid-template-columns:1fr 1fr;
+          grid-template-rows:repeat(${rows}, 1fr); column-gap:40px; }
+        .rl-item { grid-template-columns:48px 1fr; padding-top:14px; }
+        .rl-n { font-size:14px; letter-spacing:.16em; padding-top:3px; }
+        .rl-t { font:400 20px/1.32 var(--sans); }
+        .rl-col > * { flex-shrink:0; } .rl-col > .rl-list { flex-shrink:1; min-height:0; }`,
     body: `
         <div class="rl-col">
           <div class="rl-top"><span class="mono rl-idx">${esc(label)}</span><span class="mono rl-sheet">Sheet E-3${pad(i + 1)} · Rev 03</span></div>

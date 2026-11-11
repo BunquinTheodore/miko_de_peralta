@@ -6,12 +6,18 @@ const ACT = "03 · Experience";
 const BONE = "#f2efea";
 const SAGE = "#557373";
 const PORTRAIT = STAGE.portrait;
+const SQ = STAGE.square; // 1080x1080 stage (?layout=square)
+const NARROW = PORTRAIT || SQ; // layouts only 1080px wide
 const W = STAGE.w, H = STAGE.h;
 const MX = 90; // side margin, stage px
 
 // font-size that keeps `text` inside `width` px (approximate Geist 900 uppercase advance)
 const fit = (text, max, width, k = 0.62) =>
   Math.max(40, Math.min(max, Math.floor(width / (Math.max(1, String(text).length) * k))));
+const splitHead = (text) => {
+  const w = String(text).split(/\s+/).filter(Boolean), k = Math.ceil(w.length / 2);
+  return w.length < 2 ? w : [w.slice(0, k).join(" "), w.slice(k).join(" ")];
+};
 const mask = (inner, cls = "", style = "") => `<div class="mask ${cls}" style="${style}"><span>${inner}</span></div>`;
 const ARROW = `<svg class="rr-arrow" viewBox="0 0 32 32" width="40" height="40" fill="none" stroke="currentColor"
   stroke-width="3" stroke-linecap="square"><path d="M6 26 L26 6 M10 6 H26 V22"/></svg>`;
@@ -24,12 +30,15 @@ const PM = "font-size:28px;letter-spacing:.18em";
 function experienceScene(C) {
   const roles = C.work || [];
   const sub = `${pad(roles.length)} roles`;
-  const L = PORTRAIT
+  const L = SQ
+    ? { eyeTop: 380, wordTop: 440, wordPx: fit("EXPERIENCE", 250, 860, 0.56), dimTop: 640, subTop: 700,
+        dimL: MX, dimW: W - 2 * MX, lbl: "font-size:22px;letter-spacing:.2em", sub: "font-size:22px;letter-spacing:.2em", drift: 24 }
+    : PORTRAIT
     ? { eyeTop: 700, wordTop: 770, wordPx: fit("EXPERIENCE", 250, 860, 0.56), dimTop: 960, subTop: 1030,
         dimL: MX, dimW: W - 2 * MX, lbl: PM, sub: PM, drift: 24 }
     : { eyeTop: 300, wordTop: 376, wordPx: 262, dimTop: 668, subTop: 744,
         dimL: 100, dimW: 1720, lbl: "font-size:18px", sub: "font-size:24px", drift: -50 };
-  const eyeStyle = PORTRAIT ? `color:var(--ink);${PM}` : "color:var(--ink)";
+  const eyeStyle = NARROW ? `color:var(--ink);${SQ ? "font-size:22px;letter-spacing:.2em" : PM}` : "color:var(--ink)";
   return {
     slug: "experience", name: "Experience", act: ACT, field: "sage", dur: 2.0,
     stars: false, ammo: 1, turn: [1.45, "ink"], rest: null, restAt: null, model: false,
@@ -44,8 +53,8 @@ function experienceScene(C) {
       </style>
       <div class="abs ex-flood" style="inset:0;background:var(--ink);z-index:1;clip-path:circle(0px at ${W / 2}px ${H / 2}px)"></div>
       <div class="abs ex-ink" style="inset:0;z-index:2;color:var(--ink)">
-        <div class="abs ex-eye" style="left:${PORTRAIT ? MX : 100}px;top:${L.eyeTop}px">${mask(`<span class="eyebrow ex-eb" style="${eyeStyle}">Experience</span>`)}</div>
-        <div class="abs mono ex-sheet" style="right:${PORTRAIT ? MX : 100}px;top:${L.eyeTop}px;${L.lbl};opacity:.7">Sheet E-201 · Rev 02</div>
+        <div class="abs ex-eye" style="left:${NARROW ? MX : 100}px;top:${L.eyeTop}px">${mask(`<span class="eyebrow ex-eb" style="${eyeStyle}">Experience</span>`)}</div>
+        <div class="abs mono ex-sheet" style="right:${NARROW ? MX : 100}px;top:${L.eyeTop}px;${L.lbl};opacity:.7">Sheet E-201 · Rev 02</div>
         <div class="abs" style="left:${MX}px;top:${L.wordTop}px;width:${W - 2 * MX}px;overflow:hidden">
           <h2 class="mega" style="font-size:${L.wordPx}px;white-space:nowrap"><span class="ex-slide" style="display:block">EXPERIENCE</span></h2>
         </div>
@@ -53,8 +62,8 @@ function experienceScene(C) {
           <i class="ex-e" style="left:0"></i><i class="ex-e" style="right:0"></i>
           <i class="ex-l"></i><i class="ex-a l"></i><i class="ex-a r"></i>
         </div>
-        <div class="abs mono ex-sub" style="left:${PORTRAIT ? MX : 104}px;top:${L.subTop}px;${L.sub}">${esc(sub)}</div>
-        <div class="abs mono ex-scale" style="right:${PORTRAIT ? MX : 100}px;top:${L.subTop}px;${L.lbl};opacity:.7">Scale 1:1</div>
+        <div class="abs mono ex-sub" style="left:${NARROW ? MX : 104}px;top:${L.subTop}px;${L.sub}">${esc(sub)}</div>
+        <div class="abs mono ex-scale" style="right:${NARROW ? MX : 100}px;top:${L.subTop}px;${L.lbl};opacity:.7">Scale 1:1</div>
       </div>`,
     anim(root, tl) {
       const slide = q(root, ".ex-slide");
@@ -246,13 +255,85 @@ function rolesRestPortrait(C) {
   };
 }
 
+// Square (1080x1080): everything in one frame. Two compact role rows on top, the responsibilities list below.
+function rolesRestSquare(C) {
+  const roles = (C.work || []).slice(0, 2);
+  const resp = (C.responsibilities || []).slice(0, 5);
+  const SX = 70, CW = W - 2 * SX, TOP = 120, ROW = 206;
+  const rolePx = Math.min(...roles.map((r) => fit(String(r.role).toUpperCase(), 58, CW - 90, 0.64)), 58);
+  const rows = roles.map((r, i) => {
+    const link = isLink(r.url);
+    const tag = link ? "a" : "div";
+    const attrs = link ? ` ${linkAttrs(r.url)}` : "";
+    const meta = [r.company, r.place, r.since ? `Since ${r.since}` : ""].filter(Boolean).map(esc).join(" · ");
+    return `
+      <${tag} class="rs-role${link ? " rr-link" : ""}"${attrs} style="top:${TOP + i * ROW}px">
+        <span class="mono rs-i">${pad(i + 1)}${link ? " ↗" : ""}</span>
+        <span class="mask rs-name"><span style="font-size:${rolePx}px">${esc(String(r.role).toUpperCase())}</span></span>
+        <span class="mono rs-meta">${meta}</span>
+        <span class="rs-sum">${esc(r.summary || "")}</span>
+      </${tag}>`;
+  }).join("");
+  const lines = Array.from({ length: roles.length }, (_, i) =>
+    `<div class="abs rr-line" style="left:${SX}px;top:${TOP + i * ROW}px;width:${CW}px;height:2px;background:var(--bone);opacity:.35;transform-origin:0 50%"></div>`).join("");
+  const HTOP = TOP + roles.length * ROW, ITOP = HTOP + 112, ITEM = Math.floor((H - 56 - ITOP) / Math.max(1, resp.length));
+  const items = resp.map((t, i) => `
+      <div class="rs-item" style="top:${ITOP + i * ITEM}px;height:${ITEM}px">
+        <span class="mono rs-n">${pad(i + 1)}</span>
+        <span class="rs-t">${esc(t)}</span>
+      </div>`).join("");
+  return {
+    ...rolesMeta(C),
+    html: `
+      <style>
+        .rs-role { position:absolute; left:${SX}px; width:${CW}px; height:${ROW}px; padding:22px 0 0; display:grid;
+          grid-template-rows:auto auto auto 1fr; gap:12px; align-content:start; color:var(--bone); text-decoration:none; }
+        .rs-role .rs-i { font-size:18px; color:var(--sage); letter-spacing:.2em; }
+        .rs-role .rs-name { font-size:${rolePx}px; line-height:1; }
+        .rs-role .rs-name span { font:900 ${rolePx}px/1 var(--sans); letter-spacing:-.04em; white-space:nowrap; }
+        .rs-role .rs-meta { font-size:16px; letter-spacing:.16em; color:var(--ash); }
+        .rs-role .rs-sum { font:400 24px/1.3 var(--sans); color:var(--bone); }
+        .rs-head { position:absolute; left:${SX}px; top:${HTOP}px; width:${CW}px; height:96px; display:flex; justify-content:space-between;
+          align-items:flex-end; border-top:2px solid rgba(242, 239, 234,.35); padding-top:26px; }
+        .rs-head .rs-label { font-size:18px; color:var(--ash); letter-spacing:.2em; padding-bottom:12px; }
+        .rs-list-tick { position:absolute; left:${SX}px; width:3px; top:${ITOP}px; height:${ITEM * resp.length}px;
+          background:var(--sage); transform-origin:50% 0; }
+        .rs-item { position:absolute; left:${SX + 28}px; width:${CW - 28}px; display:grid; grid-template-columns:56px 1fr;
+          align-items:center; border-top:1px dashed rgba(242, 239, 234,.25); }
+        .rs-item .rs-n { font-size:16px; color:var(--sage); letter-spacing:.2em; }
+        .rs-item .rs-t { font:400 23px/1.28 var(--sans); color:var(--bone); }
+      </style>
+      <div class="abs" style="left:${SX}px;top:70px">${mask(`<span class="eyebrow">Experience</span>`)}</div>
+      <div class="abs mono dim rr-count" style="right:${SX}px;top:74px;font-size:18px;letter-spacing:.2em">${pad(roles.length)} roles · E-202</div>
+      ${lines}${rows}
+      <div class="rs-head">
+        <span class="mono rs-label">Responsibilities</span>
+        ${mask(pad(resp.length), "big ol rs-count", "font-size:100px;color:var(--bone)")}
+      </div>
+      <i class="rs-list-tick"></i>
+      ${items}`,
+    anim(root, tl) {
+      tl.from(q(root, ".eyebrow"), { opacity: 0, x: -30, duration: 0.6, ease: "power3.out" }, 0);
+      tl.from(q(root, ".rr-count"), { opacity: 0, duration: 0.6 }, 0.2);
+      tl.from(qa(root, ".rr-line"), { scaleX: 0, duration: 0.8, ease: "power3.inOut", stagger: 0.1 }, 0.15);
+      tl.from(qa(root, ".rs-name > span"), { yPercent: 115, duration: 0.8, ease: "power4.out", stagger: 0.12 }, 0.3);
+      tl.from(qa(root, ".rs-i, .rs-meta, .rs-sum"), { opacity: 0, y: 18, duration: 0.6, ease: "power3.out", stagger: 0.04 }, 0.5);
+      tl.from(q(root, ".rs-head"), { opacity: 0, duration: 0.5 }, 0.8);
+      tl.from(q(root, ".rs-count > span"), { yPercent: 115, duration: 0.7, ease: "power4.out" }, 0.85);
+      tl.from(q(root, ".rs-list-tick"), { scaleY: 0, duration: 0.9, ease: "power3.inOut" }, 0.85);
+      tl.from(qa(root, ".rs-item"), { opacity: 0, x: 40, duration: 0.5, ease: "power3.out", stagger: 0.12 }, 0.95);
+    },
+  };
+}
+
 /* ------------------------------------------------------------------ 12 process */
 function processScene(C) {
+  const HEAD = String(C.processHead || "HOW I WORK").toUpperCase();
   const steps = (C.process || []).slice(0, 5);
   const n = Math.max(1, steps.length);
   const first = steps[0]?.step || "", last = steps[steps.length - 1]?.step || "";
   const overall = steps.length > 1 ? `${first} → ${last}` : first;
-  const G = PORTRAIT ? processPortrait(steps, n) : processLandscape(steps, n);
+  const G = SQ ? processSquare(steps, n, HEAD) : PORTRAIT ? processPortrait(steps, n, HEAD) : processLandscape(steps, n, HEAD);
 
   return {
     slug: "process", name: "Process", act: ACT, field: "bone", dur: 4.0,
@@ -282,14 +363,14 @@ function processScene(C) {
       </style>
       <div class="pr-grid"></div>
       <div class="abs" style="left:${G.mx}px;top:${G.eyeTop}px">${mask(`<span class="eyebrow" style="${G.lbl}">Process</span>`)}</div>
-      <div class="abs mono pr-sheet" style="right:${G.mx}px;top:${G.eyeTop}px;${G.lbl};color:#6a6565">Sheet A-501 · ${PORTRAIT ? "Det. 01" : "Detail 01"}</div>
+      <div class="abs mono pr-sheet" style="right:${G.mx}px;top:${G.eyeTop}px;${G.lbl};color:#6a6565">Sheet A-501 · ${NARROW ? "Det. 01" : "Detail 01"}</div>
       ${G.head}
       <svg class="pr-svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" aria-hidden="true">
         ${G.svg}
       </svg>
       ${G.nodes}
       <div class="pr-olabel"><span class="mono pr-ol">${esc(overall)}</span></div>
-      <div class="abs mono pr-foot" style="left:${G.mx}px;top:${G.footTop}px;${G.foot};color:#6a6565">${PORTRAIT ? "Fig. 01" : "Fig. 01 · How I build an estimate"}</div>
+      <div class="abs mono pr-foot" style="left:${G.mx}px;top:${G.footTop}px;${G.foot};color:#6a6565">${NARROW ? "Fig. 01" : `Fig. 01 · ${C.processHead ? C.processHead.charAt(0) + C.processHead.slice(1).toLowerCase() : "How I work"}`}</div>
       <div class="abs mono pr-foot" style="right:${G.mx}px;top:${G.footTop}px;${G.foot};color:#6a6565">Not to scale</div>`,
     anim(root, tl) {
       tl.from(q(root, ".pr-grid"), { opacity: 0, duration: 0.8, ease: "power2.out" }, 0);
@@ -331,11 +412,10 @@ const overallSvg = (x0, x1, y) =>
    <path class="pr-oarr" d="M${x1} ${y} L${x1 - 20} ${y - 6} L${x1 - 20} ${y + 6} Z"/>`;
 
 // landscape: horizontal dimension line, nodes in a row, labels above/below
-function processLandscape(steps, n) {
+function processLandscape(steps, n, head) {
   const X0 = 90, X1 = 1830, COL = (X1 - X0) / n, LY = 500, OY = 872;
   const cx = (i) => Math.round(X0 + COL * (i + 0.5));
   const bounds = Array.from({ length: n + 1 }, (_, k) => Math.round(X0 + COL * k));
-  const head = "HOW I BUILD AN ESTIMATE";
   const headPx = fit(head, 112, 1700, 0.6);
   const stepPx = Math.min(...steps.map((s) => fit(String(s.step).toUpperCase(), 56, COL - 48, 0.62)), 56);
   const BW = Math.round(COL - 40);
@@ -364,11 +444,11 @@ function processLandscape(steps, n) {
 }
 
 // portrait: vertical dimension line down the left, nodes stacked, tool/step/text beside each node
-function processPortrait(steps, n) {
+function processPortrait(steps, n, headText) {
   const LX = 170, Y0 = 476, Y1 = 1644, SEG = (Y1 - Y0) / n, OY = 1700;
   const cy = (i) => Math.round(Y0 + SEG * (i + 0.5));
   const bounds = Array.from({ length: n + 1 }, (_, k) => Math.round(Y0 + SEG * k));
-  const lines = ["HOW I BUILD", "AN ESTIMATE"];
+  const lines = splitHead(headText);
   const headPx = Math.min(...lines.map((l) => fit(l, 124, W - 2 * MX, 0.64)));
   const BX = 262, BW = W - MX - BX;
   const stepPx = Math.min(...steps.map((s) => fit(String(s.step).toUpperCase(), 60, BW, 0.64)), 60);
@@ -400,6 +480,41 @@ function processPortrait(steps, n) {
   };
 }
 
+// square: vertical dimension line down the left (like portrait), one-line headline, blocks sized to fill 1080x1080
+function processSquare(steps, n, head) {
+  const SX = 70, LX = 130, Y0 = 232, Y1 = 900, SEG = (Y1 - Y0) / n, OY = 950;
+  const cy = (i) => Math.round(Y0 + SEG * (i + 0.5));
+  const bounds = Array.from({ length: n + 1 }, (_, k) => Math.round(Y0 + SEG * k));
+  const headPx = fit(head, 84, W - 2 * SX, 0.6);
+  const BX = 214, BW = W - SX - BX;
+  const stepPx = Math.min(...steps.map((s) => fit(String(s.step).toUpperCase(), 46, BW, 0.64)), 46);
+  const NODE = 64;
+  const svg = bounds.map((y) => `<path class="pr-ext" d="M${LX - 40} ${y} H${LX + 40}"/>`).join("") +
+    `<path class="pr-base" pathLength="1" d="M${LX} ${Y0} V${Y1}"/>` +
+    `<path class="pr-prog" pathLength="1" d="M${LX} ${Y0} V${cy(n - 1)}"/>` +
+    bounds.slice(1, -1).map((y) => `<path class="pr-tick" d="M${LX - 12} ${y + 12} L${LX + 12} ${y - 12}"/>`).join("") +
+    `<path class="pr-arr" d="M${LX} ${Y0} L${LX - 8} ${Y0 + 24} L${LX + 8} ${Y0 + 24} Z"/>` +
+    `<path class="pr-arr" d="M${LX} ${Y1} L${LX - 8} ${Y1 - 24} L${LX + 8} ${Y1 - 24} Z"/>` +
+    overallSvg(SX, W - SX, OY);
+  const nodes = steps.map((s, i) => `
+      <div class="pr-node" style="left:${LX - NODE / 2}px;top:${cy(i) - NODE / 2}px"><i class="pr-fill"></i><b class="mono">${pad(i + 1)}</b></div>
+      <div class="pr-blk" style="left:${BX}px;top:${cy(i)}px;width:${BW}px">
+        <div class="mono pr-tool">${esc(s.tool)}</div>
+        ${mask(esc(String(s.step).toUpperCase()), "pr-step", `font-size:${stepPx}px`)}
+        <div class="pr-text">${esc(s.text)}</div>
+      </div>`).join("");
+  return {
+    mx: SX, eyeTop: 70, footTop: 996, oy: OY, node: NODE, nodeFont: 20, enterAxis: "x",
+    lbl: "font-size:18px;letter-spacing:.2em", foot: "font-size:16px;letter-spacing:.2em",
+    css: `.pr-blk { position:absolute; display:grid; gap:8px; transform:translateY(-50%); }
+        .pr-tool { font-size:16px; letter-spacing:.16em; }
+        .pr-text { font:400 23px/1.28 var(--sans); }
+        .pr-olabel span { font-size:16px; letter-spacing:.24em; }`,
+    head: mask(esc(head), "mid pr-head", `position:absolute;left:${SX - 2}px;top:122px;font-size:${headPx}px;white-space:nowrap`),
+    svg, nodes,
+  };
+}
+
 export function scenes(C, P) {
-  return [experienceScene(C), PORTRAIT ? rolesRestPortrait(C) : rolesRestLandscape(C), processScene(C)];
+  return [experienceScene(C), SQ ? rolesRestSquare(C) : PORTRAIT ? rolesRestPortrait(C) : rolesRestLandscape(C), processScene(C)];
 }

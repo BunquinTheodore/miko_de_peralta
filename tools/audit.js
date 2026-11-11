@@ -1,4 +1,4 @@
-// Dev-only layout audit. Paste into the console (or evaluate it) on a running page, then call
+// Dev-only layout audit for the film (animated.html). Paste into the console (or evaluate it) on a running page, then call
 //   __audit()            -> every scene at its rest/settled frame
 //   __audit("name", 1.5) -> one scene at one time
 // It reports visible text boxes that overlap each other or sit outside the stage's safe margin.

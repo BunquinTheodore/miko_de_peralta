@@ -8,6 +8,7 @@ const IN = "power3.out", OUT = "power3.in";
 const ORDER = ["roof", "walls", "windows", "door", "slab", "foundation"]; // layer-scene order (top -> bottom)
 const CAM_Z = 14;
 const PT = STAGE.portrait;
+const SQ = STAGE.square; // 1080x1080 (`?layout=square`)
 
 // EXPLODED (ex = 1) part centres [x, y, z] in model units at s = 1, as house.js computes them for project():
 // anchorCentre(part, 1) + EXPLODE[part] (front: +z toward camera). Used only to aim the push-in poses.
@@ -58,12 +59,24 @@ const PORT = {
   builtPose: { px: 0.05, py: 1.45, pz: 0, s: 0.46, rx: 0.32, ry: -0.62, rz: 0, ex: 0 },
   flood: [540, 600],
 };
-const L = PT ? PORT : LAND;
+// Square: the house stays centred and the copy hugs the frame edges. Layer push-ins reuse the portrait framings.
+const SQUARE = {
+  ...PORT,
+  col: (v) => ({ x: 70, w: 940, top: v.copy === "top" ? 70 : 520 }),
+  titleMax: 110,
+  toolkitPose: { px: 0.1, py: 0.9, pz: 0, s: 0.62, rx: 0.32, ry: -0.62, rz: 0, ex: 0 },
+  explodedPose: { px: 0.1, py: -0.45, pz: 0, s: 0.54, rx: 0.2, ry: -0.5, rz: 0, ex: 1 },
+  builtPose: { px: -0.15, py: 1.3, pz: 0, s: 0.6, rx: 0.32, ry: -0.62, rz: 0, ex: 0 },
+  flood: [540, 500],
+};
+const L = SQ ? SQUARE : PT ? PORT : LAND;
 
 // exploded callouts. Landscape: two columns beside the model, y follows the part (spread apart).
 // Portrait: two short fixed columns below the model; only the leaders follow the parts.
 const TAG_SIDE = { roof: "r", walls: "r", slab: "r", windows: "l", door: "l", foundation: "l" };
-const TAG = PT
+const TAG = SQ
+  ? { l: 240, r: 840, half: 14, gap: 66, top: 290, bot: 990 }
+  : PT
   ? { l: 470, r: 610, half: 22, slots: { windows: 1320, door: 1460, foundation: 1600, roof: 1320, walls: 1460, slab: 1600 } }
   : { l: 470, r: 1490, half: 16, gap: 62, top: 330, bot: 990 };
 
@@ -90,9 +103,22 @@ const CSS_PORT = `
 .tk-meta{margin-top:28px;font-size:28px;letter-spacing:.16em;color:var(--ash)}
 .scene .tk-tag{font:700 28px/1 var(--mono);letter-spacing:.14em}
 .scene .tk-tag b{padding:8px 12px;margin-right:14px}
-.scene .tk-tag small{margin-top:10px;font:600 26px/1 var(--mono);letter-spacing:.12em}
+.scene .tk-tag small{margin-top:10px;font:600 21px/1 var(--mono);letter-spacing:.12em}
 .scene .tk-chip{width:435px;height:88px;padding:0 26px;font:700 28px/1 var(--mono);letter-spacing:.14em}`;
-const CSS = `<style>${PT ? CSS_PORT : CSS_LAND}
+const CSS_SQ = `
+.tk-col{position:absolute;display:flex;flex-direction:column;align-items:flex-start}
+.tk-col .eyebrow{margin-bottom:18px}
+.tk-eb,.tk-a-eb,.tk-x-eb,.tk-b-eb{font-size:22px;letter-spacing:.2em}
+.tk-nm{font-size:96px;white-space:nowrap}
+.tk-sk{margin:22px 0 0;padding:0;list-style:none;display:grid;grid-auto-rows:40px}
+.tk-sk li{display:flex;align-items:center;font:700 24px/1 var(--mono);letter-spacing:.1em;
+  text-transform:uppercase;color:var(--bone);white-space:nowrap}
+.tk-meta{margin-top:20px;font-size:20px;letter-spacing:.16em;color:var(--ash)}
+.scene .tk-tag{font:700 19px/1 var(--mono);letter-spacing:.12em}
+.scene .tk-tag b{padding:6px 8px;margin-right:9px}
+.scene .tk-tag small{margin-top:7px;font:600 13px/1 var(--mono);letter-spacing:.12em}
+.scene .tk-chip{width:300px;height:62px;padding:0 20px;font:700 22px/1 var(--mono);letter-spacing:.14em}`;
+const CSS = `<style>${SQ ? CSS_SQ : PT ? CSS_PORT : CSS_LAND}
 .tk-gp{white-space:nowrap}
 .tk-sk li.p{color:var(--sage);text-shadow:0 0 14px rgba(85, 115, 115,.45)}
 .tk-lead{position:absolute;left:0;top:0;width:${STAGE.w}px;height:${STAGE.h}px;overflow:visible;z-index:19}
@@ -236,7 +262,14 @@ export function scenes(C, P) {
   const FL = L.flood;
   const FR = Math.ceil(Math.max(Math.hypot(FL[0], FL[1]), Math.hypot(W - FL[0], FL[1]), Math.hypot(FL[0], H - FL[1]), Math.hypot(W - FL[0], H - FL[1]))) + 4;
   const clip = (r) => `circle(${r}px at ${FL[0]}px ${FL[1]}px)`;
-  const tkHtml = PT
+  const tkHtml = SQ
+    ? `<div class="eyebrow abs tk-a-eb" style="z-index:2;left:70px;top:70px;font-size:22px;letter-spacing:.2em">The toolkit</div>
+      <div class="abs mono tk-a-sub" style="z-index:2;left:70px;top:118px;font-size:22px;letter-spacing:.18em;line-height:1.5">
+        ${pad(ORDER.length)} layers<br>${pad(total)} skills</div>
+      <div class="abs tk-rule tk-a-rule" style="z-index:2;left:70px;top:210px;width:260px"></div>
+      <div class="abs mono tk-a-scale" style="z-index:2;left:70px;top:248px;font-size:18px;letter-spacing:.16em">Scale 1:100 · Rev 02</div>
+      <div class="mask abs" style="z-index:2;left:66px;top:840px"><h1 class="mega tk-a-title" style="color:var(--bone);font-size:190px"><span>TOOLKIT.</span></h1></div>`
+    : PT
     ? `<div class="eyebrow abs tk-a-eb" style="z-index:2;left:90px;top:160px">The toolkit</div>
       <div class="mask abs" style="z-index:2;left:86px;top:1040px"><h1 class="mega tk-a-title" style="color:var(--bone);font-size:170px"><span>TOOLKIT.</span></h1></div>
       <div class="abs mono tk-a-sub" style="z-index:2;left:90px;top:1260px;font-size:32px;letter-spacing:.18em;line-height:1.5">
@@ -275,7 +308,12 @@ export function scenes(C, P) {
 
   // ---- 14 exploded ----
   let tagCache = null;
-  const xHead = PT
+  const xHead = SQ
+    ? `<div class="eyebrow ink abs tk-x-eb" style="left:70px;top:64px">Exploded axonometric</div>
+      <div class="mask abs" style="left:70px;top:108px"><span class="mid tk-x-l1" style="font-size:60px">Six layers.</span></div>
+      <div class="mask abs" style="left:70px;top:172px"><span class="mid ol tk-x-l2" style="font-size:60px">One house.</span></div>
+      <div class="abs mono tk-x-meta" style="left:70px;top:1000px;font-size:18px;letter-spacing:.16em;color:#6a6565">Sheet T-100 · Not to scale</div>`
+    : PT
     ? `<div class="eyebrow ink abs tk-x-eb" style="left:90px;top:160px">Exploded axonometric</div>
       <div class="mask abs" style="left:90px;top:214px"><span class="mid tk-x-l1" style="font-size:80px">Six layers.</span></div>
       <div class="mask abs" style="left:90px;top:300px"><span class="mid ol tk-x-l2" style="font-size:80px">One house.</span></div>
@@ -330,10 +368,10 @@ export function scenes(C, P) {
         if (t.vis !== vis) { t.el.style.visibility = vis; t.g.style.visibility = vis; t.vis = vis; }
         if (!ok) continue;
         t.x = pt[0]; t.y = pt[1];
-        if (PT) t.ly = TAG.slots[t.part];
+        if (PT && !SQ) t.ly = TAG.slots[t.part];
         live[t.side].push(t);
       }
-      if (!PT) { spread(live.l); spread(live.r); }
+      if (!PT || SQ) { spread(live.l); spread(live.r); }
       for (const t of live.l) placeTag(t);
       for (const t of live.r) placeTag(t);
     },
@@ -344,13 +382,18 @@ export function scenes(C, P) {
 
   // ---- 21 built-rest ----
   const chips = ORDER.map((p, i) => {
-    const x = PT ? 90 + (i % 2) * 465 : 1310 + (i % 2) * 264;
-    const y = PT ? 1330 + Math.floor(i / 2) * 112 : 812 + Math.floor(i / 2) * 60;
+    const x = SQ ? 70 + (i % 3) * 315 : PT ? 90 + (i % 2) * 465 : 1310 + (i % 2) * 264;
+    const y = SQ ? 630 + Math.floor(i / 3) * 76 : PT ? 1330 + Math.floor(i / 2) * 112 : 812 + Math.floor(i / 2) * 60;
     return `<div class="chip tk-chip" role="button" tabindex="0" data-part="${p}" aria-label="${esc(`${C.skills[p].part}: ${C.skills[p].group}`)}" style="left:${x}px;top:${y}px">` +
       `<span>${pad(i + 1)}</span><span>${esc(C.skills[p].part)}</span></div>`;
   }).join("");
   const title = `<span>BUILT<span style="color:var(--sage)">.</span></span>`;
-  const bHtml = PT
+  const bHtml = SQ
+    ? `<div class="eyebrow abs tk-b-eb" style="left:70px;top:64px">Assembled · ${pad(ORDER.length)} / ${pad(ORDER.length)} layers</div>
+      <div class="abs mono tk-b-meta" style="right:70px;top:985px;font-size:16px;letter-spacing:.16em;color:var(--ash);text-align:right">Sheet T-200 · Issued for review</div>
+      <div class="mask abs" style="left:66px;top:785px"><h2 class="mega tk-b-title" style="font-size:215px">${title}</h2></div>
+      <div class="abs mono tk-b-hint" style="left:70px;top:985px;font-size:16px;letter-spacing:.14em;color:var(--ash)"><span class="live"></span>Tap or hover a layer to see its skills</div>`
+    : PT
     ? `<div class="eyebrow abs tk-b-eb" style="left:90px;top:160px">Assembled · ${pad(ORDER.length)} / ${pad(ORDER.length)} layers</div>
       <div class="mask abs" style="left:86px;top:1000px"><h2 class="mega tk-b-title" style="font-size:210px">${title}</h2></div>
       <div class="abs mono tk-b-hint" style="left:90px;top:1252px;font-size:28px;letter-spacing:.14em;color:var(--ash)"><span class="live"></span>Tap or hover a layer to see its skills</div>

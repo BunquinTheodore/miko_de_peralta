@@ -44,8 +44,8 @@ Applies to every scene file. Read this whole file, then re-read `CONTRACT.md` if
 
 A server is already running from `C:\Miko` on port 8791. Don't start or stop servers. Use the Chrome DevTools MCP tools;
 other agents share the browser, so open your **own** page with `new_page` and never close or navigate other pages.
-- Landscape: `http://localhost:8791/index.html?layout=landscape`, page resized to 1440x900.
-- Portrait: `http://localhost:8791/index.html?layout=portrait`, page resized to 390x844.
+- Landscape: `http://localhost:8791/animated.html?layout=landscape`, page resized to 1440x900.
+- Portrait: `http://localhost:8791/animated.html?layout=portrait`, page resized to 390x844.
 - Wait ~4s for load, then load the audit and run it:
   `const s=document.createElement("script"); s.src="/tools/audit.js?"+Date.now(); document.head.append(s); await new Promise(r=>s.onload=r);`
   `__audit("slug")` checks one scene at its settled frame; `__audit("slug", sec)` checks a given time.

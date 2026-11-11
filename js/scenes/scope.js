@@ -147,11 +147,70 @@ function portrait(groups, total) {
   };
 }
 
+/* ------------------------------------------------------------------ square (1080x1080) */
+function square(groups, total) {
+  const SM = 70, TOP = 262, GAP = 34, COLW = Math.floor((W - 2 * SM - 2 * GAP) / 3);
+  const LAYOUT = [[0, 3], [1, 4], [2]]; // group indexes per column
+  const block = (g, i) => `
+        <div class="sc-grp">
+          <div class="sc-hd">
+            <span class="mono sc-code">${code(i)} · ${pad((g.items || []).length)} items</span>
+            <span class="sc-gt">${title(g.group)}</span>
+          </div>
+          <ul class="sc-list">${(g.items || []).map((t, k) => `
+            <li class="sc-it"><span class="mono sc-n">${pad(k + 1)}</span><span class="sc-t">${esc(t)}</span></li>`).join("")}</ul>
+        </div>`;
+  const cols = LAYOUT.map((idx, c) => `
+      <div class="sc-col" style="left:${SM + c * (COLW + GAP)}px">
+        ${c > 0 ? `<i class="sc-vr"></i>` : ""}
+        ${idx.map((i) => groups[i] ? block(groups[i], i) : "").join("")}
+        ${c === 2 ? `<div class="sc-stat"><span class="mono sc-sl">Schedule of items</span>
+          <span class="sc-big">${pad(total)}</span><span class="mono sc-sl">${pad(groups.length)} groups · ${pad(total)} items</span></div>` : ""}
+      </div>`).join("");
+  return {
+    css: `
+        .sc-col { position:absolute; top:${TOP}px; width:${COLW}px; display:grid; gap:22px; align-content:start; }
+        .sc-vr { position:absolute; left:${-GAP / 2}px; top:0; width:1px; height:740px; background:rgba(13, 13, 13,.28); transform-origin:50% 0; }
+        .sc-hd { display:grid; gap:8px; padding:14px 0 10px; }
+        .sc-code { font-size:14px; letter-spacing:.18em; color:var(--sage); }
+        .sc-gt { font:900 20px/1.12 var(--sans); letter-spacing:-.01em; text-transform:uppercase; color:var(--ink); }
+        .sc-list { list-style:none; margin:0; padding:0; }
+        .sc-it { display:grid; grid-template-columns:34px 1fr; align-items:baseline; padding:7px 0;
+          border-top:1px dashed rgba(13, 13, 13,.28); }
+        .sc-n { font-size:13px; letter-spacing:.1em; color:#6a6565; }
+        .sc-t { font:400 19px/1.25 var(--sans); color:#2a2727; }
+        .sc-stat { display:grid; gap:8px; padding-top:30px; border-top:2px solid var(--ink); margin-top:14px; }
+        .sc-sl { font-size:14px; letter-spacing:.18em; color:#6a6565; }
+        .sc-big { font:900 170px/.9 var(--sans); letter-spacing:-.04em; color:var(--ink); }
+        .sc-rule { position:absolute; left:${SM}px; top:${TOP - 14}px; width:${W - 2 * SM}px; height:2px; background:var(--ink); transform-origin:0 50%; }`,
+    html: `
+      <div class="abs" style="left:${SM + 4}px;top:64px">${mask(`<span class="eyebrow">Scope</span>`)}</div>
+      <div class="abs mono sc-sheet" style="right:${SM}px;top:66px;font-size:16px;color:#6a6565">Sheet A-601 · Rev 03</div>
+      ${mask(headline(), "big sc-head", `position:absolute;left:${SM - 2}px;top:100px;font-size:132px;white-space:nowrap;color:var(--ink)`)}
+      <i class="sc-rule"></i>
+      ${cols}`,
+    anim(root, tl) {
+      tl.from(q(root, ".sc-grid"), { opacity: 0, duration: 0.8, ease: "power2.out" }, 0);
+      tl.from(q(root, ".eyebrow"), { opacity: 0, x: -30, duration: 0.6, ease: "power3.out" }, 0.05);
+      tl.from(q(root, ".sc-sheet"), { opacity: 0, duration: 0.6 }, 0.2);
+      tl.from(q(root, ".sc-head > span"), { yPercent: 115, duration: 0.85, ease: "power4.out" }, 0.1);
+      tl.from(q(root, ".sc-rule"), { scaleX: 0, duration: 0.8, ease: "power3.inOut" }, 0.3);
+      tl.from(qa(root, ".sc-vr"), { scaleY: 0, duration: 0.8, ease: "power3.inOut", stagger: 0.08 }, 0.45);
+      qa(root, ".sc-col").forEach((col, i) => {
+        const at = 0.55 + i * 0.14;
+        tl.from(qa(col, ".sc-hd"), { opacity: 0, y: 20, duration: 0.5, ease: "power3.out" }, at);
+        tl.from(qa(col, ".sc-it"), { opacity: 0, y: 14, duration: 0.4, ease: "power3.out", stagger: 0.04 }, at + 0.15);
+        tl.from(qa(col, ".sc-stat"), { opacity: 0, y: 20, duration: 0.5, ease: "power3.out" }, at + 0.5);
+      });
+    },
+  };
+}
+
 /* ------------------------------------------------------------------ scene */
 function scopeScene(C) {
   const groups = (C.scopes || []).filter((g) => g && g.group);
   const total = groups.reduce((n, g) => n + (g.items || []).length, 0);
-  const L = PORTRAIT ? portrait(groups, total) : landscape(groups, total);
+  const L = STAGE.square ? square(groups, total) : PORTRAIT ? portrait(groups, total) : landscape(groups, total);
   return {
     slug: "scope-rest", name: "Scope", act: ACT, field: "bone", dur: 4.0,
     stars: false, ammo: 3, turn: null, rest: "scroll to continue", restAt: PORTRAIT ? 2.7 : 2.4, model: false,

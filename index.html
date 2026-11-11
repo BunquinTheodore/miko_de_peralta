@@ -3,41 +3,121 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Miko De Peralta · Construction Estimator</title>
-  <meta name="description" content="Portfolio of Miko De Peralta, construction estimator for luxury residential projects: quantity take-offs, BOQs and BOMs, vendor coordination, and project scheduling. Quantity takeoff specialist and remote pre-construction project coordinator." />
-  <meta name="theme-color" content="#0d0d0d" />
-  <meta name="color-scheme" content="dark" />
+  <title>Miko De Peralta, Planning, Operations and Estimating</title>
+  <meta name="description" content="Portfolio of Miko De Peralta: planning and scheduling, operations coordination and construction estimating. Schedules in MS Project, daily coordination across 5 departments at a petroleum terminal, and takeoffs and BOQs for 12 residential projects." />
+  <meta name="theme-color" content="#f2efea" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Miko De Peralta, Planning, Operations and Estimating" />
+  <meta property="og:description" content="Planning and Scheduling, Operations Coordination, Construction Estimating. Based in Makati, Philippines." />
+  <meta property="og:image" content="https://mikodeperalta.vercel.app/img/miko.jpg" />
+  <meta property="og:url" content="https://mikodeperalta.vercel.app/" />
+  <link rel="canonical" href="https://mikodeperalta.vercel.app/" />
+  <meta name="twitter:card" content="summary" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;600;900&family=Geist+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
-  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/d3-array@3.2.4/dist/d3-array.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/d3-geo@3.1.1/dist/d3-geo.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
-  <script type="importmap">
-    { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }
-  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;800&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 16 16%27%3E%3Crect width=%2716%27 height=%2716%27 fill=%27%230d0d0d%27/%3E%3Ccircle cx=%278%27 cy=%278%27 r=%274%27 fill=%27%23557373%27/%3E%3C/svg%3E" />
-  <link rel="stylesheet" href="css/style.css" />
-  <noscript><style>body{cursor:auto}#cursor{display:none}</style></noscript>
+  <link rel="stylesheet" href="css/simple.css" />
+  <script>document.documentElement.classList.add("js");</script>
 </head>
 <body>
-  <main id="about-text"></main>
-  <noscript><p class="nojs">This portfolio is a scroll-driven film and needs JavaScript to play.</p></noscript>
-  <div id="viewport">
-    <div id="stage">
-      <canvas id="model" width="1920" height="1080"></canvas>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="bar" id="top">
+    <div class="bar-inner">
+      <a class="brand" href="#top" aria-label="Miko De Peralta, back to top">Miko De Peralta</a>
+      <nav class="nav" aria-label="Sections">
+        <a href="#about">About</a>
+        <a href="#experience">Experience</a>
+        <a href="#skills">Skills</a>
+        <a href="#feedback">Feedback</a>
+        <a href="#credentials">Credentials</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <a class="btn btn-solid bar-cta" href="animated.html">View animated version</a>
     </div>
-  </div>
-  <canvas id="stars"></canvas>
-  <div id="hud"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i></div>
-  <div id="ammo"><u></u><u></u><u></u></div>
-  <div id="act"></div>
-  <div id="cue"></div>
-  <div id="grain"></div>
-  <div id="cursor"></div>
-  <script type="module" src="js/main.js"></script>
+  </header>
+
+  <main id="main">
+    <section class="hero" aria-labelledby="hero-name">
+      <div class="wrap hero-grid">
+        <div class="hero-copy">
+          <p class="hero-place" data-slot="place"></p>
+          <h1 id="hero-name" data-slot="name">Miko De Peralta</h1>
+          <ul class="hero-titles" data-slot="titles"></ul>
+          <p class="hero-summary" data-slot="summary"></p>
+          <div class="actions" data-slot="actions"></div>
+        </div>
+        <figure class="portrait" data-slot="portrait"></figure>
+      </div>
+    </section>
+
+    <section class="sec" id="about" aria-labelledby="about-h">
+      <div class="wrap">
+        <header class="sec-head"><span class="sec-num">01</span><h2 id="about-h">About</h2></header>
+        <div class="about-grid">
+          <p class="lede" data-slot="about-text"></p>
+          <dl class="facts" data-slot="facts"></dl>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec" id="experience" aria-labelledby="exp-h">
+      <div class="wrap">
+        <header class="sec-head"><span class="sec-num">02</span><h2 id="exp-h">Experience</h2></header>
+        <div class="roles" data-slot="roles"></div>
+      </div>
+    </section>
+
+    <section class="sec" id="skills" aria-labelledby="skills-h">
+      <div class="wrap">
+        <header class="sec-head"><span class="sec-num">03</span><h2 id="skills-h">Skills</h2></header>
+        <div class="skill-groups" data-slot="skills"></div>
+      </div>
+    </section>
+
+    <section class="sec sec-dark" id="feedback" aria-labelledby="fb-h">
+      <div class="wrap">
+        <header class="sec-head"><span class="sec-num">04</span><h2 id="fb-h">Direct superior feedback</h2></header>
+        <div class="quotes" data-slot="feedback"></div>
+      </div>
+    </section>
+
+    <section class="sec" id="credentials" aria-labelledby="cred-h">
+      <div class="wrap">
+        <header class="sec-head"><span class="sec-num">05</span><h2 id="cred-h">Education and credentials</h2></header>
+        <div class="cred-grid">
+          <div class="edu" data-slot="education"></div>
+          <div>
+            <h3 class="sub">Certifications</h3>
+            <ul class="certs" data-slot="certs"></ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec sec-sage" id="contact" aria-labelledby="contact-h">
+      <div class="wrap contact-grid">
+        <div>
+          <header class="sec-head"><span class="sec-num">06</span><h2 id="contact-h">Get in touch</h2></header>
+          <p class="lede" data-slot="pitch"></p>
+        </div>
+        <ul class="contact-list" data-slot="contact"></ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="wrap foot-inner">
+      <p>Miko Q. De Peralta, Makati, Philippines</p>
+      <p class="foot-links">
+        <a href="animated.html">View animated version</a>
+        <a href="#top">Back to top</a>
+      </p>
+    </div>
+  </footer>
+
+  <noscript><p class="nojs">This page builds its content with JavaScript. Please enable it, or write directly to miko.q.deperalta@gmail.com. You can also open the <a href="animated.html">animated version</a>.</p></noscript>
+  <script type="module" src="js/simple.js"></script>
 </body>
 </html>

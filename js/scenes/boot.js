@@ -311,13 +311,18 @@ function collapseAnim(root, tl) {
 }
 
 // ---------- 04 name ----------
-const NM = PORTRAIT ? {
+const SQUARE = STAGE.square;
+const NM = SQUARE ? {
+  fs: 200, left: 70, width: 940, top: 250, metaTop: 62, ruleTop: 166, dimTop: 1004,
+  titleTop: 800, tagFs: 38, metaFs: 24,
+} : PORTRAIT ? {
   fs: 194, left: 90, width: 900, top: 500, metaTop: 170, ruleTop: 272, dimTop: 1360,
   titleTop: 1080, tagFs: 44,
 } : {
   fs: 290, left: 130, width: 1660, top: 196, metaTop: 104, ruleTop: 150, dimTop: 962,
   titleTop: null, tagFs: 34,
 };
+NM.metaFs = NM.metaFs || MONO_FS;
 
 function nameHtml(C) {
   const p = C.person, L = p.lines || [p.first, p.last];
@@ -326,24 +331,24 @@ function nameHtml(C) {
   const loc = [C.location?.country && `Based in ${C.location.country}`, C.location?.tzLabel].filter(Boolean).map(esc).join(" &nbsp;·&nbsp; ");
   const title = (style) => `<div class="nm-title" style="${style}">
       <div class="eyebrow" style="${EYE}">${esc(p.title)}</div>
-      <p style="margin:26px 0 0;font:600 ${NM.tagFs}px/1.3 var(--sans);max-width:${PORTRAIT ? 900 : 860}px;color:var(--ink)">${esc(p.tagline)}</p>
+      <p style="margin:26px 0 0;font:600 ${NM.tagFs}px/1.3 var(--sans);max-width:${SQUARE ? 940 : PORTRAIT ? 900 : 860}px;color:var(--ink)">${esc(p.tagline)}</p>
     </div>`;
   // landscape: the middle line carries the title block; the last line always carries the full stop
   const last = L.length - 1;
   const rows = L.map((s, i) => {
     if (i === last) return `<div class="nm-row">${line(s)}<span class="nm-pw"><i class="nm-dot"></i></span></div>`;
-    if (!PORTRAIT && (i === 1 || (L.length < 3 && i === 0))) {
+    if (!PORTRAIT && !SQUARE && (i === 1 || (L.length < 3 && i === 0))) {
       return `<div class="nm-row" style="align-items:center;gap:76px">${line(s)}${title("margin-top:6px")}</div>`;
     }
     return line(s);
   }).join("");
-  const meta = PORTRAIT
-    ? `<div class="nm-meta nm-top" style="left:90px;top:${NM.metaTop}px">Portfolio &nbsp;/&nbsp; Sheet A-000<br>${loc}</div>`
+  const meta = PORTRAIT || SQUARE
+    ? `<div class="nm-meta nm-top" style="left:${NM.left}px;top:${NM.metaTop}px">Portfolio &nbsp;/&nbsp; Sheet A-000<br>${loc}</div>`
     : `<div class="nm-meta nm-top" style="left:130px;top:${NM.metaTop}px">Portfolio &nbsp;/&nbsp; Sheet A-000</div>
 <div class="nm-meta nm-top" style="right:130px;top:${NM.metaTop}px;text-align:right">${loc}</div>`;
   return `
 <style>
-  .nm-meta { position:absolute; font:600 ${MONO_FS}px/1.6 var(--mono); letter-spacing:${MONO_LS}; text-transform:uppercase; color:var(--ink); white-space:nowrap; }
+  .nm-meta { position:absolute; font:600 ${NM.metaFs}px/1.6 var(--mono); letter-spacing:${MONO_LS}; text-transform:uppercase; color:var(--ink); white-space:nowrap; }
   .nm-row { display:flex; }
   .nm-pw { position:relative; display:inline-block; width:.16em; height:.16em; margin-left:.05em; margin-bottom:.07em; align-self:flex-end; font-size:${NM.fs}px; }
   .nm-dot { position:absolute; inset:0; border-radius:50%; background:var(--ink); }
@@ -356,7 +361,7 @@ ${meta}
 <i class="nm-rule" style="position:absolute;left:${NM.left}px;width:${NM.width}px;top:${NM.ruleTop}px;height:3px;background:var(--ink);transform-origin:0 50%"></i>
 
 <div class="nm-block" style="position:absolute;left:${NM.left}px;top:${NM.top}px;z-index:5;transform-origin:0 100%">${rows}</div>
-${PORTRAIT ? title(`position:absolute;left:${NM.left}px;top:${NM.titleTop}px`) : ""}
+${PORTRAIT || SQUARE ? title(`position:absolute;left:${NM.left}px;top:${NM.titleTop}px`) : ""}
 <i class="nm-dim"></i>
 <div class="nm-flood"></div>`;
 }
@@ -375,7 +380,7 @@ function nameAnim(root, tl) {
   tl.from(q(root, ".nm-rule"), { scaleX: 0, duration: 0.8, ease: "power4.out" }, 0.1);
   tl.from(qa(root, ".nm-top"), { opacity: 0, y: -14, duration: 0.5, ease: "power3.out", stagger: 0.08 }, 0.15);
   tl.from(qa(root, ".nm-m > span"), { yPercent: 118, duration: 0.8, ease: "power4.out", stagger: 0.14 }, 0.0);
-  tl.from(q(root, ".nm-title"), PORTRAIT ? { opacity: 0, y: 40, duration: 0.6, ease: "power3.out" } : { opacity: 0, x: 40, duration: 0.6, ease: "power3.out" }, 0.55);
+  tl.from(q(root, ".nm-title"), PORTRAIT || SQUARE ? { opacity: 0, y: 40, duration: 0.6, ease: "power3.out" } : { opacity: 0, x: 40, duration: 0.6, ease: "power3.out" }, 0.55);
   tl.from(q(root, ".nm-dim"), { scaleX: 0, duration: 0.7, ease: "power3.out" }, 0.75);
   // full stop pops in, then (after the rest) an ink plane opens from it as a clip-path circle
   tl.fromTo(dot, { scale: 0 }, { scale: 1, duration: 0.35, ease: "back.out(3)" }, 0.9);

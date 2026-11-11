@@ -14,7 +14,7 @@ uppercase, tight tracking) and Geist Mono (labels, wide tracking). Visual langua
 blueprints / dimension lines / measurement ticks / section marks / grid paper / stamps, rendered in the same
 premium dark/sage/bone editorial film style. No weapons, no ammo/gun vocabulary in visible copy.
 
-Already written (do not rewrite, read them): `index.html`, `css/style.css`, `js/content.js`, `js/scenes/util.js`,
+Already written (do not rewrite, read them): `animated.html` (the film entry; `index.html` is the separate simple page), `css/style.css`, `js/content.js`, `js/scenes/util.js`,
 `js/scenes/index.js`, `js/main.js`. Libraries are globals from CDN script tags: `gsap`, `Lenis`, `d3` (d3-geo only:
 `d3.geoOrthographic`, `d3.geoPath`, `d3.geoGraticule10`), `topojson` (topojson-client). three.js is import map
 entry `"three"`. No build step; ES modules served statically (`python -m http.server`). Plain JS.

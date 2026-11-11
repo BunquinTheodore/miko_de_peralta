@@ -1,4 +1,4 @@
-// All copy and data for the site. Values marked TODO were not supplied yet; nothing else needs to change.
+// All copy and data for the site. Every value comes from the résumé or the direct superior feedback.
 export const CONTENT = {
   person: {
     lines: ["MIKO", "DE", "PERALTA"],
@@ -6,21 +6,21 @@ export const CONTENT = {
     last: "De Peralta",
     full: "Miko Q. De Peralta",
     initials: "MDP",
-    title: "Construction Estimator",
-    tagline: "Engineering precision for luxury residential estimating.",
-    bio: "Construction estimator with experience on luxury residential houses in Qatar: quantity take-offs, BOQs and BOMs, vendor coordination, and project scheduling, backed by an engineering degree.",
+    title: "Planning & Scheduling · Operations Coordination · Construction Estimating",
+    tagline: "Plans, schedules and tracks work to deadline.",
+    bio: "Organized operations professional: schedules in MS Project, cross department coordination at a petroleum terminal, and daily to month end reporting, plus construction estimating for residential projects.",
     photo: "img/miko.jpg",
     // from the résumé
-    titles: ["Construction Estimator", "Quantity Takeoff Specialist", "Project Coordinator"],
-    summary: "Petroleum Engineering graduate with freelance experience in residential construction quantity takeoffs, Bill of Quantities (BOQ) preparation, and remote pre-construction project coordination. Proficient in Bluebeam, PlanSwift, JobTread, and Procore, with additional experience in petroleum terminal operations, inventory monitoring, and operational leadership.",
+    titles: ["Planning & Scheduling", "Operations Coordination", "Construction Estimating"],
+    summary: "Organized operations professional who plans, schedules and tracks work to deadline, promoted to Operations Assistant within 8 weeks at a petroleum terminal. Experienced with schedules in MS Project, Gantt charts and S-curves, cross-department coordination, and daily to month-end reporting, plus drawing and quantity knowledge from residential construction estimating.",
   },
-  words: ["MEASURE", "QUANTIFY", "PRICE", "SCHEDULE"],
+  words: ["PLAN", "SCHEDULE", "COORDINATE", "ESTIMATE"],
   // home base; `markets` are where the estimated projects are
   location: {
-    city: "Manila", country: "Philippines", lat: 14.6, lon: 121.0, tz: "Asia/Manila", tzLabel: "GMT+8", // TODO: confirm city
-    note: "Open to relocation",
+    city: "Makati", country: "Philippines", lat: 14.55, lon: 121.02, tz: "Asia/Manila", tzLabel: "GMT+8",
+    note: "Contract and remote work",
     markets: [
-      { city: "Doha", country: "Qatar", lat: 25.29, lon: 51.53, tz: "Asia/Qatar", tzLabel: "GMT+3" },
+      { city: "Qatar", country: "Estimating projects", lat: 25.29, lon: 51.53, tz: "Asia/Qatar", tzLabel: "GMT+3" },
     ],
   },
   education: {
@@ -29,131 +29,138 @@ export const CONTENT = {
     school: "Adamson University",
     place: "Manila, Philippines",
     years: "Aug 2019 to May 2025",
+    certificate: { title: "Certificate, Oil & Gas Industry Operations and Markets", school: "Duke University", years: "Jun 2025 to Jul 2025" },
   },
   work: [
-    { company: "Luxury Residential Projects", role: "Estimator", place: "Qatar", since: null, url: null,
-      summary: "Take-offs, BOQs and BOMs, vendor pricing and schedules for luxury residential houses." },
-    { company: "Porto Petroleum", role: "Operations Assistant", place: "Philippines", since: null, url: null,
-      summary: "Terminal operations: inventory reconciliation, safety, and cross-functional coordination." },
+    { company: "Contract", role: "BOQ & Construction Estimator", place: "Remote", since: null, url: null,
+      summary: "Takeoffs and BOQs for 12 residential projects, including luxury homes in Qatar." },
+    { company: "Porto Petroleum Inc.", role: "Operations Assistant", place: "Sariaya, Quezon, Philippines", since: null, url: null,
+      summary: "Daily coordination across 5 departments at a petroleum terminal, scheduling of rosters, loading, vessels and maintenance, and daily to month end reporting." },
   ],
-  // "By the numbers" (résumé figures; approximate where the résumé says so)
+  // "By the numbers" (résumé figures)
   record: {
     head: "BY THE NUMBERS",
     stats: [
-      { value: "12", unit: "", label: "Residential estimating projects", note: "Including luxury residential properties" },
-      { value: "5,000", unit: "sqm", label: "Average project area", note: "Approximate, as reported" },
-      { value: "10 to 30", unit: "", label: "Drawing sheets per project", note: "Reviewed for each take-off" },
-      { value: "3", unit: "", label: "Pre-construction projects coordinated", note: "Residential, remote" },
-      { value: "1 to 2", unit: "days", label: "Typical turnaround", note: "Depending on scope and complexity" },
+      { value: "12", unit: "", label: "Residential estimating projects", note: "Including luxury homes in Qatar" },
+      { value: "5,000", unit: "sqm", label: "Average project area", note: "Residential takeoffs and BOQs" },
+      { value: "10 to 30", unit: "", label: "Drawing sheets per project", note: "Reviewed in Bluebeam and PlanSwift" },
+      { value: "5", unit: "", label: "Departments coordinated daily", note: "Surveyors, Safety, Logistics, Sales, Accounting" },
+      { value: "1 to 2", unit: "days", label: "Typical turnaround", note: "Dates set with clients, deliverables tracked" },
+    ],
+    // headline facts for the simple page About section
+    facts: [
+      { value: "12", label: "residential estimating projects" },
+      { value: "5,000 sqm", label: "average project area" },
+      { value: "5", label: "departments coordinated daily" },
+      { value: "About 10 million", label: "liters of MOGAS received as Loading Master" },
+      { value: "8 weeks", label: "to promotion at the terminal" },
     ],
   },
-  // full résumé roles, newest first (the `work` rows above stay as the short summary)
+  // full résumé roles, newest first by end date shown in the film (the `work` rows above stay as the short summary)
   roles: [
     {
-      title: "BOQ & Construction Estimator", subtitle: null, org: "Freelance", place: "Remote", period: "Aug 2026 to Present",
+      title: "BOQ & Construction Estimator", subtitle: null, org: "Contract", place: "Remote", period: "Apr 2026 to Oct 2026",
       highlights: [
-        "Worked on quantity takeoff and Bill of Quantities (BOQ) assignments across 12 residential construction projects, including luxury residential properties.",
-        "Reviewed approximately 10 to 30 drawing sheets per project to support quantity measurement and pre-construction documentation.",
-        "Supported estimating assignments involving residential projects with an average reported floor area of approximately 5,000 sqm.",
-        "Performed quantity takeoffs for interior finishes and components, including wall finishes, flooring, fixtures, lighting fixtures, joinery, cabinetry, and doors.",
-        "Quantified wall cladding and other cladding-related scopes based on assigned project requirements.",
-        "Used Bluebeam and PlanSwift to support drawing review, quantity measurement, and takeoff preparation.",
-        "Delivered assigned estimating tasks within a typical 1 to 2 day turnaround, depending on project scope and complexity.",
-        "Prepared quantity takeoff and BOQ deliverables to support residential pre-construction planning.",
-      ],
-    },
-    {
-      title: "Project Coordinator", subtitle: "Project Management Virtual Assistant", org: "Freelance", place: "Remote", period: "Aug 2026 to Present",
-      highlights: [
-        "Coordinated 3 residential pre-construction projects, supporting project schedules, task tracking, client communication, and deliverable management.",
-        "Provided client updates and coordinated follow-ups to keep stakeholders informed of project progress and outstanding requirements.",
-        "Coordinated with multiple subcontractors according to project scope and trade requirements, including plumbing, structural work, and sewer and water connections.",
-        "Coordinated deliveries and scheduling requirements to support project activities and trade sequencing.",
-        "Assisted with permit-related requirements and documentation as part of the pre-construction coordination process.",
-        "Used JobTread and Procore to support project coordination, communication, and management workflows.",
-        "Monitored deadlines and deliverables, supporting on-time delivery through scheduling, follow-ups, and stakeholder coordination.",
-        "Managed revisions and client feedback as part of ongoing project communication and deliverable coordination.",
+        "Delivered takeoffs and BOQs for 12 residential projects (avg. 5,000 sqm), including luxury homes in Qatar.",
+        "Reviewed 10 to 30 drawing sheets per project in Bluebeam and PlanSwift.",
+        "Measured wall finishes, flooring, fixtures, lighting, joinery, cabinetry, doors and wall cladding.",
+        "Set turnaround dates with clients and tracked deliverables in a tracker, delivering within 1 to 2 days.",
       ],
     },
     {
       title: "Operations Assistant", subtitle: null, org: "Porto Petroleum Inc.", place: "Sariaya, Quezon, Philippines", period: "Jan 2026 to Sep 2026",
       highlights: [
-        "Promoted from Filler to Operations Assistant in approximately two months, reflecting demonstrated performance and operational capability.",
-        "Served as Loading Master during multiple vessel-receiving operations involving approximately 10 million liters of motor gasoline.",
-        "Monitored inventory across one 3,000,000-liter motor gasoline tank and two 50,000-liter ethanol additive tanks, recording product volume and temperature every shift.",
-        "Conducted weekly and month-end inventory tallies to support inventory monitoring and reconciliation.",
-        "Led team members during assigned shifts and served as the immediate supervisor during night shifts.",
-        "Coordinated with surveyors, Safety Officers, logistics personnel, sales managers, and Accounting to support terminal operations.",
-        "Prepared and released receipts, waybills, and withdrawal certificates, and coordinated Sales Order and account balance tallies with Accounting.",
-        "Supervised pipeline commissioning activities and truck rescue and recovery operations involving trucks outside standard operating conditions.",
+        "Coordinated daily across 5 departments: cargo figures with surveyors, safety with Safety Officers, product movement with Logistics, orders with Sales, and records with Accounting.",
+        "Scheduled shift rosters, truck loading and dispatch, vessel arrivals and discharge, and maintenance inspections.",
+        "Supervised night shifts, pipeline commissioning, and truck rescue and recovery operations.",
+        "Loading Master for onshore and offshore vessel operations, receiving about 10 million liters of MOGAS with accurate received volumes.",
+        "Recorded daily opening and closing volumes on 3 tanks (3.2M L MOGAS, 2 × 50,000 L ethanol) in Excel and Google Sheets for weekly and month end reconciliation.",
+        "Prepared and released receipts, waybills and withdrawal certificates in Excel and Google Docs; reconciled Sales Orders and account balances with Accounting.",
+        "Prepared daily shift reports, weekly head office reports and month end reports.",
+        "Shipped receipts from the site office to head office every Monday, booking couriers and tracking deliveries.",
       ],
     },
   ],
-  // résumé "Technical skills" groups (shown in the Scope scene after the toolkit)
+  // résumé skills groups (shown in the Scope scene after the toolkit)
   scopes: [
-    { group: "Construction Estimating & Pre-Construction", items: ["Quantity Takeoff", "Bill of Quantities (BOQ)", "Bill of Materials (BOM)", "Residential Construction", "Luxury Residential Projects", "Construction Drawing Review", "Pre-Construction Documentation"] },
-    { group: "Interior Finishes & Cladding", items: ["Wall Finishes", "Flooring", "Fixtures", "Lighting Fixtures", "Joinery and Cabinetry", "Doors", "Wall Cladding", "Other Cladding-Related Takeoffs"] },
-    { group: "Project Coordination & Management", items: ["Project Scheduling and Task Tracking", "Client Communication", "Subcontractor Coordination", "Delivery Coordination", "Permit Coordination", "Document and Deliverable Management", "Revision and Feedback Management"] },
-    { group: "Software", items: ["Bluebeam", "PlanSwift", "JobTread", "Procore", "AutoCAD", "Microsoft Office"] },
-    { group: "Communication Platforms", items: ["Google Meet", "Zoom", "Slack", "WhatsApp", "Viber"] },
+    { group: "Planning", items: ["Scheduling", "MS Project", "Gantt & S-Curve", "Progress Reporting", "Deadline Tracking"] },
+    { group: "Estimating", items: ["Quantity Takeoff", "BOQ & BOM", "Drawing Review", "Bluebeam", "PlanSwift", "AutoCAD"] },
+    { group: "Operations", items: ["Inventory Tracking", "Reconciliation", "Documentation", "Shipping & Courier Logistics"] },
+    { group: "Office", items: ["Excel", "Google Sheets", "Google Docs", "MS Office", "Slack", "WhatsApp", "Viber", "Google Meet", "Zoom"] },
   ],
-  // "How I build an estimate"
+  // rendered title of the process scene
+  processHead: "HOW I WORK",
   process: [
-    { step: "Drawings", tool: "AutoCAD", text: "Reviewing plans and drawings for luxury residential houses" },
-    { step: "Take-Off", tool: "Bluebeam · PlanSwift", text: "Measuring quantities from the drawings" },
-    { step: "BOQ & BOM", tool: "Excel", text: "Structuring quantities into Bills of Quantities and Materials" },
-    { step: "Vendors", tool: "Pricing & materials", text: "Coordinating with vendors and suppliers" },
-    { step: "Schedule", tool: "Gantt & S-curve", text: "Planning in MS Project, JobTread, and Procore" },
+    { step: "Plan", tool: "MS Project · Gantt · S-Curve", text: "Setting schedules and tracking progress against deadlines" },
+    { step: "Coordinate", tool: "5 departments", text: "Daily coordination with surveyors, Safety, Logistics, Sales and Accounting" },
+    { step: "Track", tool: "Excel · Google Sheets", text: "Recording volumes and deliverables for reconciliation" },
+    { step: "Report", tool: "Daily · Weekly · Month end", text: "Shift reports, head office reports and month end reports" },
+    { step: "Estimate", tool: "Bluebeam · PlanSwift", text: "Takeoffs and BOQs from residential drawings" },
   ],
   responsibilities: [
-    "Prepared quantity take-offs for luxury residential houses in Qatar using Bluebeam, PlanSwift, and AutoCAD.",
-    "Developed Bills of Quantities (BOQ) and Bills of Materials (BOM) in Microsoft Excel.",
-    "Coordinated with vendors and suppliers on pricing and materials.",
-    "Communicated with clients and project teams through Slack, WhatsApp, Viber, Telegram, Google Meet, and Zoom.",
-    "Supported project scheduling with Gantt charts and S-curves using MS Project, JobTread, and Procore.",
+    "Scheduled shift rosters, truck loading and dispatch, vessel arrivals and discharge, and maintenance inspections.",
+    "Coordinated daily across 5 departments, from surveyors and Safety Officers to Logistics, Sales and Accounting.",
+    "Recorded daily tank volumes and reconciled them weekly and at month end.",
+    "Prepared daily shift reports, weekly head office reports and month end reports.",
+    "Delivered takeoffs and BOQs for residential projects in Bluebeam and PlanSwift within 1 to 2 days.",
   ],
-  values: ["Accurate quantities", "Organized records", "Clear communication", "Practical problem-solving"],
-  goals: ["Construction estimating", "Pre-construction", "Luxury residential projects", "Project scheduling"],
+  values: ["Accurate quantities", "Organized records", "Clear communication", "Attention to detail"],
+  goals: ["Planning and scheduling", "Operations coordination", "Construction estimating", "Progress reporting"],
   // one entry per house layer; `primary` lists the item indexes drawn as the strongest skills
   skills: {
-    roof: { part: "Roof", group: "Scheduling", items: ["Project Scheduling", "Gantt Charts", "S-Curves", "MS Project", "JobTread", "Procore"], primary: [0, 1, 2] },
-    walls: { part: "Walls", group: "Quantity Take-Off", items: ["Quantity Take-Off", "Bluebeam", "PlanSwift", "Luxury Residential"], primary: [0, 1, 2] },
-    windows: { part: "Windows", group: "Drawings & CAD", items: ["AutoCAD", "Drawing Review", "Plan Reading", "Microsoft Office"], primary: [0] },
-    door: { part: "Door", group: "Communication", items: ["Client Communication", "Vendor Coordination", "Slack", "WhatsApp", "Viber", "Google Meet", "Zoom", "Telegram"], primary: [0, 1] },
-    slab: { part: "Slab", group: "BOQ & BOM", items: ["Bills of Quantities", "Bills of Materials", "Microsoft Excel", "Vendor Pricing", "Organized Records"], primary: [0, 1, 2] },
-    foundation: { part: "Foundation", group: "Engineering Base", items: ["Petroleum Engineering", "Terminal Operations", "Inventory Reconciliation", "Safety", "Cross-functional Coordination"], primary: [0, 3] },
+    roof: { part: "Roof", group: "Planning", items: ["Scheduling", "MS Project", "Gantt & S-Curve", "Progress Reporting", "Deadline Tracking"], primary: [0, 1, 2] },
+    walls: { part: "Walls", group: "Estimating", items: ["Quantity Takeoff", "BOQ & BOM", "Bluebeam", "PlanSwift"], primary: [0, 1, 2] },
+    windows: { part: "Windows", group: "Estimating", items: ["Drawing Review", "AutoCAD", "Bluebeam"], primary: [0] },
+    door: { part: "Door", group: "Office", items: ["Excel", "Google Sheets", "Google Docs", "MS Office", "Slack", "WhatsApp", "Viber", "Google Meet", "Zoom"], primary: [0, 1] },
+    slab: { part: "Slab", group: "Operations", items: ["Inventory Tracking", "Reconciliation", "Documentation", "Shipping & Courier Logistics"], primary: [0, 1, 2] },
+    foundation: { part: "Foundation", group: "Education and Credentials", items: ["BS Petroleum Engineering", "Terminal Operations", "BOSH Safety Officer 2"], primary: [0, 1] },
   },
   // "How I can help"
   services: [
-    { name: "Quantity Take-Off", text: "Measured quantities from luxury residential drawings in Bluebeam and PlanSwift.", field: "ink" },
-    { name: "BOQ & BOM", text: "Bills of Quantities and Materials, structured and checkable in Excel.", field: "bone" },
-    { name: "Vendor Coordination", text: "Pricing and materials coordinated with vendors and suppliers.", field: "sage" },
-    { name: "Project Scheduling", text: "Gantt charts and S-curves in MS Project, JobTread, and Procore.", field: "ink" },
-    { name: "Client Communication", text: "Clients and project teams kept aligned across Slack, WhatsApp, Meet, and Zoom.", field: "bone" },
+    { name: "Planning & Scheduling", text: "Schedules in MS Project with Gantt charts and S-curves.", field: "ink" },
+    { name: "Operations Coordination", text: "Daily coordination across 5 departments at a petroleum terminal.", field: "bone" },
+    { name: "Deadline Tracking", text: "Turnaround dates set with clients and deliverables tracked.", field: "sage" },
+    { name: "Reports & Records", text: "Daily, weekly and month end reports, with Excel and Google Sheets reconciliation.", field: "ink" },
+    { name: "Quantity Takeoff", text: "Takeoffs and BOQs from residential drawings in Bluebeam and PlanSwift.", field: "bone" },
     { name: "Engineering Base", text: "Petroleum Engineering degree plus terminal operations experience.", field: "sage" },
   ],
   // market frames (one showcase scene each)
   showcases: [
     {
-      field: "bone", title: ["Doha,", "Qatar"], accent: "Qatar", ghost: "QA",
-      pitch: "Take-offs and BOQs for luxury residential houses in Qatar", steps: ["Drawings", "Take-off", "BOQ"],
-      stack: "Bluebeam · PlanSwift · AutoCAD · Excel", badge: { big: "QA", small: "GMT+3" },
+      field: "bone", title: ["Residential,", "Qatar"], accent: "Qatar", ghost: "QA",
+      pitch: "Takeoffs and BOQs for residential projects, including luxury homes in Qatar", steps: ["Drawings", "Takeoff", "BOQ"],
+      stack: "Bluebeam · PlanSwift · AutoCAD", badge: { big: "QA", small: "GMT+3" },
+    },
+  ],
+  // direct superior feedback, verbatim, attributed by role only
+  feedback: [
+    {
+      role: "Porto Petroleum Terminal Manager", date: "July 2026",
+      quote: "A good addition to the Porto, Sariaya operations team. He was able to pick up the role and responsibilities of the additional filler role immediately through help from colleagues and his drive to learn.",
+    },
+    {
+      role: "Porto Petroleum Supervisor", date: "July 2026",
+      quote: "An overall reliable field personnel with good attention to detail. Has good working relationship with Azora's field Ops. Can communicate with drivers and other tenants if needed.",
     },
   ],
   certs: [
-    { title: "Six Sigma Yellow Belt", issuer: "Process improvement", url: null },
-    { title: "OKR Fundamentals", issuer: "AICertified · OKRFC", url: null },
-    { title: "BOSH Safety Officer 2", issuer: "Occupational safety", url: null },
     { title: "Google Project Management Certificate", issuer: "Coursera · In progress", url: null },
-    { title: "BS Petroleum Engineering", issuer: "Adamson University", url: null },
+    { title: "Detailed Quantity Takeoff and Estimating Training", issuer: "Construction Hub PH", url: null },
+    { title: "OKR Fundamentals with AI", issuer: "Certified · OKRFC", url: null },
+    { title: "Six Sigma Yellow Belt", issuer: "Process improvement", url: null },
+    { title: "BOSH Safety Officer 2", issuer: "Occupational safety", url: null },
   ],
   contact: {
     headline: "LET'S CONNECT",
-    pitch: "Need a project coordinator to keep your teams, schedules, and deliverables aligned? Looking for support in project management or operations coordination? I'd be glad to connect.",
+    pitch: "Need someone to plan and schedule work, coordinate operations across departments, or prepare takeoffs and BOQs? I would be glad to connect.",
+    phone: "+63 962 588 6675",
+    website: "mikodeperalta.vercel.app",
     links: [
       { label: "Email", value: "miko.q.deperalta@gmail.com", url: "mailto:miko.q.deperalta@gmail.com" },
+      { label: "Phone", value: "+63 962 588 6675", url: "tel:+639625886675" },
       { label: "LinkedIn", value: "in/mikodeperalta", url: "https://www.linkedin.com/in/mikodeperalta" },
-      { label: "Based in", value: "Philippines · Open to relocation", url: null },
+      { label: "Website", value: "mikodeperalta.vercel.app", url: "https://mikodeperalta.vercel.app" },
+      { label: "Based in", value: "Makati, Philippines", url: null },
     ],
   },
 };

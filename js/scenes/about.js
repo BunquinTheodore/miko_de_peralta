@@ -8,6 +8,7 @@ const SAGE = "#557373";
 const MONO = "Geist Mono, ui-monospace, monospace";
 const ACT = "02 · About";
 const PORT = STAGE.portrait;
+const SQ = STAGE.square;
 
 // font-size that keeps `text` inside `width` px (approximate Geist 900 uppercase advance)
 const fit = (text, max, width, k = 0.62) =>
@@ -15,7 +16,7 @@ const fit = (text, max, width, k = 0.62) =>
 const mask = (inner, cls = "", style = "") => `<div class="mask ${cls}" style="${style}"><span>${inner}</span></div>`;
 // eyebrow label; portrait needs a larger mono size
 const eyebrow = (text, cls = "") =>
-  mask(`<span class="eyebrow ${cls}"${PORT ? ' style="font-size:28px;letter-spacing:.2em"' : ""}>${esc(text)}</span>`);
+  mask(`<span class="eyebrow ${cls}"${PORT ? ' style="font-size:28px;letter-spacing:.2em"' : SQ ? ' style="font-size:24px;letter-spacing:.3em"' : ""}>${esc(text)}</span>`);
 const fmtLat = (v) => `${Math.abs(v).toFixed(2)}° ${v >= 0 ? "N" : "S"}`;
 const fmtLon = (v) => `${Math.abs(v).toFixed(2)}° ${v >= 0 ? "E" : "W"}`;
 const easeOutCubic = (x) => 1 - Math.pow(1 - x, 3);
@@ -48,19 +49,22 @@ function framingCentre(points) {
 const nearLam = (lam, ref) => ref + ((((lam - ref) % 360) + 540) % 360) - 180;
 
 /* ------------------------------------------------------------------ 06 location */
-const LOC = PORT
-  ? { globe: [160, 210], text: 90, w: 900, eye: 1040, country: 1084, cMax: 150, note: 30, mh: 28, row: 92, ri: 28, rc: 46,
+const LOC = SQ
+  ? { globe: [400, 320], text: 80, w: 340, cw: 920, eye: 64, country: 108, cMax: 150, note: 24, mh: 18, row: 84, ri: 16, rc: 28,
+      lab: 16, val: 36, ft: 20, fs: 16, ls: 3, gap: 84, svg: 660, R: 290 }
+  : PORT
+  ? { globe: [160, 210], text: 90, w: 900, cw: 860, eye: 1040, country: 1084, cMax: 150, note: 30, mh: 28, row: 92, ri: 28, rc: 46,
       lab: 28, val: 34, ft: 28, fs: 26, ls: 3 }
-  : { globe: [1060, 160], text: 110, w: 800, eye: 196, country: 250, cMax: 160, note: 22, mh: 16, row: 92, ri: 16, rc: 46,
+  : { globe: [1060, 160], text: 110, w: 880, cw: 760, eye: 196, country: 250, cMax: 160, note: 22, mh: 16, row: 92, ri: 16, rc: 46,
       lab: 15, val: 28, ft: 20, fs: 15, ls: 3.5 };
 
 function locationScene(C) {
   const L = C.location;
   const markets = (L.markets || []).slice(0, 2);
-  const R = 330, MID = 380;
+  const R = LOC.R || 330, MID = (LOC.svg || 760) / 2;
   const home = [L.lon, L.lat];
   const country = String(L.country).toUpperCase();
-  const countryPx = fit(country, LOC.cMax, LOC.w - 40);
+  const countryPx = fit(country, LOC.cMax, LOC.cw);
   const noteTop = LOC.country + Math.round(countryPx * 0.9) + 38;
   const mhTop = noteTop + LOC.note + 70;
   const rowsTop = mhTop + LOC.mh + 30;
@@ -164,7 +168,7 @@ function locationScene(C) {
     html: `
       <style>
         .lc-rows{position:absolute;left:${LOC.text}px;top:${rowsTop}px;width:${LOC.w}px;height:${markets.length * LOC.row}px}
-        .lc-row{position:absolute;left:0;width:${LOC.w}px;height:${LOC.row}px;display:grid;grid-template-columns:${PORT ? 90 : 70}px 1fr auto;
+        .lc-row{position:absolute;left:0;width:${LOC.w}px;height:${LOC.row}px;display:grid;grid-template-columns:${SQ ? 52 : PORT ? 90 : 70}px 1fr auto;
           align-items:center;border-top:2px solid rgba(242, 239, 234,.28)}
         .lc-ri{font-size:${LOC.ri}px;color:var(--sage)}
         .lc-rz{font-size:${PORT ? 28 : 18}px;color:var(--bone);letter-spacing:.16em}
@@ -179,7 +183,7 @@ function locationScene(C) {
       <div class="abs mono dim lc-mh" style="left:${LOC.text}px;top:${mhTop}px;font-size:${LOC.mh}px;letter-spacing:.2em">Markets</div>
       <div class="lc-rows">${marketRows}</div>
       <div class="abs lc-rule" style="left:${LOC.text}px;top:${ruleTop}px;width:${LOC.w}px;height:2px;background:var(--bone);opacity:.28;transform-origin:0 50%"></div>
-      <div class="abs lc-read" style="left:${LOC.text}px;top:${readTop}px;width:${LOC.w}px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:40px">
+      <div class="abs lc-read" style="left:${LOC.text}px;top:${readTop}px;width:${LOC.w}px;display:grid;grid-template-columns:${SQ ? "1fr" : "1fr 1fr 1fr"};gap:${SQ ? LOC.gap : 40}px">
         <div><div class="mono dim" style="font-size:${LOC.lab}px">Latitude</div>
           <div class="mono" id="lc-lat" style="font-size:${LOC.val}px;margin-top:14px">${fmtLat(L.lat)}</div></div>
         <div><div class="mono dim" style="font-size:${LOC.lab}px">Longitude</div>
@@ -187,8 +191,8 @@ function locationScene(C) {
         <div><div class="mono dim" style="font-size:${LOC.lab}px">Zone</div>
           <div class="mono" style="font-size:${LOC.val}px;margin-top:14px">${esc(L.tzLabel)}</div></div>
       </div>
-      <div class="abs lc-wrap" style="left:${gx}px;top:${gy}px;width:760px;height:760px">
-        <svg viewBox="0 0 760 760" width="760" height="760" style="overflow:visible">
+      <div class="abs lc-wrap" style="left:${gx}px;top:${gy}px;width:${MID * 2}px;height:${MID * 2}px">
+        <svg viewBox="0 0 ${MID * 2} ${MID * 2}" width="${MID * 2}" height="${MID * 2}" style="overflow:visible">
           <circle cx="${MID}" cy="${MID}" r="${R + 22}" fill="none" stroke="${SAGE}" stroke-width="1.5" stroke-opacity=".45" stroke-dasharray="3 9"/>
           <circle cx="${MID}" cy="${MID}" r="${R}" fill="rgba(13, 13, 13,.9)" stroke="${BONE}" stroke-opacity=".5" stroke-width="2"/>
           <path class="lc-grat" fill="none" stroke="${BONE}" stroke-opacity=".16" stroke-width="1"/>
@@ -199,7 +203,7 @@ function locationScene(C) {
             `<circle r="11" fill="none" stroke="${SAGE}" stroke-width="2"/><circle r="5" fill="${SAGE}"/>`)).join("")}
           ${labelSvg("lc-pin", String(L.city).toUpperCase(), "HOME",
             `<circle class="lc-ring" r="10" fill="none" stroke="${SAGE}" stroke-width="3"/><circle r="9" fill="${SAGE}"/>`)}
-          <text aria-hidden="true" x="${MID}" y="${MID + R + 64}" fill="${BONE}" fill-opacity=".5" font-family="${MONO}" font-size="${PORT ? 22 : 14}"
+          <text aria-hidden="true" x="${MID}" y="${MID + R + 64}" fill="${BONE}" fill-opacity=".5" font-family="${MONO}" font-size="${PORT ? 22 : SQ ? 16 : 14}"
             letter-spacing="4" text-anchor="middle">ORTHOGRAPHIC · GREAT-CIRCLE ROUTES</text>
         </svg>
       </div>`,
@@ -384,7 +388,10 @@ function timezoneScene(C) {
 }
 
 /* ------------------------------------------------------------------ 08 education */
-const EDU = PORT
+const EDU = SQ
+  ? { frame: [600, 80, 380, 380], cap: 478, text: 110, w: 870, bar: 70, eye: 80, top: 200, topPx: 69, main: 570, mainMax: 150,
+      school: 76, place: 20, years: 18 }
+  : PORT
   ? { frame: [270, 270, 540, 560], cap: 862, text: 130, w: 850, bar: 90, eye: 960, top: 1012, topPx: 56, main: 1100, mainMax: 120,
       school: 76, place: 28, years: 28 }
   : { frame: [1330, 180, 500, 620], cap: 830, text: 140, w: 1100, bar: 90, eye: 176, top: 226, topPx: 52, main: 300, mainMax: 150,
@@ -396,7 +403,7 @@ function photoFrame(P) {
   const inner = has(P.photo)
     ? `<img class="ed-img" src="${esc(P.photo)}" alt="${esc(P.full)}" decoding="async"><div class="ed-grade"></div>`
     : `<div class="ed-ph"><div class="ed-hatch"></div><div class="mask ed-ini"><span class="ol">${esc(P.initials)}</span></div></div>`;
-  const lab = PORT ? 28 : 14;
+  const lab = PORT ? 28 : SQ ? 16 : 14;
   return `
     <div class="abs ed-frame" style="left:${x}px;top:${y}px;width:${w}px;height:${h}px">
       <div class="ed-box">${inner}<div class="ed-cover"></div></div>
@@ -404,7 +411,7 @@ function photoFrame(P) {
       <div class="abs mono ed-lab" style="left:20px;top:20px;font-size:${lab}px">Photo</div>
       <div class="abs mono ed-lab" style="right:20px;top:20px;font-size:${lab}px">Fig. 01</div>
     </div>
-    <div class="abs mono dim ed-cap" style="left:${x}px;top:${EDU.cap}px;width:${w}px;font-size:${PORT ? 28 : 15}px;letter-spacing:.2em;
+    <div class="abs mono dim ed-cap" style="left:${x}px;top:${EDU.cap}px;width:${w}px;font-size:${PORT ? 28 : SQ ? 17 : 15}px;letter-spacing:.2em;
       ${PORT ? "text-align:center" : ""}">${esc(P.full)}</div>`;
 }
 
@@ -417,13 +424,19 @@ function educationScene(C) {
   const W = EDU.w;
   const mainPx = Math.min(...lines.map((l) => fit(l, EDU.mainMax, W, 0.7)));
   const topPx = Math.min(EDU.topPx, fit(top.toUpperCase(), EDU.topPx, W, 0.66));
-  const mainTop = top ? EDU.main : EDU.top;
+  // square: "Bachelor / of Science" stacks beside the photo, so it gets the narrow column's width
+  const topLines = SQ ? twoLines(top.toUpperCase()) : [top.toUpperCase()];
+  const topSqPx = SQ ? Math.min(EDU.topPx, ...topLines.map((l) => fit(l, EDU.topPx, EDU.frame[0] - EDU.text - 30, 0.66))) : topPx;
+  const mainTop = SQ || top ? EDU.main : EDU.top;
   const ruleTop = mainTop + Math.round(mainPx * 0.92 * lines.length) + 44;
   const schoolPx = fit(E.school.toUpperCase(), EDU.school, W, 0.64);
   const placeTop = ruleTop + 40 + schoolPx + 26;
   const showYears = has(E.years);
-  const yearsStyle = PORT
-    ? `left:${EDU.text}px;top:${placeTop + 60}px;font-size:${EDU.years}px`
+  const cert = E.certificate && has(E.certificate.title) ? E.certificate : null;
+  const yearsStyle = SQ
+    ? `left:${EDU.text}px;top:${EDU.frame[1] + EDU.frame[3] - 22}px;font-size:${EDU.years}px`
+    : PORT
+    ? `left:${EDU.text}px;top:${placeTop + (cert ? 170 : 60)}px;font-size:${EDU.years}px`
     : `left:${EDU.text + W - 300}px;width:300px;text-align:right;top:180px;font-size:${EDU.years}px`;
   return {
     slug: "education", name: "Education", act: ACT, field: "bone", dur: 3.4,
@@ -444,20 +457,22 @@ function educationScene(C) {
         .ed-cover{position:absolute;inset:-2px;background:var(--bone)}
         .ed-lab{color:var(--ink);background:var(--bone);padding:6px 8px;letter-spacing:.2em}
       </style>
-      <div class="abs ed-bar" style="left:${EDU.bar}px;top:${EDU.eye}px;width:12px;height:${ruleTop - EDU.eye}px;background:var(--sage);transform-origin:50% 0"></div>
+      <div class="abs ed-bar" style="left:${EDU.bar}px;top:${EDU.eye}px;width:12px;height:${(SQ ? EDU.frame[1] + EDU.frame[3] : ruleTop) - EDU.eye}px;background:var(--sage);transform-origin:50% 0"></div>
       <div class="abs" style="left:${EDU.text}px;top:${EDU.eye}px">${eyebrow("Education", "ink")}</div>
       ${showYears ? `<div class="abs mono dim ed-years" style="${yearsStyle}">${esc(E.years)}</div>` : ""}
-      ${top ? mask(esc(top.toUpperCase()), "mid", `position:absolute;left:${EDU.text - 4}px;top:${EDU.top}px;font-size:${topPx}px;white-space:nowrap`) : ""}
+      ${top ? topLines.map((l, i) => mask(esc(l), "mid", `position:absolute;left:${EDU.text - 4}px;top:${EDU.top + Math.round(i * topSqPx * 0.95)}px;font-size:${topSqPx}px;white-space:nowrap`)).join("") : ""}
       ${lines.map((l, i) => mask(esc(l), "big ol", `position:absolute;left:${EDU.text - 10}px;top:${mainTop + Math.round(i * mainPx * 0.92)}px;font-size:${mainPx}px;white-space:nowrap`)).join("")}
       <div class="abs ed-rule" style="left:${EDU.text}px;top:${ruleTop}px;width:${W}px;height:3px;background:var(--ink);transform-origin:0 50%"></div>
       ${mask(esc(E.school.toUpperCase()), "mid", `position:absolute;left:${EDU.text - 4}px;top:${ruleTop + 40}px;font-size:${schoolPx}px;white-space:nowrap`)}
       <div class="abs mono dim ed-place" style="left:${EDU.text}px;top:${placeTop}px;font-size:${EDU.place}px;letter-spacing:.2em">${esc(E.place)}</div>
+      ${cert ? `<div class="abs mono dim ed-cert" style="left:${EDU.text}px;top:${placeTop + EDU.place + 34}px;width:${W}px;font-size:${Math.max(16, EDU.place - 4)}px;letter-spacing:.16em;line-height:1.5">${esc(cert.title)}<br>${esc([cert.school, cert.years].filter(Boolean).join(" · "))}</div>` : ""}
       ${photoFrame(C.person)}`,
     anim(root, tl) {
       tl.from(q(root, ".ed-bar"), { scaleY: 0, duration: 1.0, ease: "power4.inOut" }, 0);
       tl.from(qa(root, ".mask:not(.ed-ini) > span"), { yPercent: 115, duration: 0.9, ease: "power4.out", stagger: 0.12 }, 0.2);
       tl.from(q(root, ".ed-rule"), { scaleX: 0, duration: 1.0, ease: "power3.inOut" }, 0.7);
       tl.from(q(root, ".ed-place"), { opacity: 0, x: -30, duration: 0.7, ease: "power3.out" }, 1.3);
+      if (cert) tl.from(q(root, ".ed-cert"), { opacity: 0, x: -30, duration: 0.7, ease: "power3.out" }, 1.5);
       if (showYears) tl.from(q(root, ".ed-years"), { opacity: 0, duration: 0.6 }, 1.2);
       // the photo wipes open top to bottom: a bone cover slides down out of the frame (transform only)
       tl.fromTo(q(root, ".ed-cover"), { yPercent: 0 }, { yPercent: 102, duration: 1.0, ease: "power3.inOut", immediateRender: true }, 0.4);
@@ -472,7 +487,10 @@ function educationScene(C) {
 }
 
 /* ------------------------------------------------------------------ 09 values */
-const VAL = PORT
+const VAL = SQ
+  ? { eye: 52, word: 82, wordMax: 170, w: 940, cols: [[80, 358], [80, 718]], pillW: 920, row: 76, ph: 62, hgap: 24, numW: 64, padL: 28, padR: 24,
+      icon: 44, maxPx: 32, head: 20, tag: [90, 248, 900, 18], ruleTop: 292, ruleL: 80, ruleW: 920 }
+  : PORT
   ? { eye: 160, word: 204, wordMax: 180, w: 900, cols: [[90, 630], [90, 1170]], pillW: 900, row: 104, numW: 64, padL: 28, padR: 24,
       icon: 44, maxPx: 38, head: 28, tag: [90, 400, 900, 30] }
   : { eye: 110, word: 160, wordMax: 220, w: 1740, cols: [[90, 560], [1010, 560]], pillW: 820, row: 104, numW: 64, padL: 30, padR: 26,
@@ -498,7 +516,7 @@ function valuesScene(C) {
           <span class="va-ic">${c.kind === "v" ? check : arrow}</span>
         </div>`).join("");
     return `
-      <div class="abs va-h" style="left:${left}px;top:${top - 40 - VAL.head}px;width:${VAL.pillW}px">
+      <div class="abs va-h" style="left:${left}px;top:${top - (VAL.hgap || 40) - VAL.head}px;width:${VAL.pillW}px">
         <span class="mono" style="font-size:${VAL.head}px">${pad(ci + 1)} · ${esc(c.title)}</span></div>
       <div class="abs va-col" style="left:${left}px;top:${top}px;width:${VAL.pillW}px;height:${VAL.row * c.items.length}px">${rows}</div>`;
   };
@@ -510,30 +528,30 @@ function valuesScene(C) {
     html: `
       <style>
         .va-h span{color:var(--sage);letter-spacing:${PORT ? ".2em" : ".3em"}}
-        .va-pill{position:absolute;left:0;width:${VAL.pillW}px;height:82px;border:2px solid rgba(242, 239, 234,.42);border-radius:999px;
+        .va-pill{position:absolute;left:0;width:${VAL.pillW}px;height:${VAL.ph || 82}px;border:2px solid rgba(242, 239, 234,.42);border-radius:999px;
           display:grid;grid-template-columns:${VAL.numW}px minmax(0,1fr) ${VAL.icon}px;column-gap:8px;align-items:center;
           padding:0 ${VAL.padR}px 0 ${VAL.padL}px;background:rgba(13, 13, 13,.6);overflow:hidden}
-        .va-i{font-size:${PORT ? 28 : 15}px;color:var(--ash);letter-spacing:.16em}
+        .va-i{font-size:${PORT ? 28 : SQ ? 17 : 15}px;color:var(--ash);letter-spacing:.16em}
         .va-t{font-weight:900;letter-spacing:-.02em;text-transform:uppercase;white-space:nowrap;line-height:1;overflow:hidden}
         .va-ic{display:grid;place-items:center;color:var(--sage)}
         .va-g{border-style:dashed}
         .va-word .period{background:var(--sage)}
       </style>
-      <div class="abs" style="left:96px;top:${VAL.eye}px">${eyebrow("Values · Direction")}</div>
+      <div class="abs" style="left:${SQ ? 88 : 96}px;top:${VAL.eye}px">${eyebrow("Values · Direction")}</div>
       ${mask(`PRECISE<span class="period"></span>`, "mega va-word", `position:absolute;left:84px;top:${VAL.word}px;font-size:${wordPx}px;white-space:nowrap`)}
-      <div class="abs mono dim va-tag" style="left:${tx}px;top:${ty}px;width:${tw}px;${PORT ? "" : "text-align:right;"}font-size:${tf}px;
-        line-height:1.6;letter-spacing:${PORT ? ".12em" : ".22em"}">${esc(C.person.tagline)}</div>
-      <div class="abs va-rule" style="left:90px;top:${PORT ? 530 : 440}px;width:${PORT ? 900 : 1740}px;height:2px;background:var(--bone);opacity:.28;transform-origin:0 50%"></div>
+      <div class="abs mono dim va-tag" style="left:${tx}px;top:${ty}px;width:${tw}px;${PORT || SQ ? "" : "text-align:right;"}font-size:${tf}px;
+        line-height:1.6;letter-spacing:${PORT || SQ ? ".12em" : ".22em"}">${esc(C.person.tagline)}</div>
+      <div class="abs va-rule" style="left:${SQ ? VAL.ruleL : 90}px;top:${SQ ? VAL.ruleTop : PORT ? 530 : 440}px;width:${SQ ? VAL.ruleW : PORT ? 900 : 1740}px;height:2px;background:var(--bone);opacity:.28;transform-origin:0 50%"></div>
       ${cols.map(col).join("")}`,
     anim(root, tl) {
       tl.from(qa(root, ".mask > span"), { yPercent: 115, duration: 0.85, ease: "power4.out", stagger: 0.1 }, 0.05);
-      tl.from(q(root, ".va-tag"), { opacity: 0, x: PORT ? -30 : 30, duration: 0.6, ease: "power3.out" }, 0.4);
+      tl.from(q(root, ".va-tag"), { opacity: 0, x: PORT || SQ ? -30 : 30, duration: 0.6, ease: "power3.out" }, 0.4);
       tl.from(q(root, ".va-rule"), { scaleX: 0, duration: 0.8, ease: "power3.inOut" }, 0.35);
       tl.from(qa(root, ".va-h"), { opacity: 0, y: 16, duration: 0.5, ease: "power3.out", stagger: 0.1 }, 0.55);
       // landscape: row by row across both columns; portrait: down the stacked list
       const pills = qa(root, ".va-pill");
-      const order = PORT ? pills : [...pills].sort((a, b) => parseFloat(a.style.top) - parseFloat(b.style.top));
-      const gap = PORT ? 0.07 : 0.09;
+      const order = PORT || SQ ? pills : [...pills].sort((a, b) => parseFloat(a.style.top) - parseFloat(b.style.top));
+      const gap = PORT || SQ ? 0.07 : 0.09;
       tl.from(order, { opacity: 0, x: -40, duration: 0.5, ease: "power3.out", stagger: gap }, 0.7);
       tl.from(order.map((p) => q(p, ".va-ic")), { scale: 0, rotation: -90, duration: 0.4, ease: "back.out(2)", stagger: gap }, 0.95);
     },

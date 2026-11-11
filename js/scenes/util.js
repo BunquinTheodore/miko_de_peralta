@@ -53,5 +53,8 @@ export function makePoser(state) {
 // Stage layout, decided once at load. Portrait screens get a 1080x1920 stage and every scene lays out for it.
 // `?layout=portrait|landscape` forces one (handy for testing on a desktop).
 const forced = new URLSearchParams(location.search).get("layout");
+// `?layout=square` gives a 1080x1080 stage (social posts). It is opt-in only: never picked from the window size.
 const portrait = forced ? forced === "portrait" : innerWidth / innerHeight < 0.9;
-export const STAGE = Object.freeze(portrait ? { w: 1080, h: 1920, portrait: true } : { w: 1920, h: 1080, portrait: false });
+const square = forced === "square";
+export const STAGE = Object.freeze(square ? { w: 1080, h: 1080, portrait: false, square: true }
+  : portrait ? { w: 1080, h: 1920, portrait: true, square: false } : { w: 1920, h: 1080, portrait: false, square: false });

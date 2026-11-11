@@ -335,7 +335,7 @@ function buildAbout() {
       list((r.highlights ?? []).map((h) => [h]));
     }
   }
-  add("h2", "How I build an estimate");
+  add("h2", C.processHead ? C.processHead.charAt(0) + C.processHead.slice(1).toLowerCase() : "How I work");
   list(C.process.map((s, i) => [`${i + 1}. ${s.step} (${s.tool}): ${s.text}`]));
   add("h2", "Responsibilities");
   list(C.responsibilities.map((r) => [r]));
@@ -348,10 +348,16 @@ function buildAbout() {
   }
   add("h2", "How I can help");
   list(C.services.map((s) => [`${s.name}: ${s.text}`]));
+  const fb = C.feedback ?? [];
+  if (fb.length) {
+    add("h2", "Feedback");
+    list(fb.map((f) => [`${f.role}, ${f.date}: ${f.quote}`]));
+  }
   add("h2", "Markets");
   list(C.showcases.map((x) => [`${x.title.join(" ")}: ${x.pitch} (${x.stack})`]));
   add("h2", "Education");
   add("p", join(ed.degree, ed.school, ed.place, ed.years));
+  if (ed.certificate) add("p", join(ed.certificate.title, ed.certificate.school, ed.certificate.years));
   add("h2", "Credentials");
   list(C.certs.map((x) => [`${x.title}, ${x.issuer}`, x.url]));
   add("h2", "What I value");
@@ -485,6 +491,7 @@ Object.assign(stage.style, { width: `${STAGE.w}px`, height: `${STAGE.h}px` });
 modelCanvas.width = STAGE.w; modelCanvas.height = STAGE.h;
 Object.assign(modelCanvas.style, { width: `${STAGE.w}px`, height: `${STAGE.h}px` });
 document.documentElement.classList.toggle("portrait", STAGE.portrait);
+document.documentElement.classList.toggle("square", STAGE.square);
 
 // scenes are laid out once per layout, so crossing between portrait and landscape rebuilds the page
 const LAYOUT_FORCED = new URLSearchParams(location.search).has("layout");
