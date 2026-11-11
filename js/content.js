@@ -152,6 +152,11 @@ export const CONTENT = {
     { title: "Six Sigma Yellow Belt", issuer: "Process improvement", url: null },
     { title: "BOSH Safety Officer 2", issuer: "Occupational safety", url: null },
   ],
+  // more certifications, shown on the simple page only (the film has a fixed number of certificate cards and a count)
+  certsMore: [
+    { title: "Well Operations Crew Resource Management", issuer: "International Well Control Forum (IWCF)", url: null },
+    { title: "Level 1 Programme", issuer: "International Well Control Forum (IWCF)", url: null },
+  ],
   contact: {
     headline: "LET'S CONNECT",
     pitch: "Need someone to plan and schedule work, coordinate operations across departments, or prepare takeoffs and BOQs? I would be glad to connect.",

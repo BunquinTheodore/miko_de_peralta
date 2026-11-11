@@ -132,7 +132,7 @@ function renderCredentials() {
     entry(e.short, e.school, e.place, e.years),
     e.certificate && entry(e.certificate.title, e.certificate.school, null, e.certificate.years));
 
-  fill("certs", C.certs.map((c) => {
+  fill("certs", [...C.certs, ...(C.certsMore || [])].map((c) => {
     const inProgress = /in progress/i.test(c.issuer);
     const issuer = tidy(c.issuer).replace(/,?\s*in progress/i, "");
     return el("li", { class: "cert" },
