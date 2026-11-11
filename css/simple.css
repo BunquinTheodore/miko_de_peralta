@@ -224,6 +224,8 @@ a.c-value:hover { text-decoration-thickness: 2px; }
   .nav::-webkit-scrollbar { display: none; }
 }
 @media (max-width: 560px) {
+  /* justified text makes wide word gaps in narrow columns, so phones use left aligned paragraphs */
+  p, .bullets li { text-align: left; }
   .tags { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 24px; }
   .tags li { white-space: normal; }
   .contact-list { grid-template-columns: minmax(0, 1fr); }
@@ -246,3 +248,30 @@ a.c-value:hover { text-decoration-thickness: 2px; }
   .role, .quote, .edu-item, .cert { break-inside: avoid; }
   .btn { border: 0; padding: 0; min-height: 0; }
 }
+
+/* Splash screen: white cover with the name and tagline, a thin line sweeps across once, then it fades out */
+.splash { display: none; }
+.splash-on .splash {
+  position: fixed; inset: 0; z-index: 200; display: grid; place-items: center; background: #fff; color: #000;
+  transition: opacity 0.7s var(--ease);
+  animation: splashFailsafe 0s 4s forwards;   /* if the script never runs, the splash still goes away */
+}
+.splash.out { opacity: 0; pointer-events: none; }
+.splash-lead { position: relative; width: min(100% - 2 * var(--gutter), var(--max)); container-type: inline-size; }
+.splash-name { margin: 0 0 var(--space-m); font: 700 9cqw/1.05 var(--display); letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap; text-align: left; }
+.splash-tag { margin: 0; font-size: clamp(0.62rem, 2.6cqw, 1.3rem); font-weight: 500; line-height: 1.6; text-transform: uppercase; white-space: nowrap; text-align: left; hyphens: none; }
+.splash-tag .stretch { display: inline-block; letter-spacing: 0.1em; }
+.splash-name, .splash-tag { opacity: 0; }
+.splash.go .splash-name, .splash.go .splash-tag { animation: splashIn 0.6s var(--ease) forwards; }
+.splash.go .splash-tag { animation-delay: 0.1s; }
+.splash-line { position: absolute; top: -8%; bottom: -8%; left: 0; width: 1px; background: #000; opacity: 0; }
+.splash.go .splash-line { animation: splashSweep 1.5s 0.25s cubic-bezier(0.65, 0, 0.35, 1) forwards; }
+@keyframes splashIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@keyframes splashSweep { 0% { opacity: 1; transform: translateX(0); } 92% { opacity: 1; } 100% { opacity: 0; transform: translateX(100cqw); } }
+@keyframes splashFailsafe { to { opacity: 0; visibility: hidden; pointer-events: none; } }
+@keyframes splashUnlock { to { overflow: auto; } }
+html.splash-on { overflow: hidden; animation: splashUnlock 0s 4s forwards; }
+/* the hero waits for the splash to finish, then settles in */
+.splash-on .hero-lead > *, .splash-on .hero-foot > * { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) { .splash { display: none !important; } }
+

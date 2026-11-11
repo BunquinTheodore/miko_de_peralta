@@ -238,25 +238,23 @@ function textBoxWidth(node) {
   return range.getBoundingClientRect().width;
 }
 
-function fitHero() {
-  const lead = document.querySelector(".hero-lead");
-  const h1 = lead && lead.querySelector("h1");
-  const tag = lead && lead.querySelector(".stretch");
-  if (!h1 || !tag) return;
+/** Name and tagline lockup: ink-aligned to the container width. Used by the hero and by the splash screen. */
+function fitLockup(lead, nameEl, tag) {
+  if (!lead || !nameEl || !tag) return;
   const W = lead.clientWidth;
 
   // name: solve the font size so the ink width equals W
-  const cs = getComputedStyle(h1);
-  const nameText = h1.textContent.toUpperCase();
+  const cs = getComputedStyle(nameEl);
+  const nameText = nameEl.textContent.toUpperCase();
   const REF = 100;
-  h1.style.fontSize = `${REF}px`; h1.style.marginLeft = "0px";
+  nameEl.style.fontSize = `${REF}px`; nameEl.style.marginLeft = "0px";
   const refFont = `${cs.fontWeight} ${REF}px ${cs.fontFamily}`;
-  const trailing = parseFloat(getComputedStyle(h1).letterSpacing) || 0;
+  const trailing = parseFloat(getComputedStyle(nameEl).letterSpacing) || 0;
   const refBearings = inkBearings(nameText, refFont);
-  const refInk = textBoxWidth(h1) - trailing - refBearings.left - refBearings.right;
+  const refInk = textBoxWidth(nameEl) - trailing - refBearings.left - refBearings.right;
   const k = W / refInk;
-  h1.style.fontSize = `${REF * k}px`;
-  h1.style.marginLeft = `${-refBearings.left * k}px`;
+  nameEl.style.fontSize = `${REF * k}px`;
+  nameEl.style.marginLeft = `${-refBearings.left * k}px`;
 
   // tagline: track out so its ink width equals W, and pull its ink to the same left edge
   const tcs = getComputedStyle(tag);
@@ -267,6 +265,53 @@ function fitHero() {
   const gaps = Math.max(1, tagText.length - 1);
   tag.style.letterSpacing = `${Math.max(0, (W - natural) / gaps)}px`;
   tag.style.marginLeft = `${-tb.left}px`;
+}
+
+function fitHero() {
+  const lead = document.querySelector(".hero-lead");
+  fitLockup(lead, lead && lead.querySelector("h1"), lead && lead.querySelector(".stretch"));
+}
+
+/**
+ * Splash screen: the name and tagline on white, a thin line sweeps across once, then the splash fades out
+ * and the hero settles in underneath. Click or any key skips it. The page stays usable if this never runs
+ * (a CSS timeout hides the splash after 4s).
+ */
+function runSplash() {
+  const splash = document.querySelector(".splash");
+  const root = document.documentElement;
+  if (!splash) return;
+  const finish = () => { splash.remove(); root.classList.remove("splash-on"); };
+  if (!root.classList.contains("splash-on")) { splash.remove(); return; }
+
+  const lead = splash.querySelector(".splash-lead");
+  const name = splash.querySelector(".splash-name");
+  const tag = splash.querySelector(".stretch");
+  name.textContent = `${C.person.first} ${C.person.last}`;
+  tag.textContent = C.person.tagline.replace(/[.\s]+$/, "");
+
+  let done = false;
+  const out = (fadeMs) => {
+    if (done) return;
+    done = true;
+    splash.classList.add("out");
+    setTimeout(finish, fadeMs);
+  };
+  splash.addEventListener("click", () => out(350));
+  addEventListener("keydown", () => out(350), { once: true });
+
+  const ready = (document.fonts && document.fonts.load)
+    ? Promise.race([
+      Promise.all([document.fonts.load('700 100px "Josefin Sans"'), document.fonts.load('500 16px "Manrope"')]),
+      new Promise((resolve) => setTimeout(resolve, 1500)),
+    ])
+    : Promise.resolve();
+  ready.then(() => {
+    fitLockup(lead, name, tag);
+    addEventListener("resize", () => fitLockup(lead, name, tag));
+    splash.classList.add("go");
+    setTimeout(() => out(700), 2000);
+  });
 }
 
 /** About heading: tracked out with letter spacing so its letters span exactly the width of the facts table below it. */
@@ -324,7 +369,7 @@ function watchTagline() {
 }
 
 // one failing section must not blank the rest of the page
-for (const step of [renderHero, renderAbout, renderRoles, renderSkills, renderFeedback, renderCredentials, renderContact,
+for (const step of [runSplash, renderHero, renderAbout, renderRoles, renderSkills, renderFeedback, renderCredentials, renderContact,
   watchActiveNav, watchReveals, watchTagline]) {
   try { step(); } catch (err) { console.error(`simple.js: ${step.name} failed`, err); }
 }
