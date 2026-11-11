@@ -15,7 +15,7 @@
   <meta name="twitter:card" content="summary" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 16 16%27%3E%3Crect width=%2716%27 height=%2716%27 fill=%27%230d0d0d%27/%3E%3Ccircle cx=%278%27 cy=%278%27 r=%274%27 fill=%27%23557373%27/%3E%3C/svg%3E" />
   <link rel="stylesheet" href="css/simple.css" />
   <script>document.documentElement.classList.add("js");</script>
@@ -25,64 +25,65 @@
 
   <header class="bar" id="top">
     <div class="bar-inner">
-      <a class="brand" href="#top" aria-label="Miko De Peralta, back to top">Miko De Peralta</a>
+      <a class="brand" href="#top" aria-label="Home, back to top">Home</a>
       <nav class="nav" aria-label="Sections">
-        <a href="#about">About</a>
+        <a href="#about">Summary</a>
         <a href="#experience">Experience</a>
         <a href="#skills">Skills</a>
         <a href="#feedback">Feedback</a>
         <a href="#credentials">Credentials</a>
         <a href="#contact">Contact</a>
       </nav>
-      <a class="btn btn-solid bar-cta" href="animated.html" aria-label="View animated version">View animated<span class="long">&nbsp;version</span></a>
+      <a class="btn btn-solid bar-cta" href="animated.html" aria-label="Portfolio, the animated version">Portfolio</a>
     </div>
   </header>
 
   <main id="main">
     <section class="hero" aria-labelledby="hero-name">
       <div class="wrap hero-grid">
-        <div class="hero-copy">
+        <div class="hero-lead">
           <h1 id="hero-name" data-slot="name">Miko De Peralta</h1>
-          <ul class="hero-titles" data-slot="titles"></ul>
           <p class="hero-summary" data-slot="summary"></p>
+        </div>
+        <div class="hero-foot">
+          <ul class="hero-titles" data-slot="titles"></ul>
           <div class="actions" data-slot="actions"></div>
         </div>
-        <figure class="portrait" data-slot="portrait"></figure>
       </div>
     </section>
 
-    <section class="sec" id="about" aria-labelledby="about-h">
-      <div class="wrap">
-        <header class="sec-head"><h2 id="about-h">About</h2></header>
-        <div class="about-grid">
-          <p class="lede" data-slot="about-text"></p>
+    <section class="sec sec-dark" id="about" aria-labelledby="about-h">
+      <div class="wrap about-grid">
+        <div class="about-left">
+          <h2 id="about-h">Summary</h2>
           <dl class="facts" data-slot="facts" aria-label="At a glance"></dl>
         </div>
+        <p class="lede about-text" data-slot="about-text"></p>
       </div>
     </section>
 
-    <section class="sec sec-dark" id="experience" aria-labelledby="exp-h">
+    <section class="sec" id="experience" aria-labelledby="exp-h">
       <div class="wrap">
         <header class="sec-head"><h2 id="exp-h">Experience</h2></header>
         <div class="roles" data-slot="roles"></div>
       </div>
     </section>
 
-    <section class="sec" id="skills" aria-labelledby="skills-h">
+    <section class="sec sec-dark" id="skills" aria-labelledby="skills-h">
       <div class="wrap">
         <header class="sec-head"><h2 id="skills-h">Skills</h2></header>
         <div class="skill-groups" data-slot="skills"></div>
       </div>
     </section>
 
-    <section class="sec sec-dark" id="feedback" aria-labelledby="fb-h">
+    <section class="sec" id="feedback" aria-labelledby="fb-h">
       <div class="wrap">
         <header class="sec-head"><h2 id="fb-h">Direct superior feedback</h2></header>
         <div class="quotes" data-slot="feedback"></div>
       </div>
     </section>
 
-    <section class="sec" id="credentials" aria-labelledby="cred-h">
+    <section class="sec sec-dark" id="credentials" aria-labelledby="cred-h">
       <div class="wrap">
         <header class="sec-head"><h2 id="cred-h">Education and credentials</h2></header>
         <div class="cred-grid">
@@ -94,27 +95,18 @@
         </div>
       </div>
     </section>
-
-    <section class="sec sec-dark" id="contact" aria-labelledby="contact-h">
-      <div class="wrap contact-grid">
-        <div>
-          <header class="sec-head"><h2 id="contact-h">Get in touch</h2></header>
-          <p class="lede" data-slot="pitch"></p>
-        </div>
-        <ul class="contact-list" data-slot="contact"></ul>
-      </div>
-    </section>
   </main>
 
-  <footer class="foot">
-    <div class="wrap foot-inner">
-      <p>Miko Q. De Peralta, Makati, Philippines</p>
-      <p class="foot-links">
-        <a href="animated.html">View animated version</a>
-        <a href="#top">Back to top</a>
-      </p>
+  <footer class="foot" id="contact" aria-labelledby="contact-h">
+    <div class="wrap contact-grid">
+      <div>
+        <header class="sec-head"><h2 id="contact-h">Get in touch</h2></header>
+        <p class="lede" data-slot="pitch"></p>
+      </div>
+      <ul class="contact-list" data-slot="contact"></ul>
     </div>
   </footer>
+
 
   <noscript><p class="nojs">This page builds its content with JavaScript. Please enable it, or write directly to miko.q.deperalta@gmail.com. You can also open the <a href="animated.html">animated version</a>.</p></noscript>
   <script type="module" src="js/simple.js"></script>

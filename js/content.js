@@ -13,6 +13,8 @@ export const CONTENT = {
     // from the résumé
     titles: ["Planning & Scheduling", "Operations Coordination", "Construction Estimating"],
     summary: "Organized operations professional who plans, schedules and tracks work to deadline, promoted to Operations Assistant within 8 weeks at a petroleum terminal. Experienced with schedules in MS Project, Gantt charts and S-curves, cross-department coordination, and daily to month-end reporting, plus drawing and quantity knowledge from residential construction estimating.",
+    // phrases shown in bold inside the summary on the simple page (the film ignores this key)
+    summaryEmphasis: ["plans, schedules and tracks work to deadline", "Operations Assistant within 8 weeks", "MS Project, Gantt charts and S-curves", "cross-department coordination", "residential construction estimating"],
   },
   words: ["PLAN", "SCHEDULE", "COORDINATE", "ESTIMATE"],
   // home base; `markets` are where the estimated projects are
@@ -59,7 +61,7 @@ export const CONTENT = {
   // full résumé roles, newest first by end date shown in the film (the `work` rows above stay as the short summary)
   roles: [
     {
-      title: "BOQ & Construction Estimator", subtitle: null, org: "Contract", place: "Remote", period: "Apr 2026 to Oct 2026",
+      title: "BOQ & Construction Estimator", subtitle: null, org: "Contract", place: "Remote", period: "Apr 2026 to Oct 2026", photo: "img/miko.jpg", photoAlt: "Portrait of Miko De Peralta", photoW: 480, photoH: 480,
       highlights: [
         "Delivered takeoffs and BOQs for 12 residential projects (avg. 5,000 sqm), including luxury homes in Qatar.",
         "Reviewed 10 to 30 drawing sheets per project in Bluebeam and PlanSwift.",
@@ -68,7 +70,7 @@ export const CONTENT = {
       ],
     },
     {
-      title: "Operations Assistant", subtitle: null, org: "Porto Petroleum Inc.", place: "Sariaya, Quezon, Philippines", period: "Jan 2026 to Sep 2026", photo: "img/vessel.jpg", photoAlt: "Miko in a hard hat on the deck of a tanker at Porto Petroleum",
+      title: "Operations Assistant", subtitle: null, org: "Porto Petroleum Inc.", place: "Sariaya, Quezon, Philippines", period: "Jan 2026 to Sep 2026", photo: "img/vessel.jpg", photoAlt: "Miko in a hard hat on the deck of a tanker at Porto Petroleum", photoW: 480, photoH: 853,
       highlights: [
         "Coordinated daily across 5 departments: cargo figures with surveyors, safety with Safety Officers, product movement with Logistics, orders with Sales, and records with Accounting.",
         "Scheduled shift rosters, truck loading and dispatch, vessel arrivals and discharge, and maintenance inspections.",

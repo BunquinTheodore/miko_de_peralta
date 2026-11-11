@@ -43,7 +43,7 @@ function renderHero() {
   const { person } = C;
   fill("name", person.first, " ", person.last);
   fill("titles", person.titles.map((t) => el("li", null, t)));
-  fill("summary", person.tagline);
+  fill("summary", el("span", { class: "stretch" }, person.tagline.replace(/[.\s]+$/, "")));
 
   const email = contactLink("Email");
   const linkedin = contactLink("LinkedIn");
@@ -51,17 +51,33 @@ function renderHero() {
     email && link("btn btn-solid", email.url, "Email me"),
     linkedin && link("btn btn-line", linkedin.url, "LinkedIn"),
   );
+}
 
-  const frame = slot("portrait");
-  const fallback = () => frame.replaceChildren(el("div", { class: "portrait-fallback", role: "img", "aria-label": `${person.full}, portrait unavailable` }, person.initials));
-  if (!person.photo) return fallback();
-  const img = el("img", { src: person.photo, alt: `Portrait of ${person.full}`, width: 480, height: 480, decoding: "async", fetchpriority: "high" });
-  img.addEventListener("error", fallback, { once: true });
-  frame.replaceChildren(img);
+/** Text with the given phrases wrapped in <strong>. Built from text nodes only, so content is never parsed as HTML. */
+function emphasize(text, phrases) {
+  const list = phrases.filter(Boolean);
+  if (!list.length) return [text];
+  // split on the phrases without building a regex from content: walk the text and cut at each phrase hit
+  const parts = [];
+  let rest = text;
+  while (rest) {
+    const hits = list.map((p) => ({ p, at: rest.indexOf(p) })).filter((h) => h.at >= 0).sort((a, b) => a.at - b.at || b.p.length - a.p.length);
+    if (!hits.length) { parts.push(rest); break; }
+    const { p, at } = hits[0];
+    if (at > 0) parts.push(rest.slice(0, at));
+    parts.push(p);
+    rest = rest.slice(at + p.length);
+  }
+  return parts.map((part) => {
+    if (!list.includes(part)) return document.createTextNode(part);
+    const strong = document.createElement("strong");
+    strong.textContent = part;
+    return strong;
+  });
 }
 
 function renderAbout() {
-  fill("about-text", C.person.summary);
+  fill("about-text", emphasize(C.person.summary, C.person.summaryEmphasis || []));
   fill("facts", (C.record.facts || []).map(({ value, label }) =>
     el("div", { class: "fact" }, el("dt", null, value), el("dd", null, label))));
 }
@@ -69,21 +85,33 @@ function renderAbout() {
 function renderRoles() {
   fill("roles", C.roles.map((r) =>
     el("article", { class: "role" },
-      el("header", { class: "role-meta" },
-        el("p", { class: "role-period" }, r.period),
-        el("p", { class: "role-org" }, r.org),
-        el("p", { class: "role-place" }, r.place),
-        r.photo && el("img", { class: "role-photo", src: r.photo, alt: r.photoAlt || "", width: 480, height: 853, loading: "lazy", decoding: "async" })),
-      el("div", { class: "role-body" },
-        el("h3", null, r.title),
-        el("ul", { class: "bullets" }, r.highlights.map((h) => el("li", null, h)))))));
+      el("p", { class: "role-period" }, r.period),
+      el("h3", null, r.title),
+      el("figure", { class: "role-side" },
+        r.photo && el("img", { class: "role-photo", src: r.photo, alt: r.photoAlt || "", width: r.photoW || 480, height: r.photoH || 853, loading: "lazy", decoding: "async" }),
+        el("figcaption", null,
+          el("p", { class: "role-line" },
+            el("span", { class: "role-org" }, r.org),
+            el("span", { class: "role-sep", "aria-hidden": "true" }, "|"),
+            el("span", { class: "role-place" }, r.place)))),
+      el("ul", { class: "bullets" }, r.highlights.map((h) => el("li", null, h))))));
+}
+
+// Tool marks: only real brand glyphs (Simple Icons, self-hosted in img/logos). Anything without a real logo shows no mark.
+const LOGO_FILES = {
+  "AutoCAD": "autocad", "Google Sheets": "googlesheets", "Google Docs": "googledocs", "Slack": "slack",
+  "WhatsApp": "whatsapp", "Viber": "viber", "Google Meet": "googlemeet", "Zoom": "zoom",
+};
+
+function logoMark(file) {
+  return file ? el("img", { class: "mark", src: `img/logos/${file}.svg`, alt: "", width: 18, height: 18, decoding: "async" }) : null;
 }
 
 function renderSkills() {
   fill("skills", C.scopes.map((g) =>
     el("div", { class: "skill-group" },
       el("h3", null, g.group),
-      el("ul", { class: "tags" }, g.items.map((i) => el("li", null, i))))));
+      el("ul", { class: "tags" }, g.items.map((i) => el("li", null, el("span", null, i), logoMark(LOGO_FILES[i])))))));
 }
 
 function renderFeedback() {
@@ -126,25 +154,57 @@ function renderContact() {
 function watchActiveNav() {
   const links = [...document.querySelectorAll(".nav a")];
   const byId = new Map(links.map((a) => [a.getAttribute("href").slice(1), a]));
-  if (!("IntersectionObserver" in window)) return;
+  const bar = document.querySelector(".bar-inner");
+  const brand = document.querySelector(".brand");
+  if (!bar || !brand) return;
+
+  // One line under the current item. It slides from item to item (CSS transition on transform and width).
+  const line = document.createElement("span");
+  line.className = "nav-line";
+  line.setAttribute("aria-hidden", "true");
+  bar.append(line);
+  let target = brand;
+  const placeLine = () => {
+    const b = bar.getBoundingClientRect();
+    const r = target.getBoundingClientRect();
+    line.style.width = `${r.width}px`;
+    line.style.transform = `translate(${r.left - b.left}px, ${r.bottom - b.top - 1}px)`;
+  };
+  const nav = document.querySelector(".nav");
+
   const setCurrent = (a) => {
     links.forEach((l) => l.removeAttribute("aria-current"));
-    if (!a) return;
-    a.setAttribute("aria-current", "true");
-    const nav = a.parentElement;
-    if (nav.scrollWidth > nav.clientWidth) {
+    if (a) a.setAttribute("aria-current", "true");
+    target = a || brand;
+    if (a && nav.scrollWidth > nav.clientWidth) {
       const left = a.getBoundingClientRect().left - nav.getBoundingClientRect().left + nav.scrollLeft - 16;
       nav.scrollTo({ left, behavior: "smooth" });
     }
+    placeLine();
   };
-  const io = new IntersectionObserver((entries) => {
-    for (const entry of entries) if (entry.isIntersecting) setCurrent(byId.get(entry.target.id));
-  }, { rootMargin: "-45% 0px -50% 0px" });
-  byId.forEach((_, id) => { const s = document.getElementById(id); if (s) io.observe(s); });
-  // above the first section (hero) nothing should look current
-  const hero = document.querySelector("header.hero, .hero");
-  if (hero) new IntersectionObserver((e) => { if (e[0].isIntersecting) setCurrent(null); },
-    { rootMargin: "-45% 0px -50% 0px" }).observe(hero);
+
+  placeLine();
+  addEventListener("resize", placeLine);
+  nav.addEventListener("scroll", placeLine, { passive: true });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(placeLine);
+
+  // Which section is current: the last one whose top has passed 45% of the viewport height.
+  // At the very bottom of the page the last section (the footer) is current, even though it is short.
+  const sections = [...byId.keys()].map((id) => document.getElementById(id)).filter(Boolean);
+  let shown;
+  let frame = 0;
+  const update = () => {
+    frame = 0;
+    const probe = innerHeight * 0.45;
+    let current = null;
+    for (const s of sections) if (s.getBoundingClientRect().top <= probe) current = s;
+    if (innerHeight + scrollY >= document.documentElement.scrollHeight - 2) current = sections[sections.length - 1];
+    if (current !== shown) { shown = current; setCurrent(current ? byId.get(current.id) : null); }
+  };
+  const schedule = () => { if (!frame) frame = requestAnimationFrame(update); };
+  addEventListener("scroll", schedule, { passive: true });
+  addEventListener("resize", schedule);
+  update();
 }
 
 /** Soft fade in on scroll. Content stays visible if JS or IO is unavailable. */
@@ -158,8 +218,113 @@ function watchReveals() {
   targets.forEach((t) => io.observe(t));
 }
 
+/**
+ * Hero lockup: the name and the tagline start and end on exactly the same left and right lines.
+ * Glyphs have built-in side space, so alignment is done on the visible letter shapes (ink), not the text boxes:
+ * the name's size is solved so its ink spans the content width, and the tagline is tracked out to the same ink width.
+ */
+const inkCanvas = document.createElement("canvas").getContext("2d");
+
+function inkBearings(text, font) {
+  inkCanvas.font = font;
+  const first = inkCanvas.measureText(text[0]);
+  const last = inkCanvas.measureText(text[text.length - 1]);
+  return { left: -first.actualBoundingBoxLeft, right: last.width - last.actualBoundingBoxRight };
+}
+
+function textBoxWidth(node) {
+  const range = document.createRange();
+  range.selectNodeContents(node);
+  return range.getBoundingClientRect().width;
+}
+
+function fitHero() {
+  const lead = document.querySelector(".hero-lead");
+  const h1 = lead && lead.querySelector("h1");
+  const tag = lead && lead.querySelector(".stretch");
+  if (!h1 || !tag) return;
+  const W = lead.clientWidth;
+
+  // name: solve the font size so the ink width equals W
+  const cs = getComputedStyle(h1);
+  const nameText = h1.textContent.toUpperCase();
+  const REF = 100;
+  h1.style.fontSize = `${REF}px`; h1.style.marginLeft = "0px";
+  const refFont = `${cs.fontWeight} ${REF}px ${cs.fontFamily}`;
+  const trailing = parseFloat(getComputedStyle(h1).letterSpacing) || 0;
+  const refBearings = inkBearings(nameText, refFont);
+  const refInk = textBoxWidth(h1) - trailing - refBearings.left - refBearings.right;
+  const k = W / refInk;
+  h1.style.fontSize = `${REF * k}px`;
+  h1.style.marginLeft = `${-refBearings.left * k}px`;
+
+  // tagline: track out so its ink width equals W, and pull its ink to the same left edge
+  const tcs = getComputedStyle(tag);
+  const tagText = tag.textContent.toUpperCase();
+  tag.style.letterSpacing = "0px"; tag.style.marginLeft = "0px";
+  const tb = inkBearings(tagText, `${tcs.fontWeight} ${tcs.fontSize} ${tcs.fontFamily}`);
+  const natural = tag.getBoundingClientRect().width - tb.left - tb.right;
+  const gaps = Math.max(1, tagText.length - 1);
+  tag.style.letterSpacing = `${Math.max(0, (W - natural) / gaps)}px`;
+  tag.style.marginLeft = `${-tb.left}px`;
+}
+
+/** About heading: tracked out with letter spacing so its letters span exactly the width of the facts table below it. */
+function fitAboutHeading() {
+  const left = document.querySelector(".about-left");
+  const h2 = left && left.querySelector("h2");
+  if (!h2) return;
+  const W = left.clientWidth;
+  const cs = getComputedStyle(h2);
+  const text = h2.textContent.toUpperCase();
+  h2.style.letterSpacing = "0px"; h2.style.marginLeft = "0px";
+  const b = inkBearings(text, `${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`);
+  const natural = textBoxWidth(h2) - b.left - b.right;
+  h2.style.letterSpacing = `${Math.max(0, (W - natural) / Math.max(1, text.length - 1))}px`;
+  h2.style.marginLeft = `${-b.left}px`;
+}
+
+/** "Get in touch" heading: tracked out so its letters span exactly the width of the paragraph under it. */
+function fitContactHeading() {
+  const col = document.querySelector(".contact-grid > div:first-child");
+  const h2 = col && col.querySelector("h2");
+  const p = col && col.querySelector("p");
+  if (!h2 || !p) return;
+  const W = p.getBoundingClientRect().width;
+  const cs = getComputedStyle(h2);
+  const text = h2.textContent.toUpperCase();
+  h2.style.letterSpacing = "0px"; h2.style.marginLeft = "0px";
+  const b = inkBearings(text, `${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`);
+  const natural = textBoxWidth(h2) - b.left - b.right;
+  h2.style.letterSpacing = `${Math.max(0, (W - natural) / Math.max(1, text.length - 1))}px`;
+  h2.style.marginLeft = `${-b.left}px`;
+}
+
+function watchTagline() {
+  const lead = document.querySelector(".hero-lead");
+  if (!lead) return;
+  fitHero();
+  if (document.fonts && document.fonts.load) {
+    Promise.all([document.fonts.load('700 100px "Josefin Sans"'), document.fonts.load('500 16px "Manrope"')])
+      .then(() => document.fonts.ready).then(fitHero).catch(() => {});
+  }
+  if ("ResizeObserver" in window) new ResizeObserver(fitHero).observe(lead);
+  const contactCol = document.querySelector(".contact-grid > div:first-child");
+  if (contactCol) {
+    fitContactHeading();
+    if (document.fonts && document.fonts.load) document.fonts.load('300 20px "Josefin Sans"').then(() => document.fonts.ready).then(fitContactHeading).catch(() => {});
+    if ("ResizeObserver" in window) new ResizeObserver(fitContactHeading).observe(contactCol);
+  }
+  const aboutLeft = document.querySelector(".about-left");
+  if (aboutLeft) {
+    fitAboutHeading();
+    if (document.fonts && document.fonts.load) document.fonts.load('300 40px "Josefin Sans"').then(() => document.fonts.ready).then(fitAboutHeading).catch(() => {});
+    if ("ResizeObserver" in window) new ResizeObserver(fitAboutHeading).observe(aboutLeft);
+  }
+}
+
 // one failing section must not blank the rest of the page
 for (const step of [renderHero, renderAbout, renderRoles, renderSkills, renderFeedback, renderCredentials, renderContact,
-  watchActiveNav, watchReveals]) {
+  watchActiveNav, watchReveals, watchTagline]) {
   try { step(); } catch (err) { console.error(`simple.js: ${step.name} failed`, err); }
 }
